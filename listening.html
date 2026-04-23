@@ -262,6 +262,51 @@
             color: #F44336;
         }
         
+        .wrong-words-section {
+            background: #fff3e0;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 3px solid #FF9800;
+        }
+        
+        .wrong-words-section h3 {
+            color: #E65100;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .wrong-words-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .wrong-word-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            border-radius: 15px;
+            padding: 10px 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid #FF9800;
+        }
+        
+        .wrong-word-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .wrong-word-item span {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+        
         @media (max-width: 768px) {
             .choices-grid {
                 grid-template-columns: repeat(2, 1fr);

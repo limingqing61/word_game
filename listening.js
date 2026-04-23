@@ -217,7 +217,9 @@ let gameState = {
     questionOrder: [],
     isAnswered: false,
     hintUsed: false,
-    totalQuestions: wordList.length
+    hintRemaining: 5,
+    totalQuestions: 30,
+    wrongWords: []
 };
 
 // DOM elements
@@ -239,12 +241,19 @@ function initListeningGame() {
     gameState.currentQuestionIndex = 0;
     gameState.isAnswered = false;
     gameState.hintUsed = false;
+    gameState.hintRemaining = 5;
+    gameState.wrongWords = [];
     
-    // Create shuffled question order
-    gameState.questionOrder = shuffleArray([...Array(wordList.length).keys()]);
+    // Select 30 random questions from the word list
+    const allIndices = [...Array(wordList.length).keys()];
+    const shuffledAll = shuffleArray(allIndices);
+    const selectedIndices = shuffledAll.slice(0, Math.min(30, wordList.length));
+    gameState.questionOrder = selectedIndices;
+    gameState.totalQuestions = selectedIndices.length;
     
     // Update UI
     updateScoreDisplay();
+    updateHintButton();
     showQuestion();
 }
 
@@ -267,6 +276,16 @@ function updateScoreDisplay() {
     progressFillElement.style.width = `${progressPercent}%`;
 }
 
+// Update hint button display
+function updateHintButton() {
+    hintBtn.textContent = `Hint (${gameState.hintRemaining})`;
+    if (gameState.hintRemaining <= 0) {
+        hintBtn.disabled = true;
+    } else {
+        hintBtn.disabled = false;
+    }
+}
+
 // Show current question
 function showQuestion() {
     if (gameState.currentQuestionIndex >= gameState.totalQuestions) {
@@ -276,7 +295,6 @@ function showQuestion() {
     
     gameState.isAnswered = false;
     gameState.hintUsed = false;
-    hintBtn.disabled = false;
     
     // Show action buttons
     const actionButtons = document.querySelector('.action-buttons');
@@ -296,8 +314,9 @@ function showQuestion() {
     // Play the word pronunciation
     playWordPronunciation(correctWord.word);
     
-    // Update progress
+    // Update progress and hint button
     updateScoreDisplay();
+    updateHintButton();
 }
 
 // Generate 4 choices (1 correct + 3 random)
@@ -396,6 +415,10 @@ function handleChoiceClick(clickedElement, correctIndex) {
         clickedElement.appendChild(icon);
     } else {
         gameState.wrongCount++;
+        // Track wrong word
+        const wrongWord = wordList[correctIndex];
+        gameState.wrongWords.push(wrongWord);
+        
         clickedElement.classList.add('wrong');
         clickedElement.classList.add('revealed');
         
@@ -501,6 +524,24 @@ function showGameComplete() {
         actionButtons.style.display = 'none';
     }
     
+    let wrongWordsHtml = '';
+    if (gameState.wrongWords.length > 0) {
+        wrongWordsHtml = `
+            <div class="wrong-words-section">
+                <h3><i class="fas fa-book"></i> Words to Review (${gameState.wrongWords.length})</h3>
+                <div class="wrong-words-list">
+                    ${gameState.wrongWords.map(w => `
+                        <div class="wrong-word-item" onclick="playWordPronunciation('${w.word}')">
+                            <img src="${w.image}" alt="${w.word}" style="width:60px; height:60px; object-fit:contain; border-radius:10px;">
+                            <span>${w.word}</span>
+                            <i class="fas fa-volume-up" style="color:#2196F3; font-size:1.5rem;"></i>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+    
     const completeDiv = document.createElement('div');
     completeDiv.className = 'game-complete';
     completeDiv.innerHTML = `
@@ -509,6 +550,7 @@ function showGameComplete() {
             <span class="correct">Correct: ${gameState.correctCount}</span> | 
             <span class="wrong">Wrong: ${gameState.wrongCount}</span>
         </div>
+        ${wrongWordsHtml}
         <button id="playAgainBtn" class="repeat-btn">
             <i class="fas fa-redo"></i> Play Again
         </button>
@@ -575,10 +617,11 @@ repeatBtn.addEventListener('click', function() {
 });
 
 hintBtn.addEventListener('click', function() {
-    if (gameState.isAnswered || gameState.hintUsed) return;
+    if (gameState.isAnswered || gameState.hintUsed || gameState.hintRemaining <= 0) return;
     
     gameState.hintUsed = true;
-    hintBtn.disabled = true;
+    gameState.hintRemaining--;
+    updateHintButton();
     
     const correctIndex = gameState.questionOrder[gameState.currentQuestionIndex];
     
