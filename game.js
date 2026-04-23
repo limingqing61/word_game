@@ -79,35 +79,35 @@ const wordList = [
         image: "https://cdn.pixabay.com/photo/2016/11/18/15/58/alligator-1836425_640.jpg",
         color: "#4CAF50"
     },
-    // Body parts - using simple illustrations
+    // Body parts - using simple illustrations from a different source
     {
         word: "eye",
-        image: "https://cdn.pixabay.com/photo/2016/03/31/18/42/eye-1294884_640.png",
+        image: "https://cdn.pixabay.com/photo/2013/07/12/12/56/eye-147849_640.png",
         color: "#9C27B0"
     },
     {
         word: "nose",
-        image: "https://cdn.pixabay.com/photo/2016/03/31/18/42/nose-1294885_640.png",
+        image: "https://cdn.pixabay.com/photo/2013/07/12/12/56/nose-147848_640.png",
         color: "#FF8A65"
     },
     {
         word: "ear",
-        image: "https://cdn.pixabay.com/photo/2016/03/31/18/42/ear-1294886_640.png",
+        image: "https://cdn.pixabay.com/photo/2013/07/12/12/56/ear-147847_640.png",
         color: "#FFD166"
     },
     {
         word: "mouth",
-        image: "https://cdn.pixabay.com/photo/2016/03/31/18/42/mouth-1294887_640.png",
+        image: "https://cdn.pixabay.com/photo/2013/07/12/12/56/mouth-147846_640.png",
         color: "#EF476F"
     },
     {
         word: "leg",
-        image: "https://cdn.pixabay.com/photo/2016/03/31/18/42/leg-1294888_640.png",
+        image: "https://cdn.pixabay.com/photo/2013/07/12/12/56/leg-147845_640.png",
         color: "#FF9800"
     },
     {
         word: "foot",
-        image: "https://cdn.pixabay.com/photo/2016/03/31/18/42/foot-1294889_640.png",
+        image: "https://cdn.pixabay.com/photo/2013/07/12/12/56/foot-147844_640.png",
         color: "#795548"
     },
     // Common objects
@@ -231,10 +231,30 @@ function createWordGrid() {
             wordItem.classList.add('found');
         }
         
-        wordItem.innerHTML = `
-            <img src="${item.image}" alt="${item.word}" onerror="this.style.display='none'; this.parentNode.innerHTML+='<div style=\'color:${item.color}; font-size:1.5rem; font-weight:bold;\'>${item.word}</div>'">
-            <div class="word">${item.word}</div>
-        `;
+        const img = document.createElement('img');
+        img.src = item.image;
+        img.alt = item.word;
+        
+        const wordText = document.createElement('div');
+        wordText.className = 'word';
+        wordText.textContent = item.word;
+        wordText.style.color = item.color;
+        
+        wordItem.appendChild(img);
+        wordItem.appendChild(wordText);
+        
+        // Add error handling for grid images
+        img.onerror = function() {
+            img.style.display = 'none';
+            const fallback = document.createElement('div');
+            fallback.textContent = item.word;
+            fallback.style.color = item.color;
+            fallback.style.fontSize = '1.5rem';
+            fallback.style.fontWeight = 'bold';
+            fallback.style.textAlign = 'center';
+            fallback.style.marginTop = '10px';
+            wordItem.insertBefore(fallback, wordText);
+        };
         
         wordsGrid.appendChild(wordItem);
     });
@@ -535,20 +555,40 @@ function getPronunciationGuide(word) {
 function updateCurrentWord() {
     const currentWord = wordList[gameState.currentWordIndex];
     targetWordElement.textContent = currentWord.word;
+    
+    // Clear any existing fallback text
+    const imageContainer = wordImageElement.parentNode;
+    const existingFallback = imageContainer.querySelector('.fallback-text');
+    if (existingFallback) {
+        existingFallback.remove();
+    }
+    
+    // Reset image display
+    wordImageElement.style.display = 'block';
     wordImageElement.src = currentWord.image;
     wordImageElement.alt = currentWord.word;
     
     // Add error handling for image loading
     wordImageElement.onerror = function() {
         console.warn(`Failed to load image for ${currentWord.word}: ${currentWord.image}`);
-        // Set a fallback image or show text
+        // Hide the broken image
         wordImageElement.style.display = 'none';
+        
+        // Create fallback text
         const fallbackText = document.createElement('div');
+        fallbackText.className = 'fallback-text';
         fallbackText.textContent = currentWord.word;
         fallbackText.style.fontSize = '4rem';
         fallbackText.style.color = currentWord.color;
         fallbackText.style.fontWeight = 'bold';
-        wordImageElement.parentNode.appendChild(fallbackText);
+        fallbackText.style.textAlign = 'center';
+        fallbackText.style.width = '100%';
+        fallbackText.style.height = '100%';
+        fallbackText.style.display = 'flex';
+        fallbackText.style.alignItems = 'center';
+        fallbackText.style.justifyContent = 'center';
+        
+        imageContainer.appendChild(fallbackText);
     };
     
     // Update pronunciation hint in status area
