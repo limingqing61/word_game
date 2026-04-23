@@ -108,6 +108,11 @@ header h1 {
     color: white;
 }
 
+.skip-btn {
+    background: linear-gradient(to right, #9C27B0, #673AB7);
+    color: white;
+}
+
 .reset-btn {
     background: linear-gradient(to right, #F44336, #E91E63);
     color: white;

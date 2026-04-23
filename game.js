@@ -1,15 +1,27 @@
 // Game data - words and image URLs
 const wordList = [
+    // Fruits
     {
         word: "apple",
         image: "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=400&h=300&fit=crop&auto=format",
         color: "#FF6B6B"
     },
     {
-        word: "ball",
-        image: "https://images.unsplash.com/photo-1575361204480-aadea25e6e68?w=400&h=300&fit=crop&auto=format",
-        color: "#4ECDC4"
+        word: "banana",
+        image: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400&h=300&fit=crop&auto=format",
+        color: "#FFD166"
     },
+    {
+        word: "orange",
+        image: "https://images.unsplash.com/photo-1547514701-42782101795e?w=400&h=300&fit=crop&auto=format",
+        color: "#FF9800"
+    },
+    {
+        word: "grape",
+        image: "https://images.unsplash.com/photo-1515777315835-281b94c9589f?w=400&h=300&fit=crop&auto=format",
+        color: "#9C27B0"
+    },
+    // Animals
     {
         word: "cat",
         image: "https://images.unsplash.com/photo-1514888286974-6d03bde4ba42?w=400&h=300&fit=crop&auto=format",
@@ -21,14 +33,35 @@ const wordList = [
         color: "#06D6A0"
     },
     {
-        word: "egg",
-        image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400&h=300&fit=crop&auto=format",
-        color: "#118AB2"
-    },
-    {
         word: "fish",
         image: "https://images.unsplash.com/photo-1518834103328-93d45986dce1?w=400&h=300&fit=crop&auto=format",
         color: "#EF476F"
+    },
+    {
+        word: "bird",
+        image: "https://images.unsplash.com/photo-1444464666168-49d633b86797?w=400&h=300&fit=crop&auto=format",
+        color: "#2196F3"
+    },
+    {
+        word: "rabbit",
+        image: "https://images.unsplash.com/photo-1556838803-cc94986cb631?w=400&h=300&fit=crop&auto=format",
+        color: "#9E9E9E"
+    },
+    {
+        word: "bear",
+        image: "https://images.unsplash.com/photo-1573920110899-84b4c8bc5c6a?w=400&h=300&fit=crop&auto=format",
+        color: "#795548"
+    },
+    // Common objects
+    {
+        word: "ball",
+        image: "https://images.unsplash.com/photo-1575361204480-aadea25e6e68?w=400&h=300&fit=crop&auto=format",
+        color: "#4ECDC4"
+    },
+    {
+        word: "car",
+        image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400&h=300&fit=crop&auto=format",
+        color: "#FF6347"
     },
     {
         word: "sun",
@@ -36,9 +69,9 @@ const wordList = [
         color: "#FFD700"
     },
     {
-        word: "car",
-        image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400&h=300&fit=crop&auto=format",
-        color: "#FF6347"
+        word: "egg",
+        image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400&h=300&fit=crop&auto=format",
+        color: "#118AB2"
     }
 ];
 
@@ -61,6 +94,7 @@ const resultElement = document.getElementById('result');
 const statusElement = document.getElementById('status');
 const startBtn = document.getElementById('startBtn');
 const hintBtn = document.getElementById('hintBtn');
+const skipBtn = document.getElementById('skipBtn');
 const resetBtn = document.getElementById('resetBtn');
 const wordsGrid = document.querySelector('.words-grid');
 
@@ -205,10 +239,26 @@ function checkWordMatch(spokenWord) {
     else if (currentWord === 'ball' && (normalizedSpoken.includes('ball') || normalizedSpoken === 'bawl' || normalizedSpoken === 'bowl')) {
         isMatch = true;
     }
+    // Handle common misrecognitions
+    else if (currentWord === 'cat' && (normalizedSpoken === 'kite' || normalizedSpoken === 'kit' || normalizedSpoken === 'kat')) {
+        isMatch = true;
+    }
+    else if (currentWord === 'dog' && (normalizedSpoken === 'dock' || normalizedSpoken === 'dug' || normalizedSpoken === 'dag')) {
+        isMatch = true;
+    }
+    else if (currentWord === 'bird' && (normalizedSpoken === 'burd' || normalizedSpoken === 'beard' || normalizedSpoken === 'bard')) {
+        isMatch = true;
+    }
     // Match if spoken word contains the target word (for longer phrases)
     else if (normalizedSpoken.includes(currentWord) || currentWord.includes(normalizedSpoken)) {
         // Only allow if the spoken word is at least half the length of the target word
         if (normalizedSpoken.length >= currentWord.length / 2) {
+            isMatch = true;
+        }
+    }
+    // Sound similarity for short words (first two letters match)
+    else if (currentWord.length <= 4 && normalizedSpoken.length <= 4) {
+        if (currentWord.substring(0,2) === normalizedSpoken.substring(0,2)) {
             isMatch = true;
         }
     }
@@ -339,13 +389,19 @@ function showConfetti() {
 function getPronunciationGuide(word) {
     const guides = {
         'apple': 'AP-pul',
-        'ball': 'BAWL',
+        'banana': 'buh-NA-nuh',
+        'orange': 'OR-inj',
+        'grape': 'GRAYP',
         'cat': 'KAT',
         'dog': 'DAWG',
-        'egg': 'EG',
         'fish': 'FISH',
+        'bird': 'BURD',
+        'rabbit': 'RAB-bit',
+        'bear': 'BAIR',
+        'ball': 'BAWL',
+        'car': 'KAR',
         'sun': 'SUN',
-        'car': 'KAR'
+        'egg': 'EG'
     };
     return guides[word.toLowerCase()] || word;
 }
@@ -361,6 +417,64 @@ function updateCurrentWord() {
     const pronunciation = getPronunciationGuide(currentWord.word);
     document.querySelector('.speech-result p').innerHTML = 
         `Say: <strong>"${currentWord.word}"</strong> (sounds like "${pronunciation}")`;
+}
+
+// Function to skip current word
+function skipCurrentWord() {
+    // Mark current word as found (but don't add to score)
+    const currentWord = wordList[gameState.currentWordIndex].word.toLowerCase();
+    gameState.foundWords.add(currentWord);
+    
+    // Update remaining count
+    gameState.remaining--;
+    
+    // Update UI
+    updateScore();
+    
+    // Mark word as found in grid
+    const wordItems = document.querySelectorAll('.word-item');
+    wordItems.forEach(item => {
+        if (item.dataset.word.toLowerCase() === currentWord) {
+            item.classList.add('found');
+        }
+    });
+    
+    // Find next unfound word
+    let nextIndex = -1;
+    for (let i = 0; i < wordList.length; i++) {
+        if (!gameState.foundWords.has(wordList[i].word.toLowerCase())) {
+            nextIndex = i;
+            break;
+        }
+    }
+    
+    if (nextIndex !== -1) {
+        gameState.currentWordIndex = nextIndex;
+        updateCurrentWord();
+        
+        // Update status
+        statusElement.className = 'status idle';
+        statusElement.innerHTML = `<i class="fas fa-forward"></i> Skipped! Now try: "${wordList[nextIndex].word}"`;
+        
+        // Restart listening if it was active
+        if (gameState.isListening) {
+            setTimeout(() => {
+                if (gameState.recognition) {
+                    gameState.recognition.start();
+                }
+            }, 1000);
+        }
+    } else {
+        // Game completed
+        winSound.currentTime = 0;
+        winSound.play();
+        
+        statusElement.className = 'status correct';
+        statusElement.innerHTML = '<i class="fas fa-trophy"></i> You won! All words found!';
+        
+        // Show confetti effect
+        showConfetti();
+    }
 }
 
 // Event listeners
@@ -388,6 +502,15 @@ hintBtn.addEventListener('click', function() {
     const currentWord = wordList[gameState.currentWordIndex].word;
     const pronunciation = getPronunciationGuide(currentWord);
     alert(`Hint: The word is "${currentWord}".\n\nPronounce it like: "${pronunciation}"\n\nTry saying it clearly and slowly!`);
+});
+
+skipBtn.addEventListener('click', function() {
+    clickSound.currentTime = 0;
+    clickSound.play();
+    
+    if (confirm(`Skip the word "${wordList[gameState.currentWordIndex].word}" and move to the next one?`)) {
+        skipCurrentWord();
+    }
 });
 
 resetBtn.addEventListener('click', function() {
