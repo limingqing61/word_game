@@ -1,77 +1,108 @@
 // Game data - words and image URLs
+// Using reliable image sources from Pixabay (public domain) and Unsplash with specific IDs
 const wordList = [
     // Fruits
     {
         word: "apple",
-        image: "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=400&h=300&fit=crop&auto=format",
+        image: "https://cdn.pixabay.com/photo/2014/02/01/17/28/apple-256261_640.jpg",
         color: "#FF6B6B"
     },
     {
         word: "banana",
-        image: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400&h=300&fit=crop&auto=format",
+        image: "https://cdn.pixabay.com/photo/2016/01/03/17/59/bananas-1119790_640.jpg",
         color: "#FFD166"
     },
     {
         word: "orange",
-        image: "https://images.unsplash.com/photo-1547514701-42782101795e?w=400&h=300&fit=crop&auto=format",
+        image: "https://cdn.pixabay.com/photo/2017/01/20/15/06/oranges-1995056_640.jpg",
         color: "#FF9800"
     },
     {
         word: "grape",
-        image: "https://images.unsplash.com/photo-1515777315835-281b94c9589f?w=400&h=300&fit=crop&auto=format",
+        image: "https://cdn.pixabay.com/photo/2016/07/22/09/59/grapes-1534498_640.jpg",
         color: "#9C27B0"
+    },
+    {
+        word: "strawberry",
+        image: "https://cdn.pixabay.com/photo/2017/11/18/17/09/strawberry-2960533_640.jpg",
+        color: "#EF476F"
+    },
+    {
+        word: "watermelon",
+        image: "https://cdn.pixabay.com/photo/2016/10/07/14/11/watermelon-1721911_640.jpg",
+        color: "#06D6A0"
     },
     // Animals
     {
         word: "cat",
-        image: "https://images.unsplash.com/photo-1514888286974-6d03bde4ba42?w=400&h=300&fit=crop&auto=format",
+        image: "https://cdn.pixabay.com/photo/2014/04/13/20/49/cat-323262_640.jpg",
         color: "#FFD166"
     },
     {
         word: "dog",
-        image: "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=400&h=300&fit=crop&auto=format",
+        image: "https://cdn.pixabay.com/photo/2016/12/13/05/15/puppy-1903313_640.jpg",
         color: "#06D6A0"
     },
     {
         word: "fish",
-        image: "https://images.unsplash.com/photo-1518834103328-93d45986dce1?w=400&h=300&fit=crop&auto=format",
-        color: "#EF476F"
-    },
-    {
-        word: "bird",
-        image: "https://images.unsplash.com/photo-1444464666168-49d633b86797?w=400&h=300&fit=crop&auto=format",
+        image: "https://cdn.pixabay.com/photo/2016/12/31/21/22/discus-fish-1943755_640.jpg",
         color: "#2196F3"
     },
     {
+        word: "bird",
+        image: "https://cdn.pixabay.com/photo/2017/02/07/16/47/kingfisher-2046453_640.jpg",
+        color: "#FF9800"
+    },
+    {
         word: "rabbit",
-        image: "https://images.unsplash.com/photo-1556838803-cc94986cb631?w=400&h=300&fit=crop&auto=format",
+        image: "https://cdn.pixabay.com/photo/2017/04/02/22/36/easter-2197043_640.jpg",
         color: "#9E9E9E"
     },
     {
         word: "bear",
-        image: "https://images.unsplash.com/photo-1573920110899-84b4c8bc5c6a?w=400&h=300&fit=crop&auto=format",
+        image: "https://cdn.pixabay.com/photo/2015/03/26/09/41/bear-690566_640.jpg",
         color: "#795548"
+    },
+    {
+        word: "lion",
+        image: "https://cdn.pixabay.com/photo/2017/10/25/16/54/african-lion-2888519_640.jpg",
+        color: "#FF9800"
+    },
+    {
+        word: "elephant",
+        image: "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_640.jpg",
+        color: "#9E9E9E"
     },
     // Common objects
     {
         word: "ball",
-        image: "https://images.unsplash.com/photo-1575361204480-aadea25e6e68?w=400&h=300&fit=crop&auto=format",
+        image: "https://cdn.pixabay.com/photo/2016/07/21/11/17/ball-1532271_640.jpg",
         color: "#4ECDC4"
     },
     {
         word: "car",
-        image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400&h=300&fit=crop&auto=format",
+        image: "https://cdn.pixabay.com/photo/2015/01/19/13/51/car-604019_640.jpg",
         color: "#FF6347"
     },
     {
         word: "sun",
-        image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop&auto=format",
+        image: "https://cdn.pixabay.com/photo/2016/10/22/17/46/sun-1761417_640.jpg",
         color: "#FFD700"
     },
     {
         word: "egg",
-        image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400&h=300&fit=crop&auto=format",
-        color: "#118AB2"
+        image: "https://cdn.pixabay.com/photo/2015/09/17/17/19/egg-944495_640.jpg",
+        color: "#FFE082"
+    },
+    {
+        word: "house",
+        image: "https://cdn.pixabay.com/photo/2016/06/24/10/47/house-1477041_640.jpg",
+        color: "#FF8A65"
+    },
+    {
+        word: "flower",
+        image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_640.jpg",
+        color: "#E91E63"
     }
 ];
 
@@ -121,6 +152,9 @@ function initGame() {
     statusElement.className = 'status idle';
     statusElement.innerHTML = '<i class="fas fa-microphone-slash"></i> Click "Start Game" to begin';
     resultElement.textContent = '...';
+    
+    // Update initial remaining count display
+    remainingElement.textContent = gameState.remaining;
     
     // Stop recognition if active
     if (gameState.recognition) {
@@ -240,13 +274,25 @@ function checkWordMatch(spokenWord) {
         isMatch = true;
     }
     // Handle common misrecognitions
-    else if (currentWord === 'cat' && (normalizedSpoken === 'kite' || normalizedSpoken === 'kit' || normalizedSpoken === 'kat')) {
+    else if (currentWord === 'cat' && (normalizedSpoken === 'kite' || normalizedSpoken === 'kit' || normalizedSpoken === 'kat' || normalizedSpoken === 'cut')) {
         isMatch = true;
     }
-    else if (currentWord === 'dog' && (normalizedSpoken === 'dock' || normalizedSpoken === 'dug' || normalizedSpoken === 'dag')) {
+    else if (currentWord === 'dog' && (normalizedSpoken === 'dock' || normalizedSpoken === 'dug' || normalizedSpoken === 'dag' || normalizedSpoken === 'dot')) {
         isMatch = true;
     }
-    else if (currentWord === 'bird' && (normalizedSpoken === 'burd' || normalizedSpoken === 'beard' || normalizedSpoken === 'bard')) {
+    else if (currentWord === 'bird' && (normalizedSpoken === 'burd' || normalizedSpoken === 'beard' || normalizedSpoken === 'bard' || normalizedSpoken === 'bed')) {
+        isMatch = true;
+    }
+    else if (currentWord === 'lion' && (normalizedSpoken === 'line' || normalizedSpoken === 'lain' || normalizedSpoken === 'lyin')) {
+        isMatch = true;
+    }
+    else if (currentWord === 'elephant' && (normalizedSpoken.includes('elephant') || normalizedSpoken === 'elefant' || normalizedSpoken === 'elfant')) {
+        isMatch = true;
+    }
+    else if (currentWord === 'strawberry' && (normalizedSpoken.includes('straw') || normalizedSpoken.includes('berry'))) {
+        isMatch = true;
+    }
+    else if (currentWord === 'watermelon' && (normalizedSpoken.includes('water') || normalizedSpoken.includes('melon'))) {
         isMatch = true;
     }
     // Match if spoken word contains the target word (for longer phrases)
@@ -392,16 +438,22 @@ function getPronunciationGuide(word) {
         'banana': 'buh-NA-nuh',
         'orange': 'OR-inj',
         'grape': 'GRAYP',
+        'strawberry': 'STRAW-ber-ee',
+        'watermelon': 'WAH-ter-mel-on',
         'cat': 'KAT',
         'dog': 'DAWG',
         'fish': 'FISH',
         'bird': 'BURD',
         'rabbit': 'RAB-bit',
         'bear': 'BAIR',
+        'lion': 'LY-on',
+        'elephant': 'EL-uh-funt',
         'ball': 'BAWL',
         'car': 'KAR',
         'sun': 'SUN',
-        'egg': 'EG'
+        'egg': 'EG',
+        'house': 'HOWSS',
+        'flower': 'FLOW-er'
     };
     return guides[word.toLowerCase()] || word;
 }
