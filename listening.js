@@ -230,6 +230,16 @@ function handleChoiceClick(clickedElement, correctIndex) {
         }
     }
     
+    // Replace question mark with the correct image
+    const correctWord = wordList[correctIndex];
+    questionContainer.innerHTML = `
+        <img src="${correctWord.image}" alt="${correctWord.word}" style="max-width:100%; max-height:100%; object-fit:contain;">
+        <div class="word-text" style="position:absolute; bottom:0; left:0; right:0; background:rgba(255,204,0,0.9); padding:15px; text-align:center;">
+            <span style="font-size:3rem; font-weight:bold; color:#ff3366; text-transform:uppercase;">${correctWord.word}</span>
+            <div style="font-size:1.8rem; color:#3366ff; font-weight:bold;">${getPhoneticSymbol(correctWord.word)}</div>
+        </div>
+    `;
+    
     // Update score
     updateScoreDisplay();
     
@@ -238,6 +248,40 @@ function handleChoiceClick(clickedElement, correctIndex) {
         gameState.currentQuestionIndex++;
         showQuestion();
     }, 2000);
+}
+
+// Add phonetic symbols (IPA) - shared with main game
+function getPhoneticSymbol(word) {
+    const phonetics = {
+        'apple': '/ˈæp.əl/',
+        'banana': '/bəˈnæn.ə/',
+        'orange': '/ˈɔːr.ɪndʒ/',
+        'strawberry': '/ˈstrɔː.ber.i/',
+        'cat': '/kæt/',
+        'dog': '/dɒɡ/',
+        'fish': '/fɪʃ/',
+        'bird': '/bɜːrd/',
+        'lion': '/ˈlaɪ.ən/',
+        'elephant': '/ˈel.ɪ.fənt/',
+        'fox': '/fɒks/',
+        'wolf': '/wʊlf/',
+        'dolphin': '/ˈdɒl.fɪn/',
+        'whale': '/weɪl/',
+        'alligator': '/ˈæl.ɪ.ɡeɪ.tər/',
+        'eye': '/aɪ/',
+        'nose': '/noʊz/',
+        'ear': '/ɪər/',
+        'mouth': '/maʊθ/',
+        'leg': '/leɡ/',
+        'foot': '/fʊt/',
+        'car': '/kɑːr/',
+        'egg': '/eɡ/',
+        'house': '/haʊs/',
+        'flower': '/ˈflaʊ.ər/',
+        'ball': '/bɔːl/',
+        'sun': '/sʌn/'
+    };
+    return phonetics[word.toLowerCase()] || `/${word.toLowerCase()}/`;
 }
 
 // Play word pronunciation using speech synthesis
