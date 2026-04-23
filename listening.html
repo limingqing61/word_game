@@ -149,33 +149,18 @@
             transition: width 0.5s ease;
         }
         
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 15px 10px;
+            flex-wrap: wrap;
+        }
+        
         .repeat-btn {
             background: linear-gradient(to right, #2196F3, #03A9F4);
             color: white;
-            padding: 15px 30px;
-            font-size: 1.5rem;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-            font-weight: bold;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            margin: 20px auto;
-        }
-        
-        .repeat-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-        }
-        
-        .back-btn {
-            background: linear-gradient(to right, #607D8B, #455A64);
-            color: white;
-            padding: 12px 25px;
+            padding: 12px 20px;
             font-size: 1.2rem;
             border: none;
             border-radius: 50px;
@@ -183,11 +168,38 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             transition: all 0.3s ease;
             font-weight: bold;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            margin: 20px auto;
+            flex: 1;
+            min-width: 120px;
+            max-width: 200px;
+        }
+        
+        .repeat-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .back-btn {
+            background: linear-gradient(to right, #607D8B, #455A64);
+            color: white;
+            padding: 12px 20px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            flex: 1;
+            min-width: 100px;
+            max-width: 160px;
         }
         
         .back-btn:hover {
@@ -198,7 +210,7 @@
         .hint-btn-listening {
             background: linear-gradient(to right, #FF9800, #FFC107);
             color: white;
-            padding: 12px 25px;
+            padding: 12px 20px;
             font-size: 1.2rem;
             border: none;
             border-radius: 50px;
@@ -206,11 +218,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             transition: all 0.3s ease;
             font-weight: bold;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            margin: 10px auto;
+            flex: 1;
+            min-width: 100px;
+            max-width: 160px;
         }
         
         .hint-btn-listening:hover {
@@ -261,6 +275,19 @@
             .choice-item img {
                 height: 100px;
             }
+            
+            .action-buttons {
+                gap: 10px;
+                padding: 10px 5px;
+            }
+            
+            .repeat-btn,
+            .back-btn,
+            .hint-btn-listening {
+                padding: 10px 15px;
+                font-size: 1rem;
+                min-width: 80px;
+            }
         }
     </style>
 </head>
@@ -290,18 +317,6 @@
             <div class="progress-bar">
                 <div id="progressFill" class="progress-fill" style="width: 0%"></div>
             </div>
-            
-            <div class="controls">
-                <button id="repeatBtn" class="repeat-btn">
-                    <i class="fas fa-volume-up"></i> Listen Again
-                </button>
-                <button id="hintBtnListening" class="hint-btn-listening">
-                    <i class="fas fa-lightbulb"></i> Hint (Remove one)
-                </button>
-                <button id="backBtn" class="back-btn">
-                    <i class="fas fa-arrow-left"></i> Back to Menu
-                </button>
-            </div>
         </div>
 
         <div class="game-area">
@@ -309,6 +324,18 @@
                 <div class="word-card">
                     <div class="image-container" id="questionContainer">
                         <div class="question-mark">?</div>
+                    </div>
+                    <!-- Buttons moved below the image -->
+                    <div class="action-buttons">
+                        <button id="repeatBtn" class="repeat-btn">
+                            <i class="fas fa-volume-up"></i> Listen Again
+                        </button>
+                        <button id="hintBtnListening" class="hint-btn-listening">
+                            <i class="fas fa-lightbulb"></i> Hint
+                        </button>
+                        <button id="backBtn" class="back-btn">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </button>
                     </div>
                 </div>
             </div>

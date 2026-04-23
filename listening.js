@@ -98,6 +98,12 @@ function showQuestion() {
     gameState.hintUsed = false;
     hintBtn.disabled = false;
     
+    // Show action buttons
+    const actionButtons = document.querySelector('.action-buttons');
+    if (actionButtons) {
+        actionButtons.style.display = 'flex';
+    }
+    
     const wordIndex = gameState.questionOrder[gameState.currentQuestionIndex];
     const correctWord = wordList[wordIndex];
     
@@ -309,6 +315,12 @@ function showGameComplete() {
     questionContainer.innerHTML = '';
     choicesGrid.innerHTML = '';
     
+    // Hide action buttons
+    const actionButtons = document.querySelector('.action-buttons');
+    if (actionButtons) {
+        actionButtons.style.display = 'none';
+    }
+    
     const completeDiv = document.createElement('div');
     completeDiv.className = 'game-complete';
     completeDiv.innerHTML = `
@@ -328,6 +340,10 @@ function showGameComplete() {
     questionContainer.appendChild(completeDiv);
     
     document.getElementById('playAgainBtn').addEventListener('click', function() {
+        // Show action buttons again
+        if (actionButtons) {
+            actionButtons.style.display = 'flex';
+        }
         initListeningGame();
     });
     
