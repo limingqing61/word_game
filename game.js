@@ -1,145 +1,144 @@
-// Game data - words and image URLs
-// Using reliable image sources from Pixabay (public domain)
+// Game data - words and local images
 const wordList = [
     // Fruits
     {
         word: "apple",
-        image: "https://cdn.pixabay.com/photo/2014/02/01/17/28/apple-256261_640.jpg",
+        image: "images/apple.jpeg",
         color: "#FF6B6B"
     },
     {
         word: "banana",
-        image: "https://cdn.pixabay.com/photo/2016/01/03/17/59/bananas-1119790_640.jpg",
+        image: "images/banana.jpeg",
         color: "#FFD166"
     },
     {
         word: "orange",
-        image: "https://cdn.pixabay.com/photo/2017/01/20/15/06/oranges-1995056_640.jpg",
+        image: "images/orange.jpeg",
         color: "#FF9800"
     },
     {
         word: "strawberry",
-        image: "https://cdn.pixabay.com/photo/2017/11/18/17/09/strawberry-2960533_640.jpg",
+        image: "images/strawberry.jpeg",
         color: "#EF476F"
     },
     // Animals
     {
         word: "cat",
-        image: "https://cdn.pixabay.com/photo/2014/04/13/20/49/cat-323262_640.jpg",
+        image: "images/cat.jpeg",
         color: "#FFD166"
     },
     {
         word: "dog",
-        image: "https://cdn.pixabay.com/photo/2016/12/13/05/15/puppy-1903313_640.jpg",
+        image: "images/dog.jpeg",
         color: "#06D6A0"
     },
     {
         word: "fish",
-        image: "https://cdn.pixabay.com/photo/2016/12/31/21/22/discus-fish-1943755_640.jpg",
+        image: "images/fish.jpeg",
         color: "#2196F3"
     },
     {
         word: "bird",
-        image: "https://cdn.pixabay.com/photo/2017/02/07/16/47/kingfisher-2046453_640.jpg",
+        image: "images/bird.jpeg",
         color: "#FF9800"
     },
     {
         word: "lion",
-        image: "https://cdn.pixabay.com/photo/2017/10/25/16/54/african-lion-2888519_640.jpg",
+        image: "images/lion.jpeg",
         color: "#FF9800"
     },
     {
         word: "elephant",
-        image: "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_640.jpg",
+        image: "images/elephant.jpeg",
         color: "#9E9E9E"
     },
     // New animals
     {
         word: "fox",
-        image: "https://cdn.pixabay.com/photo/2016/12/05/11/39/fox-1883658_640.jpg",
+        image: "images/fox.jpeg",
         color: "#FF9800"
     },
     {
         word: "wolf",
-        image: "https://cdn.pixabay.com/photo/2017/02/13/11/10/wolf-2063843_640.jpg",
+        image: "images/wolf.jpeg",
         color: "#9E9E9E"
     },
     {
         word: "dolphin",
-        image: "https://cdn.pixabay.com/photo/2013/07/05/12/18/dolphin-143746_640.jpg",
+        image: "images/dolphin.jpeg",
         color: "#2196F3"
     },
     {
         word: "whale",
-        image: "https://cdn.pixabay.com/photo/2016/11/29/05/45/whale-1867282_640.jpg",
+        image: "images/whale.jpeg",
         color: "#2196F3"
     },
     {
         word: "alligator",
-        image: "https://cdn.pixabay.com/photo/2016/11/18/15/58/alligator-1836425_640.jpg",
+        image: "images/alligator.jpeg",
         color: "#4CAF50"
     },
-    // Body parts - using simple illustrations from a different source
+    // Body parts
     {
         word: "eye",
-        image: "https://cdn.pixabay.com/photo/2013/07/12/12/56/eye-147849_640.png",
+        image: "images/eye.jpeg",
         color: "#9C27B0"
     },
     {
         word: "nose",
-        image: "https://cdn.pixabay.com/photo/2013/07/12/12/56/nose-147848_640.png",
+        image: "images/nose.jpeg",
         color: "#FF8A65"
     },
     {
         word: "ear",
-        image: "https://cdn.pixabay.com/photo/2013/07/12/12/56/ear-147847_640.png",
+        image: "images/ear.jpeg",
         color: "#FFD166"
     },
     {
         word: "mouth",
-        image: "https://cdn.pixabay.com/photo/2013/07/12/12/56/mouth-147846_640.png",
+        image: "images/mouth.jpeg",
         color: "#EF476F"
     },
     {
         word: "leg",
-        image: "https://cdn.pixabay.com/photo/2013/07/12/12/56/leg-147845_640.png",
+        image: "images/leg.jpeg",
         color: "#FF9800"
     },
     {
         word: "foot",
-        image: "https://cdn.pixabay.com/photo/2013/07/12/12/56/foot-147844_640.png",
+        image: "images/foot.jpeg",
         color: "#795548"
     },
     // Common objects
     {
         word: "car",
-        image: "https://cdn.pixabay.com/photo/2015/01/19/13/51/car-604019_640.jpg",
+        image: "images/car.jpeg",
         color: "#FF6347"
     },
     {
         word: "egg",
-        image: "https://cdn.pixabay.com/photo/2015/09/17/17/19/egg-944495_640.jpg",
+        image: "images/egg.jpeg",
         color: "#FFE082"
     },
     {
         word: "house",
-        image: "https://cdn.pixabay.com/photo/2016/06/24/10/47/house-1477041_640.jpg",
+        image: "images/house.jpeg",
         color: "#FF8A65"
     },
     {
         word: "flower",
-        image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_640.jpg",
+        image: "images/flower.jpeg",
         color: "#E91E63"
     },
     // Add a few more simple words for variety
     {
         word: "ball",
-        image: "https://cdn.pixabay.com/photo/2016/07/21/11/17/ball-1532271_640.jpg",
+        image: "images/ball.jpeg",
         color: "#4ECDC4"
     },
     {
         word: "sun",
-        image: "https://cdn.pixabay.com/photo/2016/10/22/17/46/sun-1761417_640.jpg",
+        image: "images/sun.jpeg",
         color: "#FFD700"
     }
 ];
@@ -253,6 +252,9 @@ function createWordGrid() {
             fallback.style.fontWeight = 'bold';
             fallback.style.textAlign = 'center';
             fallback.style.marginTop = '10px';
+            fallback.style.padding = '10px';
+            fallback.style.background = '#f9f9f9';
+            fallback.style.borderRadius = '10px';
             wordItem.insertBefore(fallback, wordText);
         };
         
@@ -565,31 +567,27 @@ function updateCurrentWord() {
     
     // Reset image display
     wordImageElement.style.display = 'block';
+    wordImageElement.onerror = null; // Clear previous error handler
+    
+    // Set a timeout to handle images that take too long to load
+    const imageLoadTimeout = setTimeout(() => {
+        if (wordImageElement.complete === false || wordImageElement.naturalHeight === 0) {
+            showFallbackText(currentWord, imageContainer);
+        }
+    }, 2000);
+    
+    wordImageElement.onload = function() {
+        clearTimeout(imageLoadTimeout);
+    };
+    
+    wordImageElement.onerror = function() {
+        clearTimeout(imageLoadTimeout);
+        console.warn(`Failed to load image for ${currentWord.word}: ${currentWord.image}`);
+        showFallbackText(currentWord, imageContainer);
+    };
+    
     wordImageElement.src = currentWord.image;
     wordImageElement.alt = currentWord.word;
-    
-    // Add error handling for image loading
-    wordImageElement.onerror = function() {
-        console.warn(`Failed to load image for ${currentWord.word}: ${currentWord.image}`);
-        // Hide the broken image
-        wordImageElement.style.display = 'none';
-        
-        // Create fallback text
-        const fallbackText = document.createElement('div');
-        fallbackText.className = 'fallback-text';
-        fallbackText.textContent = currentWord.word;
-        fallbackText.style.fontSize = '4rem';
-        fallbackText.style.color = currentWord.color;
-        fallbackText.style.fontWeight = 'bold';
-        fallbackText.style.textAlign = 'center';
-        fallbackText.style.width = '100%';
-        fallbackText.style.height = '100%';
-        fallbackText.style.display = 'flex';
-        fallbackText.style.alignItems = 'center';
-        fallbackText.style.justifyContent = 'center';
-        
-        imageContainer.appendChild(fallbackText);
-    };
     
     // Update pronunciation hint in status area
     const pronunciation = getPronunciationGuide(currentWord.word);
@@ -601,6 +599,28 @@ function updateCurrentWord() {
                 `Say: <strong>"${currentWord.word}"</strong> (sounds like "${pronunciation}")`;
         }
     }
+}
+
+// Helper function to show fallback text when image fails to load
+function showFallbackText(currentWord, imageContainer) {
+    wordImageElement.style.display = 'none';
+    
+    const fallbackText = document.createElement('div');
+    fallbackText.className = 'fallback-text';
+    fallbackText.textContent = currentWord.word;
+    fallbackText.style.fontSize = '4rem';
+    fallbackText.style.color = currentWord.color;
+    fallbackText.style.fontWeight = 'bold';
+    fallbackText.style.textAlign = 'center';
+    fallbackText.style.width = '100%';
+    fallbackText.style.height = '100%';
+    fallbackText.style.display = 'flex';
+    fallbackText.style.alignItems = 'center';
+    fallbackText.style.justifyContent = 'center';
+    fallbackText.style.background = '#f0f0f0';
+    fallbackText.style.borderRadius = '15px';
+    
+    imageContainer.appendChild(fallbackText);
 }
 
 // Function to skip current word
