@@ -1,146 +1,37 @@
 // Game data - words and local images
+// Only include words that have corresponding images in the images/ directory
 const wordList = [
     // Fruits
-    {
-        word: "apple",
-        image: "images/apple.jpeg",
-        color: "#FF6B6B"
-    },
-    {
-        word: "banana",
-        image: "images/banana.jpeg",
-        color: "#FFD166"
-    },
-    {
-        word: "orange",
-        image: "images/orange.jpeg",
-        color: "#FF9800"
-    },
-    {
-        word: "strawberry",
-        image: "images/strawberry.jpeg",
-        color: "#EF476F"
-    },
+    { word: "apple", image: "images/apple.jpeg", color: "#FF6B6B" },
+    { word: "banana", image: "images/banana.jpeg", color: "#FFD166" },
+    { word: "orange", image: "images/orange.jpeg", color: "#FF9800" },
+    { word: "strawberry", image: "images/strawberry.jpeg", color: "#EF476F" },
     // Animals
-    {
-        word: "cat",
-        image: "images/cat.jpeg",
-        color: "#FFD166"
-    },
-    {
-        word: "dog",
-        image: "images/dog.jpeg",
-        color: "#06D6A0"
-    },
-    {
-        word: "fish",
-        image: "images/fish.jpeg",
-        color: "#2196F3"
-    },
-    {
-        word: "bird",
-        image: "images/bird.jpeg",
-        color: "#FF9800"
-    },
-    {
-        word: "lion",
-        image: "images/lion.jpeg",
-        color: "#FF9800"
-    },
-    {
-        word: "elephant",
-        image: "images/elephant.jpeg",
-        color: "#9E9E9E"
-    },
-    // New animals
-    {
-        word: "fox",
-        image: "images/fox.jpeg",
-        color: "#FF9800"
-    },
-    {
-        word: "wolf",
-        image: "images/wolf.jpeg",
-        color: "#9E9E9E"
-    },
-    {
-        word: "dolphin",
-        image: "images/dolphin.jpeg",
-        color: "#2196F3"
-    },
-    {
-        word: "whale",
-        image: "images/whale.jpeg",
-        color: "#2196F3"
-    },
-    {
-        word: "alligator",
-        image: "images/alligator.jpeg",
-        color: "#4CAF50"
-    },
+    { word: "cat", image: "images/cat.jpeg", color: "#FFD166" },
+    { word: "dog", image: "images/dog.jpeg", color: "#06D6A0" },
+    { word: "fish", image: "images/fish.jpeg", color: "#2196F3" },
+    { word: "bird", image: "images/bird.jpeg", color: "#FF9800" },
+    { word: "lion", image: "images/lion.jpeg", color: "#FF9800" },
+    { word: "elephant", image: "images/elephant.jpeg", color: "#9E9E9E" },
+    { word: "fox", image: "images/fox.jpeg", color: "#FF9800" },
+    { word: "wolf", image: "images/wolf.jpeg", color: "#9E9E9E" },
+    { word: "dolphin", image: "images/dolphin.jpeg", color: "#2196F3" },
+    { word: "whale", image: "images/whale.jpeg", color: "#2196F3" },
+    { word: "alligator", image: "images/alligator.jpeg", color: "#4CAF50" },
     // Body parts
-    {
-        word: "eye",
-        image: "images/eye.jpeg",
-        color: "#9C27B0"
-    },
-    {
-        word: "nose",
-        image: "images/nose.jpeg",
-        color: "#FF8A65"
-    },
-    {
-        word: "ear",
-        image: "images/ear.jpeg",
-        color: "#FFD166"
-    },
-    {
-        word: "mouth",
-        image: "images/mouth.jpeg",
-        color: "#EF476F"
-    },
-    {
-        word: "leg",
-        image: "images/leg.jpeg",
-        color: "#FF9800"
-    },
-    {
-        word: "foot",
-        image: "images/foot.jpeg",
-        color: "#795548"
-    },
+    { word: "eye", image: "images/eye.jpeg", color: "#9C27B0" },
+    { word: "nose", image: "images/nose.jpeg", color: "#FF8A65" },
+    { word: "ear", image: "images/ear.jpeg", color: "#FFD166" },
+    { word: "mouth", image: "images/mouth.jpeg", color: "#EF476F" },
+    { word: "leg", image: "images/leg.jpeg", color: "#FF9800" },
+    { word: "foot", image: "images/foot.jpeg", color: "#795548" },
     // Common objects
-    {
-        word: "car",
-        image: "images/car.jpeg",
-        color: "#FF6347"
-    },
-    {
-        word: "egg",
-        image: "images/egg.jpeg",
-        color: "#FFE082"
-    },
-    {
-        word: "house",
-        image: "images/house.jpeg",
-        color: "#FF8A65"
-    },
-    {
-        word: "flower",
-        image: "images/flower.jpeg",
-        color: "#E91E63"
-    },
-    // Add a few more simple words for variety
-    {
-        word: "ball",
-        image: "images/ball.jpeg",
-        color: "#4ECDC4"
-    },
-    {
-        word: "sun",
-        image: "images/sun.jpeg",
-        color: "#FFD700"
-    }
+    { word: "car", image: "images/car.jpeg", color: "#FF6347" },
+    { word: "egg", image: "images/egg.jpeg", color: "#FFE082" },
+    { word: "house", image: "images/house.jpeg", color: "#FF8A65" },
+    { word: "flower", image: "images/flower.jpeg", color: "#E91E63" },
+    { word: "ball", image: "images/ball.jpeg", color: "#4ECDC4" },
+    { word: "sun", image: "images/sun.jpeg", color: "#FFD700" }
 ];
 
 // Game state

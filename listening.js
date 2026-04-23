@@ -1,9 +1,12 @@
 // Game data - words and local images (shared with main game)
+// Only include words that have corresponding images in the images/ directory
 const wordList = [
+    // Fruits
     { word: "apple", image: "images/apple.jpeg", color: "#FF6B6B" },
     { word: "banana", image: "images/banana.jpeg", color: "#FFD166" },
     { word: "orange", image: "images/orange.jpeg", color: "#FF9800" },
     { word: "strawberry", image: "images/strawberry.jpeg", color: "#EF476F" },
+    // Animals
     { word: "cat", image: "images/cat.jpeg", color: "#FFD166" },
     { word: "dog", image: "images/dog.jpeg", color: "#06D6A0" },
     { word: "fish", image: "images/fish.jpeg", color: "#2196F3" },
@@ -15,12 +18,14 @@ const wordList = [
     { word: "dolphin", image: "images/dolphin.jpeg", color: "#2196F3" },
     { word: "whale", image: "images/whale.jpeg", color: "#2196F3" },
     { word: "alligator", image: "images/alligator.jpeg", color: "#4CAF50" },
+    // Body parts
     { word: "eye", image: "images/eye.jpeg", color: "#9C27B0" },
     { word: "nose", image: "images/nose.jpeg", color: "#FF8A65" },
     { word: "ear", image: "images/ear.jpeg", color: "#FFD166" },
     { word: "mouth", image: "images/mouth.jpeg", color: "#EF476F" },
     { word: "leg", image: "images/leg.jpeg", color: "#FF9800" },
     { word: "foot", image: "images/foot.jpeg", color: "#795548" },
+    // Common objects
     { word: "car", image: "images/car.jpeg", color: "#FF6347" },
     { word: "egg", image: "images/egg.jpeg", color: "#FFE082" },
     { word: "house", image: "images/house.jpeg", color: "#FF8A65" },
