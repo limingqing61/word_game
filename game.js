@@ -1,5 +1,5 @@
 // Game data - words and image URLs
-// Using reliable image sources from Pixabay (public domain) and Unsplash with specific IDs
+// Using reliable image sources from Pixabay (public domain)
 const wordList = [
     // Fruits
     {
@@ -18,19 +18,9 @@ const wordList = [
         color: "#FF9800"
     },
     {
-        word: "grape",
-        image: "https://cdn.pixabay.com/photo/2016/07/22/09/59/grapes-1534498_640.jpg",
-        color: "#9C27B0"
-    },
-    {
         word: "strawberry",
         image: "https://cdn.pixabay.com/photo/2017/11/18/17/09/strawberry-2960533_640.jpg",
         color: "#EF476F"
-    },
-    {
-        word: "watermelon",
-        image: "https://cdn.pixabay.com/photo/2016/10/07/14/11/watermelon-1721911_640.jpg",
-        color: "#06D6A0"
     },
     // Animals
     {
@@ -54,16 +44,6 @@ const wordList = [
         color: "#FF9800"
     },
     {
-        word: "rabbit",
-        image: "https://cdn.pixabay.com/photo/2017/04/02/22/36/easter-2197043_640.jpg",
-        color: "#9E9E9E"
-    },
-    {
-        word: "bear",
-        image: "https://cdn.pixabay.com/photo/2015/03/26/09/41/bear-690566_640.jpg",
-        color: "#795548"
-    },
-    {
         word: "lion",
         image: "https://cdn.pixabay.com/photo/2017/10/25/16/54/african-lion-2888519_640.jpg",
         color: "#FF9800"
@@ -73,21 +53,68 @@ const wordList = [
         image: "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_640.jpg",
         color: "#9E9E9E"
     },
-    // Common objects
+    // New animals
     {
-        word: "ball",
-        image: "https://cdn.pixabay.com/photo/2016/07/21/11/17/ball-1532271_640.jpg",
-        color: "#4ECDC4"
+        word: "fox",
+        image: "https://cdn.pixabay.com/photo/2016/12/05/11/39/fox-1883658_640.jpg",
+        color: "#FF9800"
     },
+    {
+        word: "wolf",
+        image: "https://cdn.pixabay.com/photo/2017/10/25/16/54/african-lion-2888519_640.jpg",
+        color: "#9E9E9E"
+    },
+    {
+        word: "dolphin",
+        image: "https://cdn.pixabay.com/photo/2013/07/05/12/18/dolphin-143746_640.jpg",
+        color: "#2196F3"
+    },
+    {
+        word: "whale",
+        image: "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_640.jpg",
+        color: "#2196F3"
+    },
+    {
+        word: "alligator",
+        image: "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_640.jpg",
+        color: "#4CAF50"
+    },
+    // Body parts - using simple illustrations
+    {
+        word: "eye",
+        image: "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_640.jpg",
+        color: "#9C27B0"
+    },
+    {
+        word: "nose",
+        image: "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_640.jpg",
+        color: "#FF8A65"
+    },
+    {
+        word: "ear",
+        image: "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_640.jpg",
+        color: "#FFD166"
+    },
+    {
+        word: "mouth",
+        image: "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_640.jpg",
+        color: "#EF476F"
+    },
+    {
+        word: "leg",
+        image: "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_640.jpg",
+        color: "#FF9800"
+    },
+    {
+        word: "foot",
+        image: "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_640.jpg",
+        color: "#795548"
+    },
+    // Common objects
     {
         word: "car",
         image: "https://cdn.pixabay.com/photo/2015/01/19/13/51/car-604019_640.jpg",
         color: "#FF6347"
-    },
-    {
-        word: "sun",
-        image: "https://cdn.pixabay.com/photo/2016/10/22/17/46/sun-1761417_640.jpg",
-        color: "#FFD700"
     },
     {
         word: "egg",
@@ -292,7 +319,37 @@ function checkWordMatch(spokenWord) {
     else if (currentWord === 'strawberry' && (normalizedSpoken.includes('straw') || normalizedSpoken.includes('berry'))) {
         isMatch = true;
     }
-    else if (currentWord === 'watermelon' && (normalizedSpoken.includes('water') || normalizedSpoken.includes('melon'))) {
+    else if (currentWord === 'fox' && (normalizedSpoken === 'fax' || normalizedSpoken === 'focks' || normalizedSpoken === 'foks')) {
+        isMatch = true;
+    }
+    else if (currentWord === 'wolf' && (normalizedSpoken === 'woof' || normalizedSpoken === 'wulf' || normalizedSpoken === 'woolf')) {
+        isMatch = true;
+    }
+    else if (currentWord === 'dolphin' && (normalizedSpoken.includes('dolphin') || normalizedSpoken === 'dolfin' || normalizedSpoken === 'dolfen')) {
+        isMatch = true;
+    }
+    else if (currentWord === 'whale' && (normalizedSpoken === 'wail' || normalizedSpoken === 'wayl' || normalizedSpoken === 'whail')) {
+        isMatch = true;
+    }
+    else if (currentWord === 'alligator' && (normalizedSpoken.includes('alligator') || normalizedSpoken === 'aligator' || normalizedSpoken === 'aligater')) {
+        isMatch = true;
+    }
+    else if (currentWord === 'eye' && (normalizedSpoken === 'i' || normalizedSpoken === 'aye' || normalizedSpoken === 'ai')) {
+        isMatch = true;
+    }
+    else if (currentWord === 'nose' && (normalizedSpoken === 'noze' || normalizedSpoken === 'knows' || normalizedSpoken === 'noes')) {
+        isMatch = true;
+    }
+    else if (currentWord === 'ear' && (normalizedSpoken === 'eer' || normalizedSpoken === 'year' || normalizedSpoken === 'ier')) {
+        isMatch = true;
+    }
+    else if (currentWord === 'mouth' && (normalizedSpoken === 'mowth' || normalizedSpoken === 'mout' || normalizedSpoken === 'mowf')) {
+        isMatch = true;
+    }
+    else if (currentWord === 'leg' && (normalizedSpoken === 'lag' || normalizedSpoken === 'legg' || normalizedSpoken === 'legs')) {
+        isMatch = true;
+    }
+    else if (currentWord === 'foot' && (normalizedSpoken === 'fut' || normalizedSpoken === 'fut' || normalizedSpoken === 'feet')) {
         isMatch = true;
     }
     // Match if spoken word contains the target word (for longer phrases)
@@ -437,20 +494,25 @@ function getPronunciationGuide(word) {
         'apple': 'AP-pul',
         'banana': 'buh-NA-nuh',
         'orange': 'OR-inj',
-        'grape': 'GRAYP',
         'strawberry': 'STRAW-ber-ee',
-        'watermelon': 'WAH-ter-mel-on',
         'cat': 'KAT',
         'dog': 'DAWG',
         'fish': 'FISH',
         'bird': 'BURD',
-        'rabbit': 'RAB-bit',
-        'bear': 'BAIR',
         'lion': 'LY-on',
         'elephant': 'EL-uh-funt',
-        'ball': 'BAWL',
+        'fox': 'FAHKS',
+        'wolf': 'WUULF',
+        'dolphin': 'DAHL-fin',
+        'whale': 'WAYL',
+        'alligator': 'AL-uh-gay-ter',
+        'eye': 'EYE',
+        'nose': 'NOHZ',
+        'ear': 'EER',
+        'mouth': 'MOWTH',
+        'leg': 'LEG',
+        'foot': 'FUUT',
         'car': 'KAR',
-        'sun': 'SUN',
         'egg': 'EG',
         'house': 'HOWSS',
         'flower': 'FLOW-er'
