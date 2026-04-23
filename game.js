@@ -381,37 +381,50 @@ function checkWordMatch(spokenWord) {
     if (normalizedSpoken === currentWord) {
         isMatch = true;
     }
-    // 2. 包含匹配：如果说的词包含目标词或目标词包含说的词
-    else if (normalizedSpoken.includes(currentWord) || currentWord.includes(normalizedSpoken)) {
-        // 长度相差不超过2个字符
-        if (Math.abs(normalizedSpoken.length - currentWord.length) <= 2) {
-            isMatch = true;
-        }
-        // 或者说的词至少是目标词长度的一半
-        else if (normalizedSpoken.length >= currentWord.length / 2) {
-            isMatch = true;
-        }
-    }
-    // 3. 开头匹配：前3个字符相同
-    else if (currentWord.length >= 3 && normalizedSpoken.length >= 3) {
-        if (currentWord.substring(0, 3) === normalizedSpoken.substring(0, 3)) {
-            isMatch = true;
-        }
-    }
-    // 4. 结尾匹配：后3个字符相同
-    else if (currentWord.length >= 3 && normalizedSpoken.length >= 3) {
-        const currentEnd = currentWord.substring(currentWord.length - 3);
-        const spokenEnd = normalizedSpoken.substring(normalizedSpoken.length - 3);
-        if (currentEnd === spokenEnd) {
-            isMatch = true;
-        }
-    }
-    // 5. 相似度匹配：计算简单相似度
+    // 2. 编辑距离匹配（Levenshtein距离）
     else {
-        // 计算两个词的最小编辑距离（简化版）
-        const similarity = calculateSimilarity(currentWord, normalizedSpoken);
-        if (similarity >= 0.6) { // 60%相似度
+        const distance = levenshteinDistance(currentWord, normalizedSpoken);
+        // 对于短词（<=4字符），允许编辑距离<=1
+        // 对于长词，允许编辑距离<=2
+        const maxAllowedDistance = (currentWord.length <= 4) ? 1 : 2;
+        if (distance <= maxAllowedDistance) {
             isMatch = true;
+        }
+    }
+    
+    // 3. 如果编辑距离不匹配，尝试其他宽松匹配
+    if (!isMatch) {
+        // 包含匹配：如果说的词包含目标词或目标词包含说的词
+        if (normalizedSpoken.includes(currentWord) || currentWord.includes(normalizedSpoken)) {
+            // 长度相差不超过3个字符
+            if (Math.abs(normalizedSpoken.length - currentWord.length) <= 3) {
+                isMatch = true;
+            }
+            // 或者说的词至少是目标词长度的一半
+            else if (normalizedSpoken.length >= currentWord.length / 2) {
+                isMatch = true;
+            }
+        }
+        // 开头匹配：前2个字符相同（更宽松）
+        else if (currentWord.length >= 2 && normalizedSpoken.length >= 2) {
+            if (currentWord.substring(0, 2) === normalizedSpoken.substring(0, 2)) {
+                isMatch = true;
+            }
+        }
+        // 结尾匹配：后2个字符相同
+        else if (currentWord.length >= 2 && normalizedSpoken.length >= 2) {
+            const currentEnd = currentWord.substring(currentWord.length - 2);
+            const spokenEnd = normalizedSpoken.substring(normalizedSpoken.length - 2);
+            if (currentEnd === spokenEnd) {
+                isMatch = true;
+            }
+        }
+        // 相似度匹配
+        else {
+            const similarity = calculateSimilarity(currentWord, normalizedSpoken);
+            if (similarity >= 0.5) { // 降低到50%相似度
+                isMatch = true;
+            }
         }
     }
     
@@ -493,6 +506,38 @@ function checkWordMatch(spokenWord) {
             }, 1000);
         }
     }
+}
+
+// Levenshtein距离计算
+function levenshteinDistance(a, b) {
+    const matrix = [];
+    
+    // 初始化矩阵
+    for (let i = 0; i <= b.length; i++) {
+        matrix[i] = [i];
+    }
+    for (let j = 0; j <= a.length; j++) {
+        matrix[0][j] = j;
+    }
+    
+    // 填充矩阵
+    for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+            if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                matrix[i][j] = matrix[i - 1][j - 1];
+            } else {
+                matrix[i][j] = Math.min(
+                    matrix[i - 1][j - 1] + 1, // 替换
+                    Math.min(
+                        matrix[i][j - 1] + 1,     // 插入
+                        matrix[i - 1][j] + 1      // 删除
+                    )
+                );
+            }
+        }
+    }
+    
+    return matrix[b.length][a.length];
 }
 
 // 计算两个词的相似度（简化版）
@@ -763,22 +808,13 @@ function skipCurrentWord() {
         statusElement.className = 'status idle';
         statusElement.innerHTML = `<i class="fas fa-forward"></i> Skipped! Now try: "${wordList[nextIndex].word}"`;
         
-        // Auto-restart listening after skip
+        // Auto-restart listening after skip (only once)
         if (gameState.isListening) {
             setTimeout(() => {
                 if (gameState.recognition) {
                     gameState.recognition.start();
                 }
             }, 500);
-        }
-        
-        // Restart listening if it was active
-        if (gameState.isListening) {
-            setTimeout(() => {
-                if (gameState.recognition) {
-                    gameState.recognition.start();
-                }
-            }, 1000);
         }
     } else {
         // Game completed
