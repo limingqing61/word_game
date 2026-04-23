@@ -164,6 +164,7 @@ const startBtn = document.getElementById('startBtn');
 const hintBtn = document.getElementById('hintBtn');
 const skipBtn = document.getElementById('skipBtn');
 const resetBtn = document.getElementById('resetBtn');
+const backBtn = document.getElementById('backBtn');
 const wordsGrid = document.querySelector('.words-grid');
 
 // Audio elements
@@ -909,6 +910,12 @@ resetBtn.addEventListener('click', function() {
     if (confirm('Are you sure you want to reset the game?')) {
         initGame();
     }
+});
+
+backBtn.addEventListener('click', function() {
+    clickSound.currentTime = 0;
+    clickSound.play();
+    window.location.href = 'index.html';
 });
 
 // Initialize the game when page loads

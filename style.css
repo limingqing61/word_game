@@ -42,6 +42,49 @@ header h1 {
     font-weight: bold;
 }
 
+.mode-selection {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 40px 0;
+    flex-wrap: wrap;
+}
+
+.mode-card {
+    background: white;
+    border-radius: 25px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 8px solid #ffcc00;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 300px;
+}
+
+.mode-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    border-color: #4fc3f7;
+}
+
+.mode-card i {
+    font-size: 5rem;
+    color: #ff3366;
+    margin-bottom: 20px;
+}
+
+.mode-card h2 {
+    font-size: 2.5rem;
+    color: #3366ff;
+    margin-bottom: 15px;
+}
+
+.mode-card p {
+    font-size: 1.5rem;
+    color: #666;
+}
+
 .game-info {
     display: flex;
     justify-content: space-between;
