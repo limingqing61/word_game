@@ -521,7 +521,7 @@ function showConfetti() {
     }
 }
 
-// Add pronunciation guide
+// Add pronunciation guide and phonetic symbols
 function getPronunciationGuide(word) {
     const guides = {
         'apple': 'AP-pul',
@@ -553,10 +553,50 @@ function getPronunciationGuide(word) {
     return guides[word.toLowerCase()] || word;
 }
 
-// Update current word display to include pronunciation
+// Add phonetic symbols (IPA)
+function getPhoneticSymbol(word) {
+    const phonetics = {
+        'apple': '/ˈæp.əl/',
+        'banana': '/bəˈnæn.ə/',
+        'orange': '/ˈɔːr.ɪndʒ/',
+        'strawberry': '/ˈstrɔː.ber.i/',
+        'cat': '/kæt/',
+        'dog': '/dɒɡ/',
+        'fish': '/fɪʃ/',
+        'bird': '/bɜːrd/',
+        'lion': '/ˈlaɪ.ən/',
+        'elephant': '/ˈel.ɪ.fənt/',
+        'fox': '/fɒks/',
+        'wolf': '/wʊlf/',
+        'dolphin': '/ˈdɒl.fɪn/',
+        'whale': '/weɪl/',
+        'alligator': '/ˈæl.ɪ.ɡeɪ.tər/',
+        'eye': '/aɪ/',
+        'nose': '/noʊz/',
+        'ear': '/ɪər/',
+        'mouth': '/maʊθ/',
+        'leg': '/leɡ/',
+        'foot': '/fʊt/',
+        'car': '/kɑːr/',
+        'egg': '/eɡ/',
+        'house': '/haʊs/',
+        'flower': '/ˈflaʊ.ər/',
+        'ball': '/bɔːl/',
+        'sun': '/sʌn/'
+    };
+    return phonetics[word.toLowerCase()] || `/${word.toLowerCase()}/`;
+}
+
+// Update current word display to include pronunciation and phonetic
 function updateCurrentWord() {
     const currentWord = wordList[gameState.currentWordIndex];
     targetWordElement.textContent = currentWord.word;
+    
+    // Update phonetic symbol
+    const phoneticElement = document.getElementById('phonetic');
+    if (phoneticElement) {
+        phoneticElement.textContent = getPhoneticSymbol(currentWord.word);
+    }
     
     // Clear any existing fallback text
     const imageContainer = wordImageElement.parentNode;
@@ -607,14 +647,30 @@ function showFallbackText(currentWord, imageContainer) {
     
     const fallbackText = document.createElement('div');
     fallbackText.className = 'fallback-text';
-    fallbackText.textContent = currentWord.word;
-    fallbackText.style.fontSize = '4rem';
-    fallbackText.style.color = currentWord.color;
-    fallbackText.style.fontWeight = 'bold';
+    
+    // Create word and phonetic display
+    const wordDisplay = document.createElement('div');
+    wordDisplay.textContent = currentWord.word;
+    wordDisplay.style.fontSize = '4rem';
+    wordDisplay.style.color = currentWord.color;
+    wordDisplay.style.fontWeight = 'bold';
+    wordDisplay.style.marginBottom = '10px';
+    
+    const phoneticDisplay = document.createElement('div');
+    phoneticDisplay.textContent = getPhoneticSymbol(currentWord.word);
+    phoneticDisplay.style.fontSize = '2.5rem';
+    phoneticDisplay.style.color = '#3366ff';
+    phoneticDisplay.style.fontWeight = 'bold';
+    phoneticDisplay.style.fontFamily = 'Arial, sans-serif';
+    
+    fallbackText.appendChild(wordDisplay);
+    fallbackText.appendChild(phoneticDisplay);
+    
     fallbackText.style.textAlign = 'center';
     fallbackText.style.width = '100%';
     fallbackText.style.height = '100%';
     fallbackText.style.display = 'flex';
+    fallbackText.style.flexDirection = 'column';
     fallbackText.style.alignItems = 'center';
     fallbackText.style.justifyContent = 'center';
     fallbackText.style.background = '#f0f0f0';

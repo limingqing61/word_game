@@ -180,6 +180,15 @@ header h1 {
     font-weight: bold;
     color: #ff3366;
     text-transform: uppercase;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.phonetic {
+    font-size: 1.8rem;
+    color: #3366ff;
+    font-weight: bold;
+    font-family: 'Arial', sans-serif;
 }
 
 .recognition-status {
