@@ -193,19 +193,25 @@ function initGame() {
     // Update initial remaining count display
     remainingElement.textContent = gameState.remaining;
     
-    // Initialize speech recognition if not already done
+    // Initialize speech recognition
     if (!gameState.recognition) {
         gameState.recognition = initSpeechRecognition();
     }
     
-    // Start listening automatically
-    if (gameState.recognition && !gameState.isListening) {
-        setTimeout(() => {
-            if (gameState.remaining > 0 && !gameState.isListening) {
-                gameState.recognition.start();
+    // Start listening automatically after a short delay
+    setTimeout(() => {
+        if (gameState.remaining > 0 && !gameState.isListening) {
+            try {
+                // 创建新的识别实例
+                gameState.recognition = initSpeechRecognition();
+                if (gameState.recognition) {
+                    gameState.recognition.start();
+                }
+            } catch (e) {
+                console.log('Auto-start error:', e);
             }
-        }, 500);
-    }
+        }
+    }, 1000);
 }
 
 // Update score display
@@ -277,76 +283,88 @@ function initSpeechRecognition() {
     }
     
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
     
-    recognition.continuous = false;
-    recognition.interimResults = false;
-    recognition.lang = 'en-US';
-    
-    recognition.onstart = function() {
-        gameState.isListening = true;
-        updateStartButton();
-        statusElement.className = 'status listening';
-        statusElement.innerHTML = '<i class="fas fa-microphone"></i> Listening... Speak now!';
-    };
-    
-    recognition.onresult = function(event) {
-        const transcript = event.results[0][0].transcript.toLowerCase().trim();
-        resultElement.textContent = transcript;
+    // 每次创建新的识别实例，避免上下文干扰
+    function createNewRecognition() {
+        const recognition = new SpeechRecognition();
         
-        checkWordMatch(transcript);
-    };
-    
-    recognition.onerror = function(event) {
-        console.error('Speech recognition error', event.error);
-        statusElement.className = 'status idle';
-        statusElement.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Error: ${event.error}`;
-        gameState.isListening = false;
-        updateStartButton();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+        recognition.maxAlternatives = 1; // 只获取一个结果
         
-        // Try to restart after an error (unless it's a not-allowed error)
-        if (event.error !== 'not-allowed' && event.error !== 'service-not-allowed') {
-            setTimeout(() => {
-                if (!gameState.isListening && gameState.remaining > 0) {
-                    try {
-                        gameState.recognition.start();
-                    } catch (e) {
-                        console.log('Error restarting after error:', e);
-                    }
-                }
-            }, 1000);
-        }
-    };
-    
-    recognition.onend = function() {
-        gameState.isListening = false;
-        updateStartButton();
+        recognition.onstart = function() {
+            gameState.isListening = true;
+            updateStartButton();
+            statusElement.className = 'status listening';
+            statusElement.innerHTML = '<i class="fas fa-microphone"></i> Listening... Speak now!';
+        };
         
-        // Auto-restart listening if game is not finished
-        if (gameState.remaining > 0) {
-            statusElement.className = 'status idle';
-            statusElement.innerHTML = '<i class="fas fa-microphone"></i> Ready to listen... Speak now!';
+        recognition.onresult = function(event) {
+            const transcript = event.results[0][0].transcript.toLowerCase().trim();
+            resultElement.textContent = transcript;
             
-            // Restart after a short delay
-            setTimeout(() => {
-                if (!gameState.isListening && gameState.remaining > 0) {
-                    try {
-                        gameState.recognition.start();
-                    } catch (e) {
-                        console.log('Recognition restart error:', e);
-                        // If error, try again after a longer delay
-                        setTimeout(() => {
-                            if (!gameState.isListening && gameState.remaining > 0) {
-                                gameState.recognition.start();
-                            }
-                        }, 1000);
+            checkWordMatch(transcript);
+        };
+        
+        recognition.onerror = function(event) {
+            console.error('Speech recognition error', event.error);
+            statusElement.className = 'status idle';
+            statusElement.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Error: ${event.error}`;
+            gameState.isListening = false;
+            updateStartButton();
+            
+            // Try to restart after an error (unless it's a not-allowed error)
+            if (event.error !== 'not-allowed' && event.error !== 'service-not-allowed') {
+                setTimeout(() => {
+                    if (!gameState.isListening && gameState.remaining > 0) {
+                        try {
+                            // 创建新的识别实例
+                            gameState.recognition = createNewRecognition();
+                            gameState.recognition.start();
+                        } catch (e) {
+                            console.log('Error restarting after error:', e);
+                        }
                     }
-                }
-            }, 800);
-        }
-    };
+                }, 1500);
+            }
+        };
+        
+        recognition.onend = function() {
+            gameState.isListening = false;
+            updateStartButton();
+            
+            // Auto-restart listening if game is not finished
+            if (gameState.remaining > 0) {
+                statusElement.className = 'status idle';
+                statusElement.innerHTML = '<i class="fas fa-microphone"></i> Ready to listen... Speak now!';
+                
+                // Restart after a short delay with a new instance
+                setTimeout(() => {
+                    if (!gameState.isListening && gameState.remaining > 0) {
+                        try {
+                            // 创建新的识别实例，避免上下文问题
+                            gameState.recognition = createNewRecognition();
+                            gameState.recognition.start();
+                        } catch (e) {
+                            console.log('Recognition restart error:', e);
+                            // If error, try again after a longer delay
+                            setTimeout(() => {
+                                if (!gameState.isListening && gameState.remaining > 0) {
+                                    gameState.recognition = createNewRecognition();
+                                    gameState.recognition.start();
+                                }
+                            }, 2000);
+                        }
+                    }
+                }, 800);
+            }
+        };
+        
+        return recognition;
+    }
     
-    return recognition;
+    return createNewRecognition();
 }
 
 // Check if spoken word matches current word
@@ -356,83 +374,43 @@ function checkWordMatch(spokenWord) {
     // Normalize spoken word
     const normalizedSpoken = spokenWord.toLowerCase().trim();
     
-    // More flexible matching
+    // More flexible matching - 放宽标准
     let isMatch = false;
     
-    // Exact match
+    // 1. 完全匹配
     if (normalizedSpoken === currentWord) {
         isMatch = true;
     }
-    // Match without plural 's'
-    else if (normalizedSpoken === currentWord + 's' || normalizedSpoken + 's' === currentWord) {
-        isMatch = true;
-    }
-    // Match common variations (for short words like "ball")
-    else if (currentWord === 'ball' && (normalizedSpoken.includes('ball') || normalizedSpoken === 'bawl' || normalizedSpoken === 'bowl')) {
-        isMatch = true;
-    }
-    // Handle common misrecognitions
-    else if (currentWord === 'cat' && (normalizedSpoken === 'kite' || normalizedSpoken === 'kit' || normalizedSpoken === 'kat' || normalizedSpoken === 'cut')) {
-        isMatch = true;
-    }
-    else if (currentWord === 'dog' && (normalizedSpoken === 'dock' || normalizedSpoken === 'dug' || normalizedSpoken === 'dag' || normalizedSpoken === 'dot')) {
-        isMatch = true;
-    }
-    else if (currentWord === 'bird' && (normalizedSpoken === 'burd' || normalizedSpoken === 'beard' || normalizedSpoken === 'bard' || normalizedSpoken === 'bed')) {
-        isMatch = true;
-    }
-    else if (currentWord === 'lion' && (normalizedSpoken === 'line' || normalizedSpoken === 'lain' || normalizedSpoken === 'lyin')) {
-        isMatch = true;
-    }
-    else if (currentWord === 'elephant' && (normalizedSpoken.includes('elephant') || normalizedSpoken === 'elefant' || normalizedSpoken === 'elfant')) {
-        isMatch = true;
-    }
-    else if (currentWord === 'strawberry' && (normalizedSpoken.includes('straw') || normalizedSpoken.includes('berry'))) {
-        isMatch = true;
-    }
-    else if (currentWord === 'fox' && (normalizedSpoken === 'fax' || normalizedSpoken === 'focks' || normalizedSpoken === 'foks')) {
-        isMatch = true;
-    }
-    else if (currentWord === 'wolf' && (normalizedSpoken === 'woof' || normalizedSpoken === 'wulf' || normalizedSpoken === 'woolf')) {
-        isMatch = true;
-    }
-    else if (currentWord === 'dolphin' && (normalizedSpoken.includes('dolphin') || normalizedSpoken === 'dolfin' || normalizedSpoken === 'dolfen')) {
-        isMatch = true;
-    }
-    else if (currentWord === 'whale' && (normalizedSpoken === 'wail' || normalizedSpoken === 'wayl' || normalizedSpoken === 'whail')) {
-        isMatch = true;
-    }
-    else if (currentWord === 'alligator' && (normalizedSpoken.includes('alligator') || normalizedSpoken === 'aligator' || normalizedSpoken === 'aligater')) {
-        isMatch = true;
-    }
-    else if (currentWord === 'eye' && (normalizedSpoken === 'i' || normalizedSpoken === 'aye' || normalizedSpoken === 'ai')) {
-        isMatch = true;
-    }
-    else if (currentWord === 'nose' && (normalizedSpoken === 'noze' || normalizedSpoken === 'knows' || normalizedSpoken === 'noes')) {
-        isMatch = true;
-    }
-    else if (currentWord === 'ear' && (normalizedSpoken === 'eer' || normalizedSpoken === 'year' || normalizedSpoken === 'ier')) {
-        isMatch = true;
-    }
-    else if (currentWord === 'mouth' && (normalizedSpoken === 'mowth' || normalizedSpoken === 'mout' || normalizedSpoken === 'mowf')) {
-        isMatch = true;
-    }
-    else if (currentWord === 'leg' && (normalizedSpoken === 'lag' || normalizedSpoken === 'legg' || normalizedSpoken === 'legs')) {
-        isMatch = true;
-    }
-    else if (currentWord === 'foot' && (normalizedSpoken === 'fut' || normalizedSpoken === 'fut' || normalizedSpoken === 'feet')) {
-        isMatch = true;
-    }
-    // Match if spoken word contains the target word (for longer phrases)
+    // 2. 包含匹配：如果说的词包含目标词或目标词包含说的词
     else if (normalizedSpoken.includes(currentWord) || currentWord.includes(normalizedSpoken)) {
-        // Only allow if the spoken word is at least half the length of the target word
-        if (normalizedSpoken.length >= currentWord.length / 2) {
+        // 长度相差不超过2个字符
+        if (Math.abs(normalizedSpoken.length - currentWord.length) <= 2) {
+            isMatch = true;
+        }
+        // 或者说的词至少是目标词长度的一半
+        else if (normalizedSpoken.length >= currentWord.length / 2) {
             isMatch = true;
         }
     }
-    // Sound similarity for short words (first two letters match)
-    else if (currentWord.length <= 4 && normalizedSpoken.length <= 4) {
-        if (currentWord.substring(0,2) === normalizedSpoken.substring(0,2)) {
+    // 3. 开头匹配：前3个字符相同
+    else if (currentWord.length >= 3 && normalizedSpoken.length >= 3) {
+        if (currentWord.substring(0, 3) === normalizedSpoken.substring(0, 3)) {
+            isMatch = true;
+        }
+    }
+    // 4. 结尾匹配：后3个字符相同
+    else if (currentWord.length >= 3 && normalizedSpoken.length >= 3) {
+        const currentEnd = currentWord.substring(currentWord.length - 3);
+        const spokenEnd = normalizedSpoken.substring(normalizedSpoken.length - 3);
+        if (currentEnd === spokenEnd) {
+            isMatch = true;
+        }
+    }
+    // 5. 相似度匹配：计算简单相似度
+    else {
+        // 计算两个词的最小编辑距离（简化版）
+        const similarity = calculateSimilarity(currentWord, normalizedSpoken);
+        if (similarity >= 0.6) { // 60%相似度
             isMatch = true;
         }
     }
@@ -515,6 +493,37 @@ function checkWordMatch(spokenWord) {
             }, 1000);
         }
     }
+}
+
+// 计算两个词的相似度（简化版）
+function calculateSimilarity(word1, word2) {
+    // 如果长度相差太大，相似度低
+    const lengthDiff = Math.abs(word1.length - word2.length);
+    if (lengthDiff > 3) return 0.3;
+    
+    // 计算相同字符的比例
+    let matches = 0;
+    const minLength = Math.min(word1.length, word2.length);
+    
+    for (let i = 0; i < minLength; i++) {
+        if (word1[i] === word2[i]) {
+            matches++;
+        }
+    }
+    
+    // 考虑顺序不同的情况（简单实现）
+    const word1Set = new Set(word1);
+    const word2Set = new Set(word2);
+    let setMatches = 0;
+    for (const char of word1Set) {
+        if (word2Set.has(char)) setMatches++;
+    }
+    
+    // 综合两种匹配方式
+    const positionSimilarity = matches / Math.max(word1.length, word2.length);
+    const charSimilarity = setMatches / Math.max(word1Set.size, word2Set.size);
+    
+    return (positionSimilarity * 0.7 + charSimilarity * 0.3);
 }
 
 // Update start button text and icon
@@ -789,23 +798,23 @@ startBtn.addEventListener('click', function() {
     clickSound.currentTime = 0;
     clickSound.play();
     
-    if (!gameState.recognition) {
-        gameState.recognition = initSpeechRecognition();
-    }
-    
-    if (!gameState.recognition) return;
-    
     if (gameState.isListening) {
         // Stop listening
-        gameState.recognition.stop();
+        if (gameState.recognition) {
+            gameState.recognition.stop();
+        }
         gameState.isListening = false;
         updateStartButton();
         statusElement.className = 'status idle';
         statusElement.innerHTML = '<i class="fas fa-microphone-slash"></i> Listening stopped';
     } else {
-        // Start listening
+        // Start listening with a fresh instance
         try {
-            gameState.recognition.start();
+            // 创建新的识别实例
+            gameState.recognition = initSpeechRecognition();
+            if (gameState.recognition) {
+                gameState.recognition.start();
+            }
         } catch (e) {
             console.log('Recognition start error:', e);
             statusElement.className = 'status idle';
