@@ -864,8 +864,34 @@ hintBtn.addEventListener('click', function() {
     clickSound.play();
     
     const currentWord = wordList[gameState.currentWordIndex].word;
-    const pronunciation = getPronunciationGuide(currentWord);
-    alert(`Hint: The word is "${currentWord}".\n\nPronounce it like: "${pronunciation}"\n\nTry saying it clearly and slowly!`);
+    
+    // Use speech synthesis to pronounce the word
+    if ('speechSynthesis' in window) {
+        // Cancel any ongoing speech
+        window.speechSynthesis.cancel();
+        
+        const utterance = new SpeechSynthesisUtterance(currentWord);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.8; // Slower rate for kids
+        utterance.pitch = 1.2; // Slightly higher pitch for clarity
+        
+        // Try to find an English voice
+        const voices = window.speechSynthesis.getVoices();
+        const englishVoice = voices.find(voice => voice.lang.startsWith('en'));
+        if (englishVoice) {
+            utterance.voice = englishVoice;
+        }
+        
+        window.speechSynthesis.speak(utterance);
+        
+        // Update status to show hint was given
+        statusElement.className = 'status idle';
+        statusElement.innerHTML = `<i class="fas fa-volume-up"></i> Listen carefully!`;
+    } else {
+        // Fallback: just show the word
+        statusElement.className = 'status idle';
+        statusElement.innerHTML = `<i class="fas fa-volume-up"></i> Say: "${currentWord}"`;
+    }
 });
 
 skipBtn.addEventListener('click', function() {
@@ -886,4 +912,16 @@ resetBtn.addEventListener('click', function() {
 });
 
 // Initialize the game when page loads
-window.addEventListener('load', initGame);
+window.addEventListener('load', function() {
+    // Pre-load speech synthesis voices
+    if ('speechSynthesis' in window) {
+        // Some browsers need a user interaction to load voices
+        window.speechSynthesis.getVoices();
+        // Also listen for when voices are loaded
+        window.speechSynthesis.onvoiceschanged = function() {
+            window.speechSynthesis.getVoices();
+        };
+    }
+    
+    initGame();
+});
