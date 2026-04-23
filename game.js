@@ -61,7 +61,7 @@ const wordList = [
     },
     {
         word: "wolf",
-        image: "https://cdn.pixabay.com/photo/2017/10/25/16/54/african-lion-2888519_640.jpg",
+        image: "https://cdn.pixabay.com/photo/2017/02/13/11/10/wolf-2063843_640.jpg",
         color: "#9E9E9E"
     },
     {
@@ -71,43 +71,43 @@ const wordList = [
     },
     {
         word: "whale",
-        image: "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_640.jpg",
+        image: "https://cdn.pixabay.com/photo/2016/11/29/05/45/whale-1867282_640.jpg",
         color: "#2196F3"
     },
     {
         word: "alligator",
-        image: "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_640.jpg",
+        image: "https://cdn.pixabay.com/photo/2016/11/18/15/58/alligator-1836425_640.jpg",
         color: "#4CAF50"
     },
     // Body parts - using simple illustrations
     {
         word: "eye",
-        image: "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_640.jpg",
+        image: "https://cdn.pixabay.com/photo/2016/03/31/18/42/eye-1294884_640.png",
         color: "#9C27B0"
     },
     {
         word: "nose",
-        image: "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_640.jpg",
+        image: "https://cdn.pixabay.com/photo/2016/03/31/18/42/nose-1294885_640.png",
         color: "#FF8A65"
     },
     {
         word: "ear",
-        image: "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_640.jpg",
+        image: "https://cdn.pixabay.com/photo/2016/03/31/18/42/ear-1294886_640.png",
         color: "#FFD166"
     },
     {
         word: "mouth",
-        image: "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_640.jpg",
+        image: "https://cdn.pixabay.com/photo/2016/03/31/18/42/mouth-1294887_640.png",
         color: "#EF476F"
     },
     {
         word: "leg",
-        image: "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_640.jpg",
+        image: "https://cdn.pixabay.com/photo/2016/03/31/18/42/leg-1294888_640.png",
         color: "#FF9800"
     },
     {
         word: "foot",
-        image: "https://cdn.pixabay.com/photo/2016/11/14/04/45/elephant-1822636_640.jpg",
+        image: "https://cdn.pixabay.com/photo/2016/03/31/18/42/foot-1294889_640.png",
         color: "#795548"
     },
     // Common objects
@@ -130,6 +130,17 @@ const wordList = [
         word: "flower",
         image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_640.jpg",
         color: "#E91E63"
+    },
+    // Add a few more simple words for variety
+    {
+        word: "ball",
+        image: "https://cdn.pixabay.com/photo/2016/07/21/11/17/ball-1532271_640.jpg",
+        color: "#4ECDC4"
+    },
+    {
+        word: "sun",
+        image: "https://cdn.pixabay.com/photo/2016/10/22/17/46/sun-1761417_640.jpg",
+        color: "#FFD700"
     }
 ];
 
@@ -221,7 +232,7 @@ function createWordGrid() {
         }
         
         wordItem.innerHTML = `
-            <img src="${item.image}" alt="${item.word}">
+            <img src="${item.image}" alt="${item.word}" onerror="this.style.display='none'; this.parentNode.innerHTML+='<div style=\'color:${item.color}; font-size:1.5rem; font-weight:bold;\'>${item.word}</div>'">
             <div class="word">${item.word}</div>
         `;
         
@@ -527,10 +538,29 @@ function updateCurrentWord() {
     wordImageElement.src = currentWord.image;
     wordImageElement.alt = currentWord.word;
     
+    // Add error handling for image loading
+    wordImageElement.onerror = function() {
+        console.warn(`Failed to load image for ${currentWord.word}: ${currentWord.image}`);
+        // Set a fallback image or show text
+        wordImageElement.style.display = 'none';
+        const fallbackText = document.createElement('div');
+        fallbackText.textContent = currentWord.word;
+        fallbackText.style.fontSize = '4rem';
+        fallbackText.style.color = currentWord.color;
+        fallbackText.style.fontWeight = 'bold';
+        wordImageElement.parentNode.appendChild(fallbackText);
+    };
+    
     // Update pronunciation hint in status area
     const pronunciation = getPronunciationGuide(currentWord.word);
-    document.querySelector('.speech-result p').innerHTML = 
-        `Say: <strong>"${currentWord.word}"</strong> (sounds like "${pronunciation}")`;
+    const speechResult = document.querySelector('.speech-result');
+    if (speechResult) {
+        const firstParagraph = speechResult.querySelector('p:first-child');
+        if (firstParagraph) {
+            firstParagraph.innerHTML = 
+                `Say: <strong>"${currentWord.word}"</strong> (sounds like "${pronunciation}")`;
+        }
+    }
 }
 
 // Function to skip current word
