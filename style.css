@@ -220,6 +220,15 @@ header h1 {
     color: #333;
 }
 
+.speech-result p {
+    margin-bottom: 10px;
+}
+
+.speech-result strong {
+    color: #ff3366;
+    font-size: 2rem;
+}
+
 .speech-result span {
     font-weight: bold;
     color: #3366ff;

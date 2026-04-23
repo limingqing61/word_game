@@ -2,33 +2,43 @@
 const wordList = [
     {
         word: "apple",
-        image: "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=400&h=300&fit=crop",
+        image: "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=400&h=300&fit=crop&auto=format",
         color: "#FF6B6B"
     },
     {
         word: "ball",
-        image: "https://images.unsplash.com/photo-1530549387789-4c1017266635?w-400&h=300&fit=crop",
+        image: "https://images.unsplash.com/photo-1575361204480-aadea25e6e68?w=400&h=300&fit=crop&auto=format",
         color: "#4ECDC4"
     },
     {
         word: "cat",
-        image: "https://images.unsplash.com/photo-1514888286974-6d03bde4ba42?w=400&h=300&fit=crop",
+        image: "https://images.unsplash.com/photo-1514888286974-6d03bde4ba42?w=400&h=300&fit=crop&auto=format",
         color: "#FFD166"
     },
     {
         word: "dog",
-        image: "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=400&h=300&fit=crop",
+        image: "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=400&h=300&fit=crop&auto=format",
         color: "#06D6A0"
     },
     {
         word: "egg",
-        image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400&h=300&fit=crop",
+        image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400&h=300&fit=crop&auto=format",
         color: "#118AB2"
     },
     {
         word: "fish",
-        image: "https://images.unsplash.com/photo-1518834103328-93d45986dce1?w=400&h=300&fit=crop",
+        image: "https://images.unsplash.com/photo-1518834103328-93d45986dce1?w=400&h=300&fit=crop&auto=format",
         color: "#EF476F"
+    },
+    {
+        word: "sun",
+        image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop&auto=format",
+        color: "#FFD700"
+    },
+    {
+        word: "car",
+        image: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=400&h=300&fit=crop&auto=format",
+        color: "#FF6347"
     }
 ];
 
@@ -177,8 +187,33 @@ function initSpeechRecognition() {
 function checkWordMatch(spokenWord) {
     const currentWord = wordList[gameState.currentWordIndex].word.toLowerCase();
     
-    // Simple matching - could be improved
-    if (spokenWord === currentWord) {
+    // Normalize spoken word
+    const normalizedSpoken = spokenWord.toLowerCase().trim();
+    
+    // More flexible matching
+    let isMatch = false;
+    
+    // Exact match
+    if (normalizedSpoken === currentWord) {
+        isMatch = true;
+    }
+    // Match without plural 's'
+    else if (normalizedSpoken === currentWord + 's' || normalizedSpoken + 's' === currentWord) {
+        isMatch = true;
+    }
+    // Match common variations (for short words like "ball")
+    else if (currentWord === 'ball' && (normalizedSpoken.includes('ball') || normalizedSpoken === 'bawl' || normalizedSpoken === 'bowl')) {
+        isMatch = true;
+    }
+    // Match if spoken word contains the target word (for longer phrases)
+    else if (normalizedSpoken.includes(currentWord) || currentWord.includes(normalizedSpoken)) {
+        // Only allow if the spoken word is at least half the length of the target word
+        if (normalizedSpoken.length >= currentWord.length / 2) {
+            isMatch = true;
+        }
+    }
+    
+    if (isMatch) {
         // Play correct sound
         correctSound.currentTime = 0;
         correctSound.play();
@@ -194,7 +229,7 @@ function checkWordMatch(spokenWord) {
         // Mark word as found in grid
         const wordItems = document.querySelectorAll('.word-item');
         wordItems.forEach(item => {
-            if (item.dataset.word === currentWord) {
+            if (item.dataset.word.toLowerCase() === currentWord) {
                 item.classList.add('found');
                 
                 // Play explosion sound after a short delay
@@ -205,9 +240,9 @@ function checkWordMatch(spokenWord) {
             }
         });
         
-        // Update status
+        // Update status with what was recognized
         statusElement.className = 'status correct';
-        statusElement.innerHTML = '<i class="fas fa-check-circle"></i> Correct! Great job!';
+        statusElement.innerHTML = `<i class="fas fa-check-circle"></i> Correct! You said "${spokenWord}"`;
         
         // Move to next word if available
         setTimeout(() => {
@@ -215,7 +250,7 @@ function checkWordMatch(spokenWord) {
                 // Find next unfound word
                 let nextIndex = -1;
                 for (let i = 0; i < wordList.length; i++) {
-                    if (!gameState.foundWords.has(wordList[i].word)) {
+                    if (!gameState.foundWords.has(wordList[i].word.toLowerCase())) {
                         nextIndex = i;
                         break;
                     }
@@ -245,8 +280,9 @@ function checkWordMatch(spokenWord) {
             }
         }, 1500);
     } else {
+        // Show more detailed feedback
         statusElement.className = 'status idle';
-        statusElement.innerHTML = `<i class="fas fa-times-circle"></i> Try again! You said "${spokenWord}"`;
+        statusElement.innerHTML = `<i class="fas fa-times-circle"></i> Try again! You said "${spokenWord}". Target was "${currentWord}"`;
         
         // Restart listening after a short delay
         if (gameState.isListening) {
@@ -299,6 +335,34 @@ function showConfetti() {
     }
 }
 
+// Add pronunciation guide
+function getPronunciationGuide(word) {
+    const guides = {
+        'apple': 'AP-pul',
+        'ball': 'BAWL',
+        'cat': 'KAT',
+        'dog': 'DAWG',
+        'egg': 'EG',
+        'fish': 'FISH',
+        'sun': 'SUN',
+        'car': 'KAR'
+    };
+    return guides[word.toLowerCase()] || word;
+}
+
+// Update current word display to include pronunciation
+function updateCurrentWord() {
+    const currentWord = wordList[gameState.currentWordIndex];
+    targetWordElement.textContent = currentWord.word;
+    wordImageElement.src = currentWord.image;
+    wordImageElement.alt = currentWord.word;
+    
+    // Update pronunciation hint in status area
+    const pronunciation = getPronunciationGuide(currentWord.word);
+    document.querySelector('.speech-result p').innerHTML = 
+        `Say: <strong>"${currentWord.word}"</strong> (sounds like "${pronunciation}")`;
+}
+
 // Event listeners
 startBtn.addEventListener('click', function() {
     clickSound.currentTime = 0;
@@ -322,7 +386,8 @@ hintBtn.addEventListener('click', function() {
     clickSound.play();
     
     const currentWord = wordList[gameState.currentWordIndex].word;
-    alert(`Hint: The word is "${currentWord}". Try saying it clearly!`);
+    const pronunciation = getPronunciationGuide(currentWord);
+    alert(`Hint: The word is "${currentWord}".\n\nPronounce it like: "${pronunciation}"\n\nTry saying it clearly and slowly!`);
 });
 
 resetBtn.addEventListener('click', function() {
