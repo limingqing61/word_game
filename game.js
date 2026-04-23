@@ -187,17 +187,24 @@ function initGame() {
     
     // Reset status
     statusElement.className = 'status idle';
-    statusElement.innerHTML = '<i class="fas fa-microphone-slash"></i> Click "Start Game" to begin';
+    statusElement.innerHTML = '<i class="fas fa-microphone"></i> Ready to listen... Speak now!';
     resultElement.textContent = '...';
     
     // Update initial remaining count display
     remainingElement.textContent = gameState.remaining;
     
-    // Stop recognition if active
-    if (gameState.recognition) {
-        gameState.recognition.stop();
-        gameState.isListening = false;
-        updateStartButton();
+    // Initialize speech recognition if not already done
+    if (!gameState.recognition) {
+        gameState.recognition = initSpeechRecognition();
+    }
+    
+    // Start listening automatically
+    if (gameState.recognition && !gameState.isListening) {
+        setTimeout(() => {
+            if (gameState.remaining > 0 && !gameState.isListening) {
+                gameState.recognition.start();
+            }
+        }, 500);
     }
 }
 
@@ -296,15 +303,46 @@ function initSpeechRecognition() {
         statusElement.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Error: ${event.error}`;
         gameState.isListening = false;
         updateStartButton();
+        
+        // Try to restart after an error (unless it's a not-allowed error)
+        if (event.error !== 'not-allowed' && event.error !== 'service-not-allowed') {
+            setTimeout(() => {
+                if (!gameState.isListening && gameState.remaining > 0) {
+                    try {
+                        gameState.recognition.start();
+                    } catch (e) {
+                        console.log('Error restarting after error:', e);
+                    }
+                }
+            }, 1000);
+        }
     };
     
     recognition.onend = function() {
         gameState.isListening = false;
         updateStartButton();
         
+        // Auto-restart listening if game is not finished
         if (gameState.remaining > 0) {
             statusElement.className = 'status idle';
-            statusElement.innerHTML = '<i class="fas fa-microphone-slash"></i> Click to speak again';
+            statusElement.innerHTML = '<i class="fas fa-microphone"></i> Ready to listen... Speak now!';
+            
+            // Restart after a short delay
+            setTimeout(() => {
+                if (!gameState.isListening && gameState.remaining > 0) {
+                    try {
+                        gameState.recognition.start();
+                    } catch (e) {
+                        console.log('Recognition restart error:', e);
+                        // If error, try again after a longer delay
+                        setTimeout(() => {
+                            if (!gameState.isListening && gameState.remaining > 0) {
+                                gameState.recognition.start();
+                            }
+                        }, 1000);
+                    }
+                }
+            }, 800);
         }
     };
     
@@ -485,7 +523,7 @@ function updateStartButton() {
         startBtn.innerHTML = '<i class="fas fa-microphone-slash"></i> Stop Listening';
         startBtn.classList.add('listening');
     } else {
-        startBtn.innerHTML = '<i class="fas fa-microphone"></i> Start Game';
+        startBtn.innerHTML = '<i class="fas fa-microphone"></i> Start Listening';
         startBtn.classList.remove('listening');
     }
 }
@@ -716,6 +754,15 @@ function skipCurrentWord() {
         statusElement.className = 'status idle';
         statusElement.innerHTML = `<i class="fas fa-forward"></i> Skipped! Now try: "${wordList[nextIndex].word}"`;
         
+        // Auto-restart listening after skip
+        if (gameState.isListening) {
+            setTimeout(() => {
+                if (gameState.recognition) {
+                    gameState.recognition.start();
+                }
+            }, 500);
+        }
+        
         // Restart listening if it was active
         if (gameState.isListening) {
             setTimeout(() => {
@@ -749,9 +796,21 @@ startBtn.addEventListener('click', function() {
     if (!gameState.recognition) return;
     
     if (gameState.isListening) {
+        // Stop listening
         gameState.recognition.stop();
+        gameState.isListening = false;
+        updateStartButton();
+        statusElement.className = 'status idle';
+        statusElement.innerHTML = '<i class="fas fa-microphone-slash"></i> Listening stopped';
     } else {
-        gameState.recognition.start();
+        // Start listening
+        try {
+            gameState.recognition.start();
+        } catch (e) {
+            console.log('Recognition start error:', e);
+            statusElement.className = 'status idle';
+            statusElement.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error starting microphone';
+        }
     }
 });
 
@@ -768,9 +827,8 @@ skipBtn.addEventListener('click', function() {
     clickSound.currentTime = 0;
     clickSound.play();
     
-    if (confirm(`Skip the word "${wordList[gameState.currentWordIndex].word}" and move to the next one?`)) {
-        skipCurrentWord();
-    }
+    // Skip without confirmation
+    skipCurrentWord();
 });
 
 resetBtn.addEventListener('click', function() {
