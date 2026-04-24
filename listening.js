@@ -230,6 +230,7 @@ const progressFillElement = document.getElementById('progressFill');
 const questionContainer = document.getElementById('questionContainer');
 const choicesGrid = document.getElementById('choicesGrid');
 const repeatBtn = document.getElementById('repeatBtn');
+const slowPlayBtn = document.getElementById('slowPlayBtn');
 const hintBtn = document.getElementById('hintBtnListening');
 const backBtn = document.getElementById('backBtn');
 
@@ -250,6 +251,12 @@ function initListeningGame() {
     const selectedIndices = shuffledAll.slice(0, Math.min(30, wordList.length));
     gameState.questionOrder = selectedIndices;
     gameState.totalQuestions = selectedIndices.length;
+    
+    // Show action buttons
+    const actionButtons = document.querySelector('.action-buttons');
+    if (actionButtons) {
+        actionButtons.style.display = 'flex';
+    }
     
     // Update UI
     updateScoreDisplay();
@@ -300,6 +307,11 @@ function showQuestion() {
     const actionButtons = document.querySelector('.action-buttons');
     if (actionButtons) {
         actionButtons.style.display = 'flex';
+    }
+    
+    // Enable slow play button
+    if (slowPlayBtn) {
+        slowPlayBtn.disabled = false;
     }
     
     const wordIndex = gameState.questionOrder[gameState.currentQuestionIndex];
@@ -387,6 +399,9 @@ function handleChoiceClick(clickedElement, correctIndex) {
     
     gameState.isAnswered = true;
     hintBtn.disabled = true;
+    if (slowPlayBtn) {
+        slowPlayBtn.disabled = true;
+    }
     
     const clickedIndex = parseInt(clickedElement.dataset.wordIndex);
     const isCorrect = (clickedIndex === correctIndex);
@@ -494,13 +509,16 @@ function getPhoneticSymbol(word) {
 }
 
 // Play word pronunciation using speech synthesis
-function playWordPronunciation(word) {
+function playWordPronunciation(word, rate) {
+    if (rate === undefined) {
+        rate = 0.7;
+    }
     if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         
         const utterance = new SpeechSynthesisUtterance(word);
         utterance.lang = 'en-US';
-        utterance.rate = 0.7; // Slower for kids
+        utterance.rate = rate; // Slower for kids
         utterance.pitch = 1.1;
         
         const voices = window.speechSynthesis.getVoices();
@@ -613,6 +631,22 @@ repeatBtn.addEventListener('click', function() {
         const wordIndex = gameState.questionOrder[gameState.currentQuestionIndex];
         const word = wordList[wordIndex].word;
         playWordPronunciation(word);
+    }
+});
+
+slowPlayBtn.addEventListener('click', function() {
+    if (gameState.currentQuestionIndex < gameState.totalQuestions) {
+        const wordIndex = gameState.questionOrder[gameState.currentQuestionIndex];
+        const word = wordList[wordIndex].word;
+        playWordPronunciation(word, 0.25);
+    }
+});
+
+slowPlayBtn.addEventListener('click', function() {
+    if (gameState.currentQuestionIndex < gameState.totalQuestions) {
+        const wordIndex = gameState.questionOrder[gameState.currentQuestionIndex];
+        const word = wordList[wordIndex].word;
+        playWordPronunciation(word, 0.25);
     }
 });
 

@@ -207,6 +207,68 @@
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
         }
         
+        .slow-play-btn {
+            background: linear-gradient(to right, #9C27B0, #673AB7);
+            color: white;
+            padding: 12px 20px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            flex: 1;
+            min-width: 100px;
+            max-width: 160px;
+        }
+        
+        .slow-play-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .slow-play-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .slow-play-btn {
+            background: linear-gradient(to right, #9C27B0, #673AB7);
+            color: white;
+            padding: 12px 20px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            flex: 1;
+            min-width: 100px;
+            max-width: 160px;
+        }
+        
+        .slow-play-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .slow-play-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
         .hint-btn-listening {
             background: linear-gradient(to right, #FF9800, #FFC107);
             color: white;
@@ -386,6 +448,9 @@
                     <div class="action-buttons">
                         <button id="repeatBtn" class="repeat-btn">
                             <i class="fas fa-volume-up"></i> Listen Again
+                        </button>
+                        <button id="slowPlayBtn" class="slow-play-btn">
+                            <i class="fas fa-turtle"></i> Slow Play
                         </button>
                         <button id="hintBtnListening" class="hint-btn-listening">
                             <i class="fas fa-lightbulb"></i> Hint
