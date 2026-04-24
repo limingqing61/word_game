@@ -774,10 +774,15 @@ function showGameComplete() {
                 <h3><i class="fas fa-book"></i> Words to Review (${gameState.wrongWords.length})</h3>
                 <div class="wrong-words-list">
                     ${gameState.wrongWords.map(w => `
-                        <div class="wrong-word-item" onclick="playWordPronunciation('${w.word}')">
-                            <img src="${w.image}" alt="${w.word}" style="width:60px; height:60px; object-fit:contain; border-radius:10px;">
-                            <span>${w.word}</span>
-                            <i class="fas fa-volume-up" style="color:#2196F3; font-size:1.5rem;"></i>
+                        <div class="wrong-word-item">
+                            <img src="${w.image}" alt="${w.word}" style="width:80px; height:80px; object-fit:contain; border-radius:10px;">
+                            <div class="wrong-word-info">
+                                <span class="wrong-word-text">${w.word}</span>
+                                <span class="wrong-word-phonetic">${getPhoneticSymbol(w.word)}</span>
+                            </div>
+                            <button class="wrong-word-play-btn" onclick="playWordPronunciation('${w.word}')">
+                                <i class="fas fa-volume-up"></i>
+                            </button>
                         </div>
                     `).join('')}
                 </div>
