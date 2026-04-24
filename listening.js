@@ -432,6 +432,8 @@ function handleChoiceClick(clickedElement, correctIndex) {
         icon.className = 'result-icon correct';
         icon.innerHTML = '<i class="fas fa-check-circle"></i>';
         clickedElement.appendChild(icon);
+        
+        playSoundEffect('correct');
     } else {
         gameState.wrongCount++;
         // Track wrong word
@@ -456,6 +458,8 @@ function handleChoiceClick(clickedElement, correctIndex) {
             correctIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
             correctChoiceElement.appendChild(correctIcon);
         }
+        
+        playSoundEffect('wrong');
     }
     
     // Replace question mark with the correct image
@@ -711,6 +715,40 @@ function playWordPronunciation(word, rate) {
         }
         
         window.speechSynthesis.speak(utterance);
+    }
+}
+
+// Play sound effect for correct/wrong answer
+function playSoundEffect(type) {
+    try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        
+        if (type === 'correct') {
+            // Pleasant ascending two-tone
+            oscillator.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+            oscillator.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.15); // E5
+            oscillator.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.3); // G5
+            oscillator.type = 'sine';
+            gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+            oscillator.start(audioCtx.currentTime);
+            oscillator.stop(audioCtx.currentTime + 0.5);
+        } else {
+            // Descending two-tone for wrong
+            oscillator.frequency.setValueAtTime(400, audioCtx.currentTime);
+            oscillator.frequency.setValueAtTime(300, audioCtx.currentTime + 0.2);
+            oscillator.type = 'sawtooth';
+            gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+            oscillator.start(audioCtx.currentTime);
+            oscillator.stop(audioCtx.currentTime + 0.4);
+        }
+    } catch (e) {
+        // Audio not supported, ignore
     }
 }
 
