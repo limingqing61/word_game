@@ -303,6 +303,10 @@ function showQuestion() {
     gameState.isAnswered = false;
     gameState.hintUsed = false;
     
+    // Reset container height for normal question display
+    questionContainer.style.height = '';
+    questionContainer.style.overflow = '';
+    
     // Show action buttons
     const actionButtons = document.querySelector('.action-buttons');
     if (actionButtons) {
@@ -714,6 +718,10 @@ function playWordPronunciation(word, rate) {
 function showGameComplete() {
     questionContainer.innerHTML = '';
     choicesGrid.innerHTML = '';
+    
+    // Allow container to expand for game complete screen
+    questionContainer.style.height = 'auto';
+    questionContainer.style.overflow = 'visible';
     
     // Hide action buttons
     const actionButtons = document.querySelector('.action-buttons');
