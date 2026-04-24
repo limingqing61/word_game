@@ -642,14 +642,6 @@ slowPlayBtn.addEventListener('click', function() {
     }
 });
 
-slowPlayBtn.addEventListener('click', function() {
-    if (gameState.currentQuestionIndex < gameState.totalQuestions) {
-        const wordIndex = gameState.questionOrder[gameState.currentQuestionIndex];
-        const word = wordList[wordIndex].word;
-        playWordPronunciation(word, 0.25);
-    }
-});
-
 hintBtn.addEventListener('click', function() {
     if (gameState.isAnswered || gameState.hintUsed || gameState.hintRemaining <= 0) return;
     
