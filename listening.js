@@ -206,7 +206,10 @@ const wordList = [
     { word: "house", image: "images/house.jpeg", color: "#FF8A65" },
     { word: "flower", image: "images/flower.jpeg", color: "#E91E63" },
     { word: "ball", image: "images/ball.jpeg", color: "#4ECDC4" },
-    { word: "sun", image: "images/sun.jpeg", color: "#FFD700" }
+    { word: "sun", image: "images/sun.jpeg", color: "#FFD700" },
+    { word: "crybaby", image: "images/crybaby.jpeg", color: "#FF6B6B" },
+    { word: "brother", image: "images/brother.jpeg", color: "#2196F3" },
+    { word: "hero", image: "images/hero.jpeg", color: "#FF9800" }
 ];
 
 // Game state
@@ -690,7 +693,10 @@ function getPhoneticSymbol(word) {
         'house': '/haʊs/',
         'flower': '/ˈflaʊ.ər/',
         'ball': '/bɔːl/',
-        'sun': '/sʌn/'
+        'sun': '/sʌn/',
+        'crybaby': '/ˈkraɪ.beɪ.bi/',
+        'brother': '/ˈbrʌð.ər/',
+        'hero': '/ˈhɪr.oʊ/'
     };
     return phonetics[word.toLowerCase()] || `/${word.toLowerCase()}/`;
 }
