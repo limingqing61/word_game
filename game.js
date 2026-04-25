@@ -763,6 +763,12 @@ function updateCurrentWord() {
         phoneticElement.textContent = getPhoneticSymbol(currentWord.word);
     }
     
+    // Update Chinese translation
+    const chineseElement = document.getElementById('chinese');
+    if (chineseElement) {
+        chineseElement.textContent = currentWord.chinese || '';
+    }
+    
     // Clear any existing fallback text
     const imageContainer = wordImageElement.parentNode;
     const existingFallback = imageContainer.querySelector('.fallback-text');

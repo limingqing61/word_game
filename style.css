@@ -234,6 +234,13 @@ header h1 {
     font-family: 'Arial', sans-serif;
 }
 
+.chinese {
+    font-size: 1.6rem;
+    color: #4CAF50;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
 .recognition-status {
     background: #f0f8ff;
     border-radius: 20px;
