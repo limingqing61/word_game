@@ -207,9 +207,14 @@ const wordList = [
     { word: "flower", image: "images/flower.jpeg", color: "#E91E63", chinese: "花" },
     { word: "ball", image: "images/ball.jpeg", color: "#4ECDC4", chinese: "球" },
     { word: "sun", image: "images/sun.jpeg", color: "#FFD700", chinese: "太阳" },
-    { word: "crybaby", image: "images/crybaby.jpeg", color: "#FF6B6B", chinese: "爱哭鬼" },
     { word: "brother", image: "images/brother.jpeg", color: "#2196F3", chinese: "兄弟" },
-    { word: "hero", image: "images/hero.jpeg", color: "#FF9800", chinese: "英雄" }
+    { word: "mother", image: "images/mother.jpeg", color: "#E91E63", chinese: "母亲" },
+    { word: "father", image: "images/father.jpeg", color: "#2196F3", chinese: "父亲" },
+    { word: "grandpa", image: "images/grandpa.jpeg", color: "#795548", chinese: "爷爷" },
+    { word: "grandma", image: "images/grandma.jpeg", color: "#795548", chinese: "奶奶" },
+    { word: "uncle", image: "images/uncle.jpeg", color: "#FF9800", chinese: "叔叔" },
+    { word: "aunt", image: "images/aunt.jpeg", color: "#FF9800", chinese: "阿姨" },
+    { word: "sister", image: "images/sister.jpeg", color: "#E91E63", chinese: "姐妹" }
 ];
 
 // Game state
@@ -695,9 +700,14 @@ function getPhoneticSymbol(word) {
         'flower': '/ˈflaʊ.ər/',
         'ball': '/bɔːl/',
         'sun': '/sʌn/',
-        'crybaby': '/ˈkraɪ.beɪ.bi/',
         'brother': '/ˈbrʌð.ər/',
-        'hero': '/ˈhɪr.oʊ/'
+        'mother': '/ˈmʌð.ər/',
+        'father': '/ˈfɑː.ðər/',
+        'grandpa': '/ˈɡræn.pɑː/',
+        'grandma': '/ˈɡræn.mɑː/',
+        'uncle': '/ˈʌŋ.kəl/',
+        'aunt': '/ænt/',
+        'sister': '/ˈsɪs.tər/'
     };
     return phonetics[word.toLowerCase()] || `/${word.toLowerCase()}/`;
 }
