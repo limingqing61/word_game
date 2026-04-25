@@ -477,8 +477,13 @@ function generateWordList() {
         phoneticSpan.className = 'word-list-phonetic';
         phoneticSpan.textContent = getPhoneticSymbol(w.word);
         
+        const chineseSpan = document.createElement('span');
+        chineseSpan.className = 'word-list-chinese';
+        chineseSpan.textContent = w.chinese || '';
+        
         info.appendChild(wordSpan);
         info.appendChild(phoneticSpan);
+        info.appendChild(chineseSpan);
         
         const playBtn = document.createElement('button');
         playBtn.className = 'word-list-play-btn';
