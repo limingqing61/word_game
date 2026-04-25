@@ -1,0 +1,2 @@
+# Translation file for Word Game
+# Add translations here as needed
