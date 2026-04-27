@@ -757,7 +757,8 @@ function getPhoneticSymbol(word) {
         'grandma': '/ˈɡræn.mɑː/',
         'uncle': '/ˈʌŋ.kəl/',
         'aunt': '/ænt/',
-        'sister': '/ˈsɪs.tər/'
+        'sister': '/ˈsɪs.tər/',
+        'family': '/ˈfæm.əli/'
     };
     return phonetics[word.toLowerCase()] || `/${word.toLowerCase()}/`;
 }

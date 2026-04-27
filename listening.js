@@ -214,7 +214,8 @@ const wordList = [
     { word: "grandma", image: "images/grandma.jpeg", color: "#795548", chinese: "奶奶" },
     { word: "uncle", image: "images/uncle.jpeg", color: "#FF9800", chinese: "叔叔" },
     { word: "aunt", image: "images/aunt.jpeg", color: "#FF9800", chinese: "阿姨" },
-    { word: "sister", image: "images/sister.jpeg", color: "#E91E63", chinese: "姐妹" }
+    { word: "sister", image: "images/sister.jpeg", color: "#E91E63", chinese: "姐妹" },
+    { word: "family", image: "images/family.jpeg", color: "#E91E63", chinese: "家庭" }
 ];
 
 // Game state
