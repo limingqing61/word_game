@@ -691,31 +691,31 @@ function showConfetti() {
 // Add pronunciation guide and phonetic symbols
 function getPronunciationGuide(word) {
     const guides = {
-        'apple': 'AP-pul',
-        'banana': 'buh-NA-nuh',
-        'orange': 'OR-inj',
-        'strawberry': 'STRAW-ber-ee',
+        'apple': 'AP-uhl',
+        'banana': 'buh-NAH-nuh',
+        'orange': 'ORR-inj',
+        'strawberry': 'STRAW-buh-ree',
         'cat': 'KAT',
-        'dog': 'DAWG',
+        'dog': 'DOG',
         'fish': 'FISH',
         'bird': 'BURD',
-        'lion': 'LY-on',
-        'elephant': 'EL-uh-funt',
-        'fox': 'FAHKS',
+        'lion': 'LY-uhn',
+        'elephant': 'EL-uh-fuhnt',
+        'fox': 'FOKS',
         'wolf': 'WUULF',
-        'dolphin': 'DAHL-fin',
+        'dolphin': 'DOL-fin',
         'whale': 'WAYL',
-        'alligator': 'AL-uh-gay-ter',
+        'alligator': 'AL-uh-gay-tuh',
         'eye': 'EYE',
         'nose': 'NOHZ',
         'ear': 'EER',
         'mouth': 'MOWTH',
         'leg': 'LEG',
         'foot': 'FUUT',
-        'car': 'KAR',
+        'car': 'KAH',
         'egg': 'EG',
         'house': 'HOWSS',
-        'flower': 'FLOW-er'
+        'flower': 'FLOW-uh'
     };
     return guides[word.toLowerCase()] || word;
 }
@@ -724,41 +724,41 @@ function getPronunciationGuide(word) {
 function getPhoneticSymbol(word) {
     const phonetics = {
         'apple': '/ˈæp.əl/',
-        'banana': '/bəˈnæn.ə/',
-        'orange': '/ˈɔːr.ɪndʒ/',
-        'strawberry': '/ˈstrɔː.ber.i/',
+        'banana': '/bəˈnɑː.nə/',
+        'orange': '/ˈɒr.ɪndʒ/',
+        'strawberry': '/ˈstrɔː.bər.i/',
         'cat': '/kæt/',
         'dog': '/dɒɡ/',
         'fish': '/fɪʃ/',
-        'bird': '/bɜːrd/',
+        'bird': '/bɜːd/',
         'lion': '/ˈlaɪ.ən/',
         'elephant': '/ˈel.ɪ.fənt/',
         'fox': '/fɒks/',
         'wolf': '/wʊlf/',
         'dolphin': '/ˈdɒl.fɪn/',
         'whale': '/weɪl/',
-        'alligator': '/ˈæl.ɪ.ɡeɪ.tər/',
+        'alligator': '/ˈæl.ɪ.ɡeɪ.tə/',
         'eye': '/aɪ/',
-        'nose': '/noʊz/',
-        'ear': '/ɪər/',
+        'nose': '/nəʊz/',
+        'ear': '/ɪə/',
         'mouth': '/maʊθ/',
         'leg': '/leɡ/',
         'foot': '/fʊt/',
-        'car': '/kɑːr/',
+        'car': '/kɑː/',
         'egg': '/eɡ/',
         'house': '/haʊs/',
-        'flower': '/ˈflaʊ.ər/',
+        'flower': '/ˈflaʊ.ə/',
         'ball': '/bɔːl/',
         'sun': '/sʌn/',
-        'brother': '/ˈbrʌð.ər/',
-        'mother': '/ˈmʌð.ər/',
-        'father': '/ˈfɑː.ðər/',
+        'brother': '/ˈbrʌð.ə/',
+        'mother': '/ˈmʌð.ə/',
+        'father': '/ˈfɑː.ðə/',
         'grandpa': '/ˈɡræn.pɑː/',
         'grandma': '/ˈɡræn.mɑː/',
         'uncle': '/ˈʌŋ.kəl/',
-        'aunt': '/ænt/',
-        'sister': '/ˈsɪs.tər/',
-        'family': '/ˈfæm.əli/'
+        'aunt': '/ɑːnt/',
+        'sister': '/ˈsɪs.tə/',
+        'family': '/ˈfæm.əl.i/'
     };
     return phonetics[word.toLowerCase()] || `/${word.toLowerCase()}/`;
 }
@@ -961,7 +961,7 @@ hintBtn.addEventListener('click', function() {
         window.speechSynthesis.cancel();
         
         const utterance = new SpeechSynthesisUtterance(currentWord);
-        utterance.lang = 'en-US';
+        utterance.lang = 'en-GB';
         utterance.rate = 0.8; // Slower rate for kids
         utterance.pitch = 1.2; // Slightly higher pitch for clarity
         
