@@ -400,7 +400,6 @@ header h1 {
     align-items: center;
     z-index: 10000;
     cursor: pointer;
-    pointer-events: none; /* allow clicks to pass through to the page, except on the image */
 }
 
 .image-zoom-img {
@@ -411,7 +410,6 @@ header h1 {
     border-radius: 20px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     transition: transform 0.2s ease;
-    pointer-events: auto; /* make the image clickable */
 }
 
 /* Responsive design for iPad */

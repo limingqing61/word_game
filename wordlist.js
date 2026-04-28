@@ -998,6 +998,10 @@ function generateWordList() {
         // Click to zoom image
         img.addEventListener('click', function(e) {
             e.stopPropagation();
+            // Prevent creating multiple overlays
+            if (document.querySelector('.image-zoom-overlay')) {
+                return;
+            }
             // Prevent page scrolling while zoomed
             document.body.style.overflow = 'hidden';
             // Create overlay (transparent, only the image is visible)
