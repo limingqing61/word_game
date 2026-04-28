@@ -888,6 +888,7 @@ function getPhoneticSymbol(word) {
         'uncle': '/ˈʌŋ.kəl/',
         'aunt': '/ɑːnt/',
         'sister': '/ˈsɪs.tə/',
+        'family': '/ˈfæm.ɪ.li/',
         // New words
         'queen': '/kwiːn/',
         'king': '/kɪŋ/',
