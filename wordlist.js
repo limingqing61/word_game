@@ -995,6 +995,24 @@ function generateWordList() {
         img.onerror = function() {
             img.style.display = 'none';
         };
+        // Click to zoom image
+        img.addEventListener('click', function(e) {
+            e.stopPropagation();
+            // Create overlay
+            const overlay = document.createElement('div');
+            overlay.className = 'image-zoom-overlay';
+            // Create enlarged image
+            const zoomImg = document.createElement('img');
+            zoomImg.className = 'image-zoom-img';
+            zoomImg.src = w.image;
+            zoomImg.alt = w.word;
+            overlay.appendChild(zoomImg);
+            // Remove overlay on click
+            overlay.addEventListener('click', function() {
+                overlay.remove();
+            });
+            document.body.appendChild(overlay);
+        });
         
         const info = document.createElement('div');
         info.className = 'word-list-info';
