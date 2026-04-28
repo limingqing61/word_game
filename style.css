@@ -387,31 +387,6 @@ header h1 {
     gap: 10px;
 }
 
-/* Voice toggle button */
-.voice-toggle-btn {
-    background: linear-gradient(to right, #E91E63, #9C27B0);
-    color: white;
-    padding: 12px 20px;
-    font-size: 1.2rem;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: all 0.3s ease;
-    font-weight: bold;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    flex: 1;
-    min-width: 100px;
-    max-width: 160px;
-}
-
-.voice-toggle-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
-}
 
 /* Image zoom backdrop (transparent, captures clicks) */
 .image-zoom-backdrop {

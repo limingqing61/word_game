@@ -477,8 +477,6 @@ const wordList = [
     { word: "smile", image: "images/smile.jpeg", color: "#FFC107", chinese: "微笑" }
 ];
 
-// Voice preference (true = prefer female voice)
-let preferFemaleVoice = true;
 
 // Game state
 let gameState = {
@@ -1235,34 +1233,6 @@ function getPhoneticSymbol(word) {
     return phonetics[word.toLowerCase()] || `/${word.toLowerCase()}/`;
 }
 
-// Get preferred voice (female if preferFemaleVoice is true)
-function getPreferredVoice() {
-    const voices = window.speechSynthesis.getVoices();
-    const englishVoices = voices.filter(voice => voice.lang.startsWith('en'));
-    if (englishVoices.length === 0) return null;
-    
-    if (preferFemaleVoice) {
-        // Look for a female voice by name
-        const femaleVoice = englishVoices.find(voice => {
-            const name = voice.name.toLowerCase();
-            return name.includes('female') || name.includes('zira') || name.includes('samantha');
-        });
-        if (femaleVoice) return femaleVoice;
-    }
-    // Fallback to first English voice
-    return englishVoices[0];
-}
-
-// Toggle voice preference
-function toggleVoicePreference() {
-    preferFemaleVoice = !preferFemaleVoice;
-    const btn = document.getElementById('voiceToggleBtn');
-    if (btn) {
-        btn.innerHTML = preferFemaleVoice
-            ? '<i class="fas fa-female"></i> Female'
-            : '<i class="fas fa-male"></i> Male';
-    }
-}
 
 // Play word pronunciation using speech synthesis
 function playWordPronunciation(word, rate) {
@@ -1277,9 +1247,10 @@ function playWordPronunciation(word, rate) {
         utterance.rate = rate; // Slower for kids
         utterance.pitch = 1.1;
         
-        const voice = getPreferredVoice();
-        if (voice) {
-            utterance.voice = voice;
+        const voices = window.speechSynthesis.getVoices();
+        const englishVoice = voices.find(voice => voice.lang.startsWith('en'));
+        if (englishVoice) {
+            utterance.voice = englishVoice;
         }
         
         window.speechSynthesis.speak(utterance);
@@ -1423,11 +1394,6 @@ function showConfetti() {
     }
 }
 
-// Voice toggle button
-const voiceToggleBtn = document.getElementById('voiceToggleBtn');
-if (voiceToggleBtn) {
-    voiceToggleBtn.addEventListener('click', toggleVoicePreference);
-}
 
 // Event listeners
 repeatBtn.addEventListener('click', function() {
