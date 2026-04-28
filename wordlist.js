@@ -998,7 +998,9 @@ function generateWordList() {
         // Click to zoom image
         img.addEventListener('click', function(e) {
             e.stopPropagation();
-            // Create overlay
+            // Prevent page scrolling while zoomed
+            document.body.style.overflow = 'hidden';
+            // Create overlay (transparent, only the image is visible)
             const overlay = document.createElement('div');
             overlay.className = 'image-zoom-overlay';
             // Create enlarged image
@@ -1007,9 +1009,10 @@ function generateWordList() {
             zoomImg.src = w.image;
             zoomImg.alt = w.word;
             overlay.appendChild(zoomImg);
-            // Remove overlay on click
+            // Remove overlay on click (anywhere, including the image)
             overlay.addEventListener('click', function() {
                 overlay.remove();
+                document.body.style.overflow = '';
             });
             document.body.appendChild(overlay);
         });
