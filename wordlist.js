@@ -998,27 +998,26 @@ function generateWordList() {
         // Click to zoom image
         img.addEventListener('click', function(e) {
             e.stopPropagation();
-            // Prevent creating multiple overlays
-            if (document.querySelector('.image-zoom-overlay')) {
+            // Prevent multiple zooms
+            if (document.querySelector('.image-zoom-backdrop')) {
                 return;
             }
             // Prevent page scrolling while zoomed
             document.body.style.overflow = 'hidden';
-            // Create overlay (transparent, only the image is visible)
-            const overlay = document.createElement('div');
-            overlay.className = 'image-zoom-overlay';
-            // Create enlarged image
-            const zoomImg = document.createElement('img');
-            zoomImg.className = 'image-zoom-img';
-            zoomImg.src = w.image;
-            zoomImg.alt = w.word;
-            overlay.appendChild(zoomImg);
-            // Remove overlay on click (anywhere, including the image)
-            overlay.addEventListener('click', function() {
-                overlay.remove();
+            // Add zoom class to the clicked image
+            img.classList.add('image-zoomed');
+            // Create a transparent backdrop that captures clicks to restore
+            const backdrop = document.createElement('div');
+            backdrop.className = 'image-zoom-backdrop';
+            // Remove zoom when backdrop or the image itself is clicked
+            const removeZoom = function() {
+                img.classList.remove('image-zoomed');
+                backdrop.remove();
                 document.body.style.overflow = '';
-            });
-            document.body.appendChild(overlay);
+            };
+            backdrop.addEventListener('click', removeZoom);
+            img.addEventListener('click', removeZoom);
+            document.body.appendChild(backdrop);
         });
         
         const info = document.createElement('div');

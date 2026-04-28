@@ -387,29 +387,26 @@ header h1 {
     gap: 10px;
 }
 
-/* Image zoom overlay */
-.image-zoom-overlay {
+/* Image zoom backdrop (transparent, captures clicks) */
+.image-zoom-backdrop {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background: transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     z-index: 10000;
     cursor: pointer;
 }
 
-.image-zoom-img {
-    width: 80vw;
-    height: auto;
-    max-height: 90vh;
-    object-fit: contain;
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+/* Zoomed image (scaled in place) */
+.image-zoomed {
+    position: relative;
+    z-index: 10001;
+    transform: scale(2.5);
+    transform-origin: center center;
     transition: transform 0.2s ease;
+    cursor: pointer;
 }
 
 /* Responsive design for iPad */
