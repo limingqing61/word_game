@@ -526,6 +526,9 @@ let gameState = {
     wrongWords: []
 };
 
+// Streak counter for consecutive correct answers
+let streakCount = 0;
+
 // DOM elements
 const correctCountElement = document.getElementById('correctCount');
 const wrongCountElement = document.getElementById('wrongCount');
@@ -729,6 +732,7 @@ function handleChoiceClick(clickedElement, correctIndex) {
     // Show result icons
     if (isCorrect) {
         gameState.correctCount++;
+        streakCount++;
         clickedElement.classList.add('correct');
         clickedElement.classList.add('revealed');
         
@@ -740,6 +744,7 @@ function handleChoiceClick(clickedElement, correctIndex) {
         playSoundEffect('correct');
     } else {
         gameState.wrongCount++;
+        streakCount = 0;
         // Track wrong word
         const wrongWord = wordList[correctIndex];
         gameState.wrongWords.push(wrongWord);
@@ -780,11 +785,21 @@ function handleChoiceClick(clickedElement, correctIndex) {
     // Update score
     updateScoreDisplay();
     
-    // Auto advance to next question after delay
-    setTimeout(() => {
-        gameState.currentQuestionIndex++;
-        showQuestion();
-    }, 2000);
+    // Auto advance to next question after delay (with possible celebration)
+    const advanceDelay = 2000;
+    if (streakCount >= 5) {
+        // Show celebration, then advance after celebration duration
+        showCelebration(function() {
+            streakCount = 0;
+            gameState.currentQuestionIndex++;
+            showQuestion();
+        });
+    } else {
+        setTimeout(function() {
+            gameState.currentQuestionIndex++;
+            showQuestion();
+        }, advanceDelay);
+    }
 }
 
 // Add phonetic symbols (IPA) - shared with main game
@@ -1432,6 +1447,41 @@ function showGameComplete() {
     
     // Show confetti
     showConfetti();
+}
+
+// Show celebration overlay for streak of 5 correct answers
+function showCelebration(callback) {
+    const messages = [
+        "Very Well!",
+        "You are so clever!",
+        "I admire you so much!",
+        "Amazing!",
+        "Fantastic!",
+        "Great job!",
+        "You're a star!",
+        "Wonderful!"
+    ];
+    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+    
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'celebration-overlay';
+    
+    // Create content
+    const content = document.createElement('div');
+    content.className = 'celebration-content';
+    content.innerHTML = `
+        <div class="celebration-emoji">🧚</div>
+        <div class="celebration-message">${randomMessage}</div>
+    `;
+    overlay.appendChild(content);
+    document.body.appendChild(overlay);
+    
+    // Remove after 2 seconds and call callback
+    setTimeout(function() {
+        overlay.remove();
+        if (callback) callback();
+    }, 2000);
 }
 
 // Simple confetti effect
