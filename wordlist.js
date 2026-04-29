@@ -1031,15 +1031,15 @@ function getPhoneticSymbol(word) {
 // Play word pronunciation
 function playWordPronunciation(word, rate) {
     if (rate === undefined) {
-        rate = 0.7;
+        rate = 0.5; // Slower for kids
     }
     if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         
         const utterance = new SpeechSynthesisUtterance(word);
-        utterance.lang = 'en-GB';
+        utterance.lang = 'en-US'; // American English for clearer standard pronunciation
         utterance.rate = rate;
-        utterance.pitch = 1.1;
+        utterance.pitch = 1.2;
         
         const voices = window.speechSynthesis.getVoices();
         const englishVoice = voices.find(voice => voice.lang.startsWith('en'));
