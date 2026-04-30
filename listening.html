@@ -126,11 +126,37 @@
             color: #F44336;
         }
         
-        .score-board-listening {
+        /* --- 新的布局样式：统计区（右侧） + 操作区（左侧） 同一行 --- */
+        .game-info-stats-row {
             display: flex;
-            gap: 40px;
-            justify-content: center;
-            margin-bottom: 20px;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        /* 操作区容器（左侧） */
+        .actions-wrapper {
+            flex-shrink: 0;
+            order: 1;
+        }
+        
+        /* 统计区容器（右侧） */
+        .stats-wrapper {
+            flex-shrink: 0;
+            order: 2;
+        }
+        
+        /* 统计区水平排列 */
+        .score-board-listensing-horizontal {
+            display: flex;
+            flex-direction: row;
+            gap: 32px;
+            background: rgba(0, 0, 0, 0.03);
+            padding: 8px 24px;
+            border-radius: 60px;
         }
         
         .score-item-listening {
@@ -140,13 +166,13 @@
         }
         
         .score-label-listening {
-            font-size: 1.5rem;
+            font-size: 1rem;
             color: #555;
             margin-bottom: 5px;
         }
         
         .score-value-listening {
-            font-size: 3rem;
+            font-size: 1.8rem;
             font-weight: bold;
         }
         
@@ -174,11 +200,13 @@
             transition: width 0.5s ease;
         }
         
+        /* 按钮组 */
         .action-buttons {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            padding: 10px 5px;
+            gap: 12px;
+            padding: 0;
+            margin: 0;
             flex-wrap: nowrap;
         }
         
@@ -422,18 +450,33 @@
             }
             
             .action-buttons {
-                gap: 10px;
-                padding: 10px 5px;
+                gap: 8px;
             }
             
             .repeat-btn,
             .back-btn,
-            .hint-btn-listening {
-                padding: 10px 15px;
-                font-size: 1rem;
-                min-width: 80px;
+            .hint-btn-listening,
+            .slow-play-btn {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+                min-width: 70px;
             }
         }
+
+        /* 去掉原来包裹按钮的那个框框 */
+        .word-card {
+            background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        /* 同时确保图片容器没有多余的边框 */
+        .image-container {
+            background: transparent;
+            box-shadow: none;
+   }
     </style>
 </head>
 <body>
@@ -443,29 +486,52 @@
             <p class="subtitle">Listen and choose the correct picture!</p>
         </header>
 
-        <div class="game-info">
-            <div class="score-board-listening">
-                <div class="score-item-listening">
-                    <span class="score-label-listening">Correct:</span>
-                    <span id="correctCount" class="score-value-listening correct">0</span>
-                </div>
-                <div class="score-item-listening">
-                    <span class="score-label-listening">Wrong:</span>
-                    <span id="wrongCount" class="score-value-listening wrong">0</span>
-                </div>
-                <div class="score-item-listening">
-                    <span class="score-label-listening">Progress:</span>
-                    <span id="progressCount" class="score-value-listening">0/24</span>
-                </div>
-                <div class="score-item-listening">
-                    <span class="score-label-listening">Score:</span>
-                    <span id="totalScore" class="score-value-listening">0</span>
+        <!-- ✅ 修改点1：统计区 + 操作区 放在同一行 -->
+        <div class="game-info-stats-row">
+            <!-- 左侧：操作区 -->
+            <div class="actions-wrapper">
+                <div class="action-buttons">
+                    <button id="repeatBtn" class="repeat-btn">
+                        <i class="fas fa-volume-up"></i> Listen Again
+                    </button>
+                    <button id="slowPlayBtn" class="slow-play-btn">
+                        <i class="fas fa-turtle"></i> Slow Play
+                    </button>
+                    <button id="hintBtnListening" class="hint-btn-listening">
+                        <i class="fas fa-lightbulb"></i> Hint
+                    </button>
+                    <button id="backBtn" class="back-btn">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
                 </div>
             </div>
-            
-            <div class="progress-bar">
-                <div id="progressFill" class="progress-fill" style="width: 0%"></div>
+
+            <!-- 右侧：统计区（水平排列） -->
+            <div class="stats-wrapper">
+                <div class="score-board-listensing-horizontal">
+                    <div class="score-item-listening">
+                        <span class="score-label-listening">Correct:</span>
+                        <span id="correctCount" class="score-value-listening correct">0</span>
+                    </div>
+                    <div class="score-item-listening">
+                        <span class="score-label-listening">Wrong:</span>
+                        <span id="wrongCount" class="score-value-listening wrong">0</span>
+                    </div>
+                    <div class="score-item-listening">
+                        <span class="score-label-listening">Progress:</span>
+                        <span id="progressCount" class="score-value-listening">0/24</span>
+                    </div>
+                    <div class="score-item-listening">
+                        <span class="score-label-listening">Score:</span>
+                        <span id="totalScore" class="score-value-listening">0</span>
+                    </div>
+                </div>
             </div>
+        </div>
+
+        <!-- 进度条独立一行 -->
+        <div class="progress-bar">
+            <div id="progressFill" class="progress-fill" style="width: 0%"></div>
         </div>
 
         <div class="game-area">
@@ -473,21 +539,7 @@
                 <div class="word-card">
                     <div class="image-container" id="questionContainer">
                     </div>
-                    <!-- Buttons moved below the image -->
-                    <div class="action-buttons">
-                        <button id="repeatBtn" class="repeat-btn">
-                            <i class="fas fa-volume-up"></i> Listen Again
-                        </button>
-                        <button id="slowPlayBtn" class="slow-play-btn">
-                            <i class="fas fa-turtle"></i> Slow Play
-                        </button>
-                        <button id="hintBtnListening" class="hint-btn-listening">
-                            <i class="fas fa-lightbulb"></i> Hint
-                        </button>
-                        <button id="backBtn" class="back-btn">
-                            <i class="fas fa-arrow-left"></i> Back
-                        </button>
-                    </div>
+                    <!-- 注意：原来的操作按钮已经上移到统计区同一行了，这里不再重复 -->
                 </div>
             </div>
 
