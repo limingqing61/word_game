@@ -529,6 +529,9 @@ let gameState = {
 // Streak counter for consecutive correct answers
 let streakCount = 0;
 
+// Total score (3 points per correct for first 20 questions, 4 points for last 10)
+let totalScore = 0;
+
 // DOM elements
 const correctCountElement = document.getElementById('correctCount');
 const wrongCountElement = document.getElementById('wrongCount');
@@ -588,6 +591,12 @@ function updateScoreDisplay() {
     
     const progressPercent = (gameState.currentQuestionIndex / gameState.totalQuestions) * 100;
     progressFillElement.style.width = `${progressPercent}%`;
+    
+    // Update total score display
+    const totalScoreElement = document.getElementById('totalScore');
+    if (totalScoreElement) {
+        totalScoreElement.textContent = totalScore;
+    }
 }
 
 // Update hint button display
@@ -642,9 +651,13 @@ function showQuestion() {
     updateHintButton();
 }
 
-// Generate 4 choices (1 correct + 3 random)
+// Generate choices (4 for first 20 questions, 6 for last 10)
 function generateChoices(correctIndex) {
     const correctWord = wordList[correctIndex];
+    
+    // Determine number of choices
+    const numChoices = (gameState.currentQuestionIndex < 20) ? 4 : 6;
+    const numOthers = numChoices - 1;
     
     // Get all other word indices
     const otherIndices = [];
@@ -654,9 +667,9 @@ function generateChoices(correctIndex) {
         }
     }
     
-    // Shuffle and pick 3 random
+    // Shuffle and pick random others
     const shuffledOthers = shuffleArray([...otherIndices]);
-    const selectedOthers = shuffledOthers.slice(0, 3);
+    const selectedOthers = shuffledOthers.slice(0, numOthers);
     
     // Combine and shuffle
     const choiceIndices = [correctIndex, ...selectedOthers];
@@ -729,9 +742,13 @@ function handleChoiceClick(clickedElement, correctIndex) {
         }
     });
     
+    // Calculate points based on question index
+    const points = (gameState.currentQuestionIndex < 20) ? 3 : 4;
+    
     // Show result icons
     if (isCorrect) {
         gameState.correctCount++;
+        totalScore += points;
         streakCount++;
         clickedElement.classList.add('correct');
         clickedElement.classList.add('revealed');
@@ -1420,7 +1437,8 @@ function showGameComplete() {
         <h2><i class="fas fa-trophy"></i> Game Complete!</h2>
         <div class="final-score">
             <span class="correct">Correct: ${gameState.correctCount}</span> | 
-            <span class="wrong">Wrong: ${gameState.wrongCount}</span>
+            <span class="wrong">Wrong: ${gameState.wrongCount}</span> |
+            <span class="score">Score: ${totalScore}</span>
         </div>
         ${wrongWordsHtml}
         <button id="playAgainBtn" class="repeat-btn">
