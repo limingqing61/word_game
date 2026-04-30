@@ -1069,25 +1069,22 @@ function generateWordList() {
         // Click to zoom image
         img.addEventListener('click', function(e) {
             e.stopPropagation();
-            // Prevent multiple zooms
-            if (document.querySelector('.image-zoom-backdrop')) {
-                return;
-            }
             // Prevent page scrolling while zoomed
             document.body.style.overflow = 'hidden';
-            // Add zoom class to the clicked image
-            img.classList.add('image-zoomed');
             // Create a transparent backdrop that captures clicks to restore
             const backdrop = document.createElement('div');
             backdrop.className = 'image-zoom-backdrop';
-            // Remove zoom when backdrop or the image itself is clicked
-            const removeZoom = function() {
-                img.classList.remove('image-zoomed');
+            // Create a clone of the image for the zoomed view
+            const clone = document.createElement('img');
+            clone.className = 'image-zoom-clone';
+            clone.src = img.src;
+            clone.alt = img.alt;
+            backdrop.appendChild(clone);
+            // Remove zoom when backdrop is clicked
+            backdrop.addEventListener('click', function() {
                 backdrop.remove();
                 document.body.style.overflow = '';
-            };
-            backdrop.addEventListener('click', removeZoom);
-            img.addEventListener('click', removeZoom);
+            });
             document.body.appendChild(backdrop);
         });
         

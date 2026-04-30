@@ -440,16 +440,20 @@ header h1 {
     background: transparent;
     z-index: 10000;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Zoomed image (scaled in place) */
-.image-zoomed {
-    position: relative;
+/* Zoomed image clone */
+.image-zoom-clone {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     z-index: 10001;
-    transform: scale(2.5);
-    transform-origin: center center;
-    transition: transform 0.2s ease;
-    cursor: pointer;
+    pointer-events: none;
 }
 
 /* Responsive design for iPad */
