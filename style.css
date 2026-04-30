@@ -176,70 +176,13 @@ header h1 {
     gap: 30px;
 }
 
-.current-word {
-    display: flex;
-    justify-content: center;
-}
 
-.word-card {
-    background: white;
-    border-radius: 25px;
-    padding: 10px 20px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    border: 8px solid #ffcc00;
-    width: 400px;
-}
 
-.image-container {
-    position: relative;
-    width: 100%;
-    height: auto;
-    min-height: 0;
-    border-radius: 15px;
-    background: transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
-#wordImage {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-}
 
-.word-text {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(255, 204, 0, 0.9);
-    padding: 15px;
-    text-align: center;
-}
 
-#targetWord {
-    font-size: 3rem;
-    font-weight: bold;
-    color: #ff3366;
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 5px;
-}
 
-.phonetic {
-    font-size: 1.8rem;
-    color: #3366ff;
-    font-weight: bold;
-    font-family: 'Arial', sans-serif;
-}
 
-.chinese {
-    font-size: 1.6rem;
-    color: #4CAF50;
-    font-weight: bold;
-    margin-top: 5px;
-}
 
 .recognition-status {
     background: #f0f8ff;
