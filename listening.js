@@ -637,8 +637,10 @@ function showQuestion() {
     const wordIndex = gameState.questionOrder[gameState.currentQuestionIndex];
     const correctWord = wordList[wordIndex];
     
-    // Clear question container
+    // Clear question container and collapse its height
     questionContainer.innerHTML = '';
+    questionContainer.style.height = '0';
+    questionContainer.style.overflow = 'hidden';
     
     // Generate choices
     generateChoices(wordIndex);
@@ -794,7 +796,7 @@ function handleChoiceClick(clickedElement, correctIndex) {
         playSoundEffect('wrong');
     }
     
-    // Replace question mark with the correct image
+    // Replace question mark with the correct image and restore container height
     const correctWord = wordList[correctIndex];
     questionContainer.innerHTML = `
         <img src="${correctWord.image}" alt="${correctWord.word}" style="max-width:100%; max-height:100%; object-fit:contain;">
@@ -804,6 +806,8 @@ function handleChoiceClick(clickedElement, correctIndex) {
             <div style="font-size:1.6rem; color:#4CAF50; font-weight:bold; margin-top:5px;">${correctWord.chinese || ''}</div>
         </div>
     `;
+    questionContainer.style.height = 'auto';
+    questionContainer.style.overflow = 'visible';
     
     // Update score
     updateScoreDisplay();
