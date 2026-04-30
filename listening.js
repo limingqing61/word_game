@@ -712,10 +712,15 @@ function generateChoices(correctIndex) {
         wordChinese.textContent = word.chinese || '';
         wordChinese.style.display = 'none';
         
+        // Wrap text elements in a flex row
+        const wordDetails = document.createElement('div');
+        wordDetails.className = 'word-details';
+        wordDetails.appendChild(wordLabel);
+        wordDetails.appendChild(wordPhonetic);
+        wordDetails.appendChild(wordChinese);
+        
         choiceItem.appendChild(img);
-        choiceItem.appendChild(wordLabel);
-        choiceItem.appendChild(wordPhonetic);
-        choiceItem.appendChild(wordChinese);
+        choiceItem.appendChild(wordDetails);
         
         // Add error handling for images
         img.onerror = function() {
@@ -778,11 +783,9 @@ function handleChoiceClick(clickedElement, correctIndex) {
         icon.innerHTML = '<i class="fas fa-check-circle"></i>';
         clickedElement.appendChild(icon);
         
-        // Show phonetic and chinese inside the correct choice
-        const phoneticEl = clickedElement.querySelector('.word-phonetic');
-        const chineseEl = clickedElement.querySelector('.word-chinese');
-        if (phoneticEl) phoneticEl.style.display = 'block';
-        if (chineseEl) chineseEl.style.display = 'block';
+        // Show word details (word, phonetic, chinese) inside the correct choice
+        const wordDetails = clickedElement.querySelector('.word-details');
+        if (wordDetails) wordDetails.style.display = 'flex';
         
         playSoundEffect('correct');
     } else {
@@ -810,11 +813,9 @@ function handleChoiceClick(clickedElement, correctIndex) {
             correctIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
             correctChoiceElement.appendChild(correctIcon);
             
-            // Show phonetic and chinese inside the correct choice
-            const phoneticEl = correctChoiceElement.querySelector('.word-phonetic');
-            const chineseEl = correctChoiceElement.querySelector('.word-chinese');
-            if (phoneticEl) phoneticEl.style.display = 'block';
-            if (chineseEl) chineseEl.style.display = 'block';
+            // Show word details (word, phonetic, chinese) inside the correct choice
+            const wordDetails = correctChoiceElement.querySelector('.word-details');
+            if (wordDetails) wordDetails.style.display = 'flex';
         }
         
         playSoundEffect('wrong');
@@ -822,11 +823,9 @@ function handleChoiceClick(clickedElement, correctIndex) {
     
     // Reveal correct answer in the choice grid
     if (correctChoiceElement) {
-        // Show phonetic and chinese inside the correct choice
-        const phoneticEl = correctChoiceElement.querySelector('.word-phonetic');
-        const chineseEl = correctChoiceElement.querySelector('.word-chinese');
-        if (phoneticEl) phoneticEl.style.display = 'block';
-        if (chineseEl) chineseEl.style.display = 'block';
+        // Show word details (word, phonetic, chinese) inside the correct choice
+        const wordDetails = correctChoiceElement.querySelector('.word-details');
+        if (wordDetails) wordDetails.style.display = 'flex';
     }
     
     // Update score
