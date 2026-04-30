@@ -537,7 +537,6 @@ const correctCountElement = document.getElementById('correctCount');
 const wrongCountElement = document.getElementById('wrongCount');
 const progressCountElement = document.getElementById('progressCount');
 const progressFillElement = document.getElementById('progressFill');
-const questionContainer = document.getElementById('questionContainer');
 const choicesGrid = document.getElementById('choicesGrid');
 const repeatBtn = document.getElementById('repeatBtn');
 const slowPlayBtn = document.getElementById('slowPlayBtn');
@@ -619,10 +618,6 @@ function showQuestion() {
     gameState.isAnswered = false;
     gameState.hintUsed = false;
     
-    // Reset container height for normal question display
-    questionContainer.style.height = '';
-    questionContainer.style.overflow = '';
-    
     // Show action buttons
     const actionButtons = document.querySelector('.action-buttons');
     if (actionButtons) {
@@ -636,11 +631,6 @@ function showQuestion() {
     
     const wordIndex = gameState.questionOrder[gameState.currentQuestionIndex];
     const correctWord = wordList[wordIndex];
-    
-    // Clear question container and collapse its height
-    questionContainer.innerHTML = '';
-    questionContainer.style.height = '0';
-    questionContainer.style.overflow = 'hidden';
     
     // Generate choices
     generateChoices(wordIndex);
@@ -1422,12 +1412,7 @@ function playSoundEffect(type) {
 
 // Show game complete screen
 function showGameComplete() {
-    questionContainer.innerHTML = '';
     choicesGrid.innerHTML = '';
-    
-    // Allow container to expand for game complete screen
-    questionContainer.style.height = 'auto';
-    questionContainer.style.overflow = 'visible';
     
     // Hide action buttons
     const actionButtons = document.querySelector('.action-buttons');
@@ -1476,7 +1461,7 @@ function showGameComplete() {
         </button>
     `;
     
-    questionContainer.appendChild(completeDiv);
+    choicesGrid.appendChild(completeDiv);
     
     document.getElementById('playAgainBtn').addEventListener('click', function() {
         // Show action buttons again
