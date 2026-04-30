@@ -1416,6 +1416,9 @@ function playSoundEffect(type) {
 
 // Show game complete screen
 function showGameComplete() {
+    // Update progress display to show 100%
+    updateScoreDisplay();
+    
     choicesGrid.innerHTML = '';
     
     // Hide action buttons
