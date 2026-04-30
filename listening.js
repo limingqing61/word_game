@@ -1565,7 +1565,7 @@ slowPlayBtn.addEventListener('click', function() {
     if (gameState.currentQuestionIndex < gameState.totalQuestions) {
         const wordIndex = gameState.questionOrder[gameState.currentQuestionIndex];
         const word = wordList[wordIndex].word;
-        playWordPronunciation(word, 0.6);
+        playWordPronunciation(word, 0.05);
     }
 });
 
