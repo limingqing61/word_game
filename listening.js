@@ -554,6 +554,10 @@ function initListeningGame() {
     gameState.hintRemaining = 5;
     gameState.wrongWords = [];
     
+    // Reset total score and streak
+    totalScore = 0;
+    streakCount = 0;
+    
     // Select 30 random questions from the word list
     const allIndices = [...Array(wordList.length).keys()];
     const shuffledAll = shuffleArray(allIndices);
