@@ -637,8 +637,8 @@ function showQuestion() {
     const wordIndex = gameState.questionOrder[gameState.currentQuestionIndex];
     const correctWord = wordList[wordIndex];
     
-    // Show question mark
-    questionContainer.innerHTML = '<div class="question-mark">?</div>';
+    // Clear question container
+    questionContainer.innerHTML = '';
     
     // Generate choices
     generateChoices(wordIndex);
@@ -677,6 +677,12 @@ function generateChoices(correctIndex) {
     
     // Clear grid
     choicesGrid.innerHTML = '';
+    
+    // Adjust grid columns based on number of choices
+    choicesGrid.classList.remove('choices-grid-6');
+    if (numChoices === 6) {
+        choicesGrid.classList.add('choices-grid-6');
+    }
     
     // Create choice elements
     shuffledChoices.forEach((wordIndex) => {
