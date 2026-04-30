@@ -705,12 +705,10 @@ function generateChoices(correctIndex) {
         const wordPhonetic = document.createElement('div');
         wordPhonetic.className = 'word-phonetic';
         wordPhonetic.textContent = getPhoneticSymbol(word.word);
-        wordPhonetic.style.display = 'none';
         
         const wordChinese = document.createElement('div');
         wordChinese.className = 'word-chinese';
         wordChinese.textContent = word.chinese || '';
-        wordChinese.style.display = 'none';
         
         // Wrap text elements in a flex row
         const wordDetails = document.createElement('div');
