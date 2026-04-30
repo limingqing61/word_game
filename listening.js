@@ -783,7 +783,7 @@ function handleChoiceClick(clickedElement, correctIndex) {
         
         // Show word details (word, phonetic, chinese) inside the correct choice
         const wordDetails = clickedElement.querySelector('.word-details');
-        if (wordDetails) wordDetails.style.display = 'flex';
+        if (wordDetails) wordDetails.style.visibility = 'visible';
         
         playSoundEffect('correct');
     } else {
@@ -813,7 +813,7 @@ function handleChoiceClick(clickedElement, correctIndex) {
             
             // Show word details (word, phonetic, chinese) inside the correct choice
             const wordDetails = correctChoiceElement.querySelector('.word-details');
-            if (wordDetails) wordDetails.style.display = 'flex';
+            if (wordDetails) wordDetails.style.visibility = 'visible';
         }
         
         playSoundEffect('wrong');
@@ -823,7 +823,7 @@ function handleChoiceClick(clickedElement, correctIndex) {
     if (correctChoiceElement) {
         // Show word details (word, phonetic, chinese) inside the correct choice
         const wordDetails = correctChoiceElement.querySelector('.word-details');
-        if (wordDetails) wordDetails.style.display = 'flex';
+        if (wordDetails) wordDetails.style.visibility = 'visible';
     }
     
     // Update score
