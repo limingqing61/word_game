@@ -702,8 +702,20 @@ function generateChoices(correctIndex) {
         wordLabel.className = 'word-label';
         wordLabel.textContent = word.word;
         
+        const wordPhonetic = document.createElement('div');
+        wordPhonetic.className = 'word-phonetic';
+        wordPhonetic.textContent = getPhoneticSymbol(word.word);
+        wordPhonetic.style.display = 'none';
+        
+        const wordChinese = document.createElement('div');
+        wordChinese.className = 'word-chinese';
+        wordChinese.textContent = word.chinese || '';
+        wordChinese.style.display = 'none';
+        
         choiceItem.appendChild(img);
         choiceItem.appendChild(wordLabel);
+        choiceItem.appendChild(wordPhonetic);
+        choiceItem.appendChild(wordChinese);
         
         // Add error handling for images
         img.onerror = function() {
@@ -766,6 +778,12 @@ function handleChoiceClick(clickedElement, correctIndex) {
         icon.innerHTML = '<i class="fas fa-check-circle"></i>';
         clickedElement.appendChild(icon);
         
+        // Show phonetic and chinese inside the correct choice
+        const phoneticEl = clickedElement.querySelector('.word-phonetic');
+        const chineseEl = clickedElement.querySelector('.word-chinese');
+        if (phoneticEl) phoneticEl.style.display = 'block';
+        if (chineseEl) chineseEl.style.display = 'block';
+        
         playSoundEffect('correct');
     } else {
         gameState.wrongCount++;
@@ -791,23 +809,25 @@ function handleChoiceClick(clickedElement, correctIndex) {
             correctIcon.className = 'result-icon correct';
             correctIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
             correctChoiceElement.appendChild(correctIcon);
+            
+            // Show phonetic and chinese inside the correct choice
+            const phoneticEl = correctChoiceElement.querySelector('.word-phonetic');
+            const chineseEl = correctChoiceElement.querySelector('.word-chinese');
+            if (phoneticEl) phoneticEl.style.display = 'block';
+            if (chineseEl) chineseEl.style.display = 'block';
         }
         
         playSoundEffect('wrong');
     }
     
-    // Replace question mark with the correct image and restore container height
-    const correctWord = wordList[correctIndex];
-    questionContainer.innerHTML = `
-        <img src="${correctWord.image}" alt="${correctWord.word}" style="max-width:100%; max-height:100%; object-fit:contain;">
-        <div class="word-text" style="position:absolute; bottom:0; left:0; right:0; background:rgba(255,204,0,0.9); padding:15px; text-align:center;">
-            <span style="font-size:3rem; font-weight:bold; color:#ff3366; text-transform:uppercase;">${correctWord.word}</span>
-            <div style="font-size:1.8rem; color:#3366ff; font-weight:bold;">${getPhoneticSymbol(correctWord.word)}</div>
-            <div style="font-size:1.6rem; color:#4CAF50; font-weight:bold; margin-top:5px;">${correctWord.chinese || ''}</div>
-        </div>
-    `;
-    questionContainer.style.height = 'auto';
-    questionContainer.style.overflow = 'visible';
+    // Reveal correct answer in the choice grid
+    if (correctChoiceElement) {
+        // Show phonetic and chinese inside the correct choice
+        const phoneticEl = correctChoiceElement.querySelector('.word-phonetic');
+        const chineseEl = correctChoiceElement.querySelector('.word-chinese');
+        if (phoneticEl) phoneticEl.style.display = 'block';
+        if (chineseEl) chineseEl.style.display = 'block';
+    }
     
     // Update score
     updateScoreDisplay();
