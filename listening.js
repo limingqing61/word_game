@@ -1439,6 +1439,7 @@ function showGameComplete() {
                             <div class="wrong-word-info">
                                 <span class="wrong-word-text">${w.word}</span>
                                 <span class="wrong-word-phonetic">${getPhoneticSymbol(w.word)}</span>
+                                <span class="wrong-word-chinese">${w.chinese || ''}</span>
                             </div>
                             <button class="wrong-word-play-btn" onclick="playWordPronunciation('${w.word}', 0.7)">
                                 <i class="fas fa-volume-up"></i>
