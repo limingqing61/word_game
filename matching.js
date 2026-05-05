@@ -562,6 +562,8 @@ function initMatchingGame() {
 
 // Start a round
 function startRound() {
+    clearLines();
+
     if (gameState.currentRound >= gameState.totalRounds) {
         showGameComplete();
         return;
@@ -636,108 +638,147 @@ function startRound() {
     updateScoreDisplay();
 }
 
-// Handle word click
+// Handle word click - draw line to its correct image
 function handleWordClick(element, word) {
     if (!gameState.isRoundActive) return;
     if (element.classList.contains('matched')) return;
 
-    // Deselect previous word
-    if (gameState.selectedWord) {
-        gameState.selectedWord.classList.remove('selected');
-    }
-    gameState.selectedWord = element;
-    element.classList.add('selected');
+    // Find the matching image element
+    const imageColumn = document.getElementById('imageColumn');
+    const imageItems = imageColumn.querySelectorAll('.matching-image-item');
+    let targetImage = null;
+    imageItems.forEach(imgItem => {
+        if (imgItem.dataset.word === word && !imgItem.classList.contains('matched')) {
+            targetImage = imgItem;
+        }
+    });
 
-    // If image already selected, try match
-    if (gameState.selectedImage) {
-        tryMatch();
+    if (!targetImage) {
+        // Already matched or not found
+        return;
+    }
+
+    // Draw line from word to image
+    drawLine(element, targetImage);
+
+    // Mark both as matched
+    element.classList.add('matched');
+    targetImage.classList.add('matched');
+    gameState.matchedPairs++;
+
+    // Check if round complete
+    if (gameState.matchedPairs === gameState.totalPairs) {
+        // Round success
+        gameState.correctCount++;
+        gameState.streakCount++;
+        const points = (gameState.currentRound < 20) ? 3 : 4;
+        gameState.totalScore += points;
+        updateScoreDisplay();
+
+        // Check streak celebration
+        if (gameState.streakCount >= 5) {
+            showCelebration(() => {
+                gameState.streakCount = 0;
+                gameState.currentRound++;
+                startRound();
+            });
+        } else {
+            setTimeout(() => {
+                gameState.currentRound++;
+                startRound();
+            }, 1000);
+        }
     }
 }
 
-// Handle image click
+// Handle image click - draw line to its correct word
 function handleImageClick(element, word) {
     if (!gameState.isRoundActive) return;
     if (element.classList.contains('matched')) return;
 
-    // Deselect previous image
-    if (gameState.selectedImage) {
-        gameState.selectedImage.classList.remove('selected');
-    }
-    gameState.selectedImage = element;
-    element.classList.add('selected');
+    // Find the matching word element
+    const wordColumn = document.getElementById('wordColumn');
+    const wordItems = wordColumn.querySelectorAll('.matching-word-item');
+    let targetWord = null;
+    wordItems.forEach(wItem => {
+        if (wItem.dataset.word === word && !wItem.classList.contains('matched')) {
+            targetWord = wItem;
+        }
+    });
 
-    // If word already selected, try match
-    if (gameState.selectedWord) {
-        tryMatch();
+    if (!targetWord) {
+        // Already matched or not found
+        return;
+    }
+
+    // Draw line from image to word
+    drawLine(element, targetWord);
+
+    // Mark both as matched
+    element.classList.add('matched');
+    targetWord.classList.add('matched');
+    gameState.matchedPairs++;
+
+    // Check if round complete
+    if (gameState.matchedPairs === gameState.totalPairs) {
+        // Round success
+        gameState.correctCount++;
+        gameState.streakCount++;
+        const points = (gameState.currentRound < 20) ? 3 : 4;
+        gameState.totalScore += points;
+        updateScoreDisplay();
+
+        // Check streak celebration
+        if (gameState.streakCount >= 5) {
+            showCelebration(() => {
+                gameState.streakCount = 0;
+                gameState.currentRound++;
+                startRound();
+            });
+        } else {
+            setTimeout(() => {
+                gameState.currentRound++;
+                startRound();
+            }, 1000);
+        }
     }
 }
 
-// Try to match selected word and image
+// tryMatch is no longer used (line drawing replaces two-click matching)
 function tryMatch() {
-    const wordEl = gameState.selectedWord;
-    const imgEl = gameState.selectedImage;
-    if (!wordEl || !imgEl) return;
+    // Not used
+}
 
-    const word = wordEl.dataset.word;
-    const imgWord = imgEl.dataset.word;
+// Draw a line between two elements
+function drawLine(fromEl, toEl) {
+    const svg = document.getElementById('lineSvg');
+    if (!svg) return;
 
-    if (word === imgWord) {
-        // Correct match
-        wordEl.classList.remove('selected');
-        imgEl.classList.remove('selected');
-        wordEl.classList.add('matched');
-        imgEl.classList.add('matched');
-        gameState.matchedPairs++;
-        gameState.selectedWord = null;
-        gameState.selectedImage = null;
+    const containerRect = matchingContainer.getBoundingClientRect();
+    const fromRect = fromEl.getBoundingClientRect();
+    const toRect = toEl.getBoundingClientRect();
 
-        // Check if round complete
-        if (gameState.matchedPairs === gameState.totalPairs) {
-            // Round success
-            gameState.correctCount++;
-            gameState.streakCount++;
-            const points = (gameState.currentRound < 20) ? 3 : 4;
-            gameState.totalScore += points;
-            updateScoreDisplay();
+    const x1 = fromRect.left - containerRect.left + fromRect.width / 2;
+    const y1 = fromRect.top - containerRect.top + fromRect.height / 2;
+    const x2 = toRect.left - containerRect.left + toRect.width / 2;
+    const y2 = toRect.top - containerRect.top + toRect.height / 2;
 
-            // Check streak celebration
-            if (gameState.streakCount >= 5) {
-                showCelebration(() => {
-                    gameState.streakCount = 0;
-                    gameState.currentRound++;
-                    startRound();
-                });
-            } else {
-                setTimeout(() => {
-                    gameState.currentRound++;
-                    startRound();
-                }, 1000);
-            }
-        }
-    } else {
-        // Wrong match
-        gameState.wrongCount++;
-        gameState.streakCount = 0;
-        // Track wrong word (the correct word for the image)
-        const correctWord = imgEl.dataset.word;
-        const wrongWordObj = wordList.find(w => w.word === correctWord);
-        if (wrongWordObj) {
-            gameState.wrongWords.push(wrongWordObj);
-        }
-        updateScoreDisplay();
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', x1);
+    line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2);
+    line.setAttribute('y2', y2);
+    line.setAttribute('stroke', '#4CAF50');
+    line.setAttribute('stroke-width', '4');
+    line.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(line);
+}
 
-        // Show wrong animation
-        wordEl.classList.add('wrong');
-        imgEl.classList.add('wrong');
-        setTimeout(() => {
-            wordEl.classList.remove('wrong', 'selected');
-            imgEl.classList.remove('wrong', 'selected');
-            gameState.selectedWord = null;
-            gameState.selectedImage = null;
-            // Move to next round
-            gameState.currentRound++;
-            startRound();
-        }, 1000);
+// Clear all lines from SVG
+function clearLines() {
+    const svg = document.getElementById('lineSvg');
+    if (svg) {
+        svg.innerHTML = '';
     }
 }
 
