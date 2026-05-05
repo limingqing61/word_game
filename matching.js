@@ -689,6 +689,11 @@ function handlePointerDown(event, element, word) {
     line.setAttribute('stroke-dasharray', '8,4');
     svg.appendChild(line);
     dragState.tempLine = line;
+
+    // Add pointermove and pointerup listeners to document for proper capture
+    document.addEventListener('pointermove', handlePointerMove);
+    document.addEventListener('pointerup', handlePointerUp);
+    document.addEventListener('pointercancel', handlePointerUp);
 }
 
 // Handle pointer move
@@ -708,6 +713,11 @@ function handlePointerMove(event) {
 
 // Handle pointer up
 function handlePointerUp(event) {
+    // Remove document listeners
+    document.removeEventListener('pointermove', handlePointerMove);
+    document.removeEventListener('pointerup', handlePointerUp);
+    document.removeEventListener('pointercancel', handlePointerUp);
+
     if (!dragState.isDragging) return;
 
     dragState.isDragging = false;
