@@ -45,7 +45,7 @@ header h1 {
 .mode-selection {
     display: flex;
     justify-content: center;
-    gap: 40px;
+    gap: 80px;
     margin: 40px 0;
     flex-wrap: wrap;
 }
@@ -99,7 +99,7 @@ header h1 {
 
 .score-board {
     display: flex;
-    gap: 40px;
+    gap: 80px;
 }
 
 .score-item {
