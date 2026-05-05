@@ -528,6 +528,14 @@ let gameState = {
     wrongWords: []
 };
 
+// Drag state for line drawing
+let dragState = {
+    isDragging: false,
+    startElement: null,
+    startWord: null,
+    tempLine: null
+};
+
 // DOM elements
 const correctCountEl = document.getElementById('correctCount');
 const wrongCountEl = document.getElementById('wrongCount');
@@ -563,6 +571,10 @@ function initMatchingGame() {
 // Start a round
 function startRound() {
     clearLines();
+    dragState.isDragging = false;
+    dragState.startElement = null;
+    dragState.startWord = null;
+    dragState.tempLine = null;
 
     if (gameState.currentRound >= gameState.totalRounds) {
         showGameComplete();
@@ -610,7 +622,7 @@ function startRound() {
         wordItem.className = 'matching-word-item';
         wordItem.dataset.word = pair.word;
         wordItem.textContent = pair.word;
-        wordItem.addEventListener('click', () => handleWordClick(wordItem, pair.word));
+        wordItem.addEventListener('pointerdown', (e) => handlePointerDown(e, wordItem, pair.word));
         leftCol.appendChild(wordItem);
     });
 
@@ -626,130 +638,169 @@ function startRound() {
         chineseLabel.textContent = pair.chinese;
         imgItem.appendChild(img);
         imgItem.appendChild(chineseLabel);
-        imgItem.addEventListener('click', () => handleImageClick(imgItem, pair.word));
+        imgItem.addEventListener('pointerdown', (e) => handlePointerDown(e, imgItem, pair.word));
         rightCol.appendChild(imgItem);
     });
 
     matchingContainer.appendChild(leftCol);
     matchingContainer.appendChild(rightCol);
 
+    // Add pointermove and pointerup listeners on the container
+    matchingContainer.addEventListener('pointermove', handlePointerMove);
+    matchingContainer.addEventListener('pointerup', handlePointerUp);
+    matchingContainer.addEventListener('pointercancel', handlePointerUp);
+
     // Update round info
     roundInfoEl.textContent = `Round ${gameState.currentRound + 1}: Match ${numPairs} pairs`;
     updateScoreDisplay();
 }
 
-// Handle word click - draw line to its correct image
-function handleWordClick(element, word) {
+// Handle pointer down on a word or image item
+function handlePointerDown(event, element, word) {
     if (!gameState.isRoundActive) return;
     if (element.classList.contains('matched')) return;
 
-    // Find the matching image element
-    const imageColumn = document.getElementById('imageColumn');
-    const imageItems = imageColumn.querySelectorAll('.matching-image-item');
-    let targetImage = null;
-    imageItems.forEach(imgItem => {
-        if (imgItem.dataset.word === word && !imgItem.classList.contains('matched')) {
-            targetImage = imgItem;
-        }
-    });
+    event.preventDefault();
+    element.setPointerCapture(event.pointerId);
 
-    if (!targetImage) {
-        // Already matched or not found
-        return;
+    dragState.isDragging = true;
+    dragState.startElement = element;
+    dragState.startWord = word;
+
+    // Create a temporary line from the center of the element to the pointer
+    const svg = document.getElementById('lineSvg');
+    if (!svg) return;
+
+    const containerRect = matchingContainer.getBoundingClientRect();
+    const elRect = element.getBoundingClientRect();
+    const x1 = elRect.left - containerRect.left + elRect.width / 2;
+    const y1 = elRect.top - containerRect.top + elRect.height / 2;
+    const x2 = event.clientX - containerRect.left;
+    const y2 = event.clientY - containerRect.top;
+
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', x1);
+    line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2);
+    line.setAttribute('y2', y2);
+    line.setAttribute('stroke', '#2196F3');
+    line.setAttribute('stroke-width', '4');
+    line.setAttribute('stroke-linecap', 'round');
+    line.setAttribute('stroke-dasharray', '8,4');
+    svg.appendChild(line);
+    dragState.tempLine = line;
+}
+
+// Handle pointer move
+function handlePointerMove(event) {
+    if (!dragState.isDragging || !dragState.tempLine) return;
+
+    const svg = document.getElementById('lineSvg');
+    if (!svg) return;
+
+    const containerRect = matchingContainer.getBoundingClientRect();
+    const x2 = event.clientX - containerRect.left;
+    const y2 = event.clientY - containerRect.top;
+
+    dragState.tempLine.setAttribute('x2', x2);
+    dragState.tempLine.setAttribute('y2', y2);
+}
+
+// Handle pointer up
+function handlePointerUp(event) {
+    if (!dragState.isDragging) return;
+
+    dragState.isDragging = false;
+
+    // Remove temporary line
+    if (dragState.tempLine) {
+        dragState.tempLine.remove();
+        dragState.tempLine = null;
     }
 
-    // Draw line from word to image
-    drawLine(element, targetImage);
+    const startElement = dragState.startElement;
+    const startWord = dragState.startWord;
+    dragState.startElement = null;
+    dragState.startWord = null;
 
-    // Mark both as matched
-    element.classList.add('matched');
-    targetImage.classList.add('matched');
-    gameState.matchedPairs++;
+    if (!startElement) return;
 
-    // Check if round complete
-    if (gameState.matchedPairs === gameState.totalPairs) {
-        // Round success
-        gameState.correctCount++;
-        gameState.streakCount++;
-        const points = (gameState.currentRound < 20) ? 3 : 4;
-        gameState.totalScore += points;
+    // Determine if the pointer is over a valid target element
+    const targetElement = document.elementFromPoint(event.clientX, event.clientY);
+    if (!targetElement) return;
+
+    // Find the closest matching-word-item or matching-image-item ancestor
+    let targetItem = targetElement.closest('.matching-word-item, .matching-image-item');
+    if (!targetItem) return;
+
+    // Ensure target is not the same element and not already matched
+    if (targetItem === startElement) return;
+    if (targetItem.classList.contains('matched')) return;
+
+    // Determine if start is word and target is image (or vice versa)
+    const startIsWord = startElement.classList.contains('matching-word-item');
+    const targetIsWord = targetItem.classList.contains('matching-word-item');
+    if (startIsWord === targetIsWord) return; // both same type
+
+    const targetWord = targetItem.dataset.word;
+
+    // Check if they are the correct pair
+    if (startWord === targetWord) {
+        // Correct match
+        startElement.classList.add('matched');
+        targetItem.classList.add('matched');
+        gameState.matchedPairs++;
+
+        // Draw permanent line
+        drawLine(startElement, targetItem);
+
+        // Check if round complete
+        if (gameState.matchedPairs === gameState.totalPairs) {
+            gameState.correctCount++;
+            gameState.streakCount++;
+            const points = (gameState.currentRound < 20) ? 3 : 4;
+            gameState.totalScore += points;
+            updateScoreDisplay();
+
+            if (gameState.streakCount >= 5) {
+                showCelebration(() => {
+                    gameState.streakCount = 0;
+                    gameState.currentRound++;
+                    startRound();
+                });
+            } else {
+                setTimeout(() => {
+                    gameState.currentRound++;
+                    startRound();
+                }, 1000);
+            }
+        }
+    } else {
+        // Wrong match
+        gameState.wrongCount++;
+        gameState.streakCount = 0;
+        // Track wrong word (the correct word for the target)
+        const correctWord = targetWord;
+        const wrongWordObj = wordList.find(w => w.word === correctWord);
+        if (wrongWordObj) {
+            gameState.wrongWords.push(wrongWordObj);
+        }
         updateScoreDisplay();
 
-        // Check streak celebration
-        if (gameState.streakCount >= 5) {
-            showCelebration(() => {
-                gameState.streakCount = 0;
-                gameState.currentRound++;
-                startRound();
-            });
-        } else {
-            setTimeout(() => {
-                gameState.currentRound++;
-                startRound();
-            }, 1000);
-        }
+        // Show wrong animation
+        startElement.classList.add('wrong');
+        targetItem.classList.add('wrong');
+        setTimeout(() => {
+            startElement.classList.remove('wrong');
+            targetItem.classList.remove('wrong');
+            // Move to next round
+            gameState.currentRound++;
+            startRound();
+        }, 1000);
     }
 }
 
-// Handle image click - draw line to its correct word
-function handleImageClick(element, word) {
-    if (!gameState.isRoundActive) return;
-    if (element.classList.contains('matched')) return;
-
-    // Find the matching word element
-    const wordColumn = document.getElementById('wordColumn');
-    const wordItems = wordColumn.querySelectorAll('.matching-word-item');
-    let targetWord = null;
-    wordItems.forEach(wItem => {
-        if (wItem.dataset.word === word && !wItem.classList.contains('matched')) {
-            targetWord = wItem;
-        }
-    });
-
-    if (!targetWord) {
-        // Already matched or not found
-        return;
-    }
-
-    // Draw line from image to word
-    drawLine(element, targetWord);
-
-    // Mark both as matched
-    element.classList.add('matched');
-    targetWord.classList.add('matched');
-    gameState.matchedPairs++;
-
-    // Check if round complete
-    if (gameState.matchedPairs === gameState.totalPairs) {
-        // Round success
-        gameState.correctCount++;
-        gameState.streakCount++;
-        const points = (gameState.currentRound < 20) ? 3 : 4;
-        gameState.totalScore += points;
-        updateScoreDisplay();
-
-        // Check streak celebration
-        if (gameState.streakCount >= 5) {
-            showCelebration(() => {
-                gameState.streakCount = 0;
-                gameState.currentRound++;
-                startRound();
-            });
-        } else {
-            setTimeout(() => {
-                gameState.currentRound++;
-                startRound();
-            }, 1000);
-        }
-    }
-}
-
-// tryMatch is no longer used (line drawing replaces two-click matching)
-function tryMatch() {
-    // Not used
-}
-
-// Draw a line between two elements
+// Draw a permanent line between two elements
 function drawLine(fromEl, toEl) {
     const svg = document.getElementById('lineSvg');
     if (!svg) return;
