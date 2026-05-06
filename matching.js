@@ -662,6 +662,7 @@ function handlePointerDown(event, element, word) {
 
     event.preventDefault();
     element.setPointerCapture(event.pointerId);
+    document.body.style.overflow = 'hidden';
 
     dragState.isDragging = true;
     dragState.startElement = element;
@@ -713,6 +714,9 @@ function handlePointerMove(event) {
 
 // Handle pointer up
 function handlePointerUp(event) {
+    // restore scrolling
+    document.body.style.overflow = '';
+
     // Remove document listeners
     document.removeEventListener('pointermove', handlePointerMove);
     document.removeEventListener('pointerup', handlePointerUp);
