@@ -528,14 +528,6 @@ let gameState = {
     wrongWords: []
 };
 
-// Drag state for line drawing
-let dragState = {
-    isDragging: false,
-    startElement: null,
-    startWord: null,
-    tempLine: null
-};
-
 // DOM elements
 const correctCountEl = document.getElementById('correctCount');
 const wrongCountEl = document.getElementById('wrongCount');
@@ -570,12 +562,6 @@ function initMatchingGame() {
 
 // Start a round
 function startRound() {
-    clearLines();
-    dragState.isDragging = false;
-    dragState.startElement = null;
-    dragState.startWord = null;
-    dragState.tempLine = null;
-
     if (gameState.currentRound >= gameState.totalRounds) {
         showGameComplete();
         return;
@@ -622,7 +608,7 @@ function startRound() {
         wordItem.className = 'matching-word-item';
         wordItem.dataset.word = pair.word;
         wordItem.textContent = pair.word;
-        wordItem.addEventListener('pointerdown', (e) => handlePointerDown(e, wordItem, pair.word));
+        wordItem.addEventListener('click', (e) => handleItemClick(e, wordItem, pair.word));
         leftCol.appendChild(wordItem);
     });
 
@@ -638,135 +624,81 @@ function startRound() {
         chineseLabel.textContent = pair.chinese;
         imgItem.appendChild(img);
         imgItem.appendChild(chineseLabel);
-        imgItem.addEventListener('pointerdown', (e) => handlePointerDown(e, imgItem, pair.word));
+        imgItem.addEventListener('click', (e) => handleItemClick(e, imgItem, pair.word));
         rightCol.appendChild(imgItem);
     });
 
     matchingContainer.appendChild(leftCol);
     matchingContainer.appendChild(rightCol);
 
-    // Add pointermove and pointerup listeners on the container
-    matchingContainer.addEventListener('pointermove', handlePointerMove);
-    matchingContainer.addEventListener('pointerup', handlePointerUp);
-    matchingContainer.addEventListener('pointercancel', handlePointerUp);
-
     // Update round info
     roundInfoEl.textContent = `Round ${gameState.currentRound + 1}: Match ${numPairs} pairs`;
     updateScoreDisplay();
 }
 
-// Handle pointer down on a word or image item
-function handlePointerDown(event, element, word) {
+// Handle click on a word or image item
+function handleItemClick(event, element, word) {
     if (!gameState.isRoundActive) return;
     if (element.classList.contains('matched')) return;
 
-    event.preventDefault();
-    element.setPointerCapture(event.pointerId);
-    document.body.style.overflow = 'hidden';
-
-    dragState.isDragging = true;
-    dragState.startElement = element;
-    dragState.startWord = word;
-
-    // Create a temporary line from the center of the element to the pointer
-    const svg = document.getElementById('lineSvg');
-    if (!svg) return;
-
-    const containerRect = matchingContainer.getBoundingClientRect();
-    const elRect = element.getBoundingClientRect();
-    const x1 = elRect.left - containerRect.left + elRect.width / 2;
-    const y1 = elRect.top - containerRect.top + elRect.height / 2;
-    const x2 = event.clientX - containerRect.left;
-    const y2 = event.clientY - containerRect.top;
-
-    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('x1', x1);
-    line.setAttribute('y1', y1);
-    line.setAttribute('x2', x2);
-    line.setAttribute('y2', y2);
-    line.setAttribute('stroke', '#2196F3');
-    line.setAttribute('stroke-width', '4');
-    line.setAttribute('stroke-linecap', 'round');
-    line.setAttribute('stroke-dasharray', '8,4');
-    svg.appendChild(line);
-    dragState.tempLine = line;
-
-    // Add pointermove and pointerup listeners to document for proper capture
-    document.addEventListener('pointermove', handlePointerMove);
-    document.addEventListener('pointerup', handlePointerUp);
-    document.addEventListener('pointercancel', handlePointerUp);
-}
-
-// Handle pointer move
-function handlePointerMove(event) {
-    if (!dragState.isDragging || !dragState.tempLine) return;
-
-    const svg = document.getElementById('lineSvg');
-    if (!svg) return;
-
-    const containerRect = matchingContainer.getBoundingClientRect();
-    const x2 = event.clientX - containerRect.left;
-    const y2 = event.clientY - containerRect.top;
-
-    dragState.tempLine.setAttribute('x2', x2);
-    dragState.tempLine.setAttribute('y2', y2);
-}
-
-// Handle pointer up
-function handlePointerUp(event) {
-    // restore scrolling
-    document.body.style.overflow = '';
-
-    // Remove document listeners
-    document.removeEventListener('pointermove', handlePointerMove);
-    document.removeEventListener('pointerup', handlePointerUp);
-    document.removeEventListener('pointercancel', handlePointerUp);
-
-    if (!dragState.isDragging) return;
-
-    dragState.isDragging = false;
-
-    // Remove temporary line
-    if (dragState.tempLine) {
-        dragState.tempLine.remove();
-        dragState.tempLine = null;
+    // If no item is selected yet, select this one
+    if (gameState.selectedWord === null && gameState.selectedImage === null) {
+        // Determine if this is a word or image
+        const isWord = element.classList.contains('matching-word-item');
+        if (isWord) {
+            gameState.selectedWord = element;
+            element.classList.add('selected');
+        } else {
+            gameState.selectedImage = element;
+            element.classList.add('selected');
+        }
+        return;
     }
 
-    const startElement = dragState.startElement;
-    const startWord = dragState.startWord;
-    dragState.startElement = null;
-    dragState.startWord = null;
+    // There is already a selected item
+    const selectedIsWord = gameState.selectedWord !== null;
+    const clickedIsWord = element.classList.contains('matching-word-item');
 
-    if (!startElement) return;
+    // Ensure one is word and the other is image
+    if (selectedIsWord === clickedIsWord) {
+        // Both same type: deselect previous and select this one
+        if (gameState.selectedWord) {
+            gameState.selectedWord.classList.remove('selected');
+            gameState.selectedWord = null;
+        }
+        if (gameState.selectedImage) {
+            gameState.selectedImage.classList.remove('selected');
+            gameState.selectedImage = null;
+        }
+        // Select the clicked element
+        if (clickedIsWord) {
+            gameState.selectedWord = element;
+            element.classList.add('selected');
+        } else {
+            gameState.selectedImage = element;
+            element.classList.add('selected');
+        }
+        return;
+    }
 
-    // Determine if the pointer is over a valid target element
-    const targetElement = document.elementFromPoint(event.clientX, event.clientY);
-    if (!targetElement) return;
+    // One is word, the other is image
+    const wordElement = selectedIsWord ? gameState.selectedWord : element;
+    const imageElement = selectedIsWord ? element : gameState.selectedImage;
+    const word = wordElement.dataset.word;
+    const imageWord = imageElement.dataset.word;
 
-    // Find the closest matching-word-item or matching-image-item ancestor
-    let targetItem = targetElement.closest('.matching-word-item, .matching-image-item');
-    if (!targetItem) return;
-
-    // Ensure target is not the same element and not already matched
-    if (targetItem === startElement) return;
-    if (targetItem.classList.contains('matched')) return;
-
-    // Determine if start is word and target is image (or vice versa)
-    const startIsWord = startElement.classList.contains('matching-word-item');
-    const targetIsWord = targetItem.classList.contains('matching-word-item');
-    if (startIsWord === targetIsWord) return; // both same type
-
-    const targetWord = targetItem.dataset.word;
-
-    // Check if they are the correct pair
-    if (startWord === targetWord) {
+    // Check if they match
+    if (word === imageWord) {
         // Correct match
-        startElement.classList.add('matched');
-        targetItem.classList.add('matched');
+        wordElement.classList.remove('selected');
+        imageElement.classList.remove('selected');
+        wordElement.classList.add('matched');
+        imageElement.classList.add('matched');
         gameState.matchedPairs++;
 
-        // Draw permanent line
-        drawLine(startElement, targetItem);
+        // Clear selection
+        gameState.selectedWord = null;
+        gameState.selectedImage = null;
 
         // Check if round complete
         if (gameState.matchedPairs === gameState.totalPairs) {
@@ -794,7 +726,7 @@ function handlePointerUp(event) {
         gameState.wrongCount++;
         gameState.streakCount = 0;
         // Track wrong word (the correct word for the target)
-        const correctWord = targetWord;
+        const correctWord = imageWord;
         const wrongWordObj = wordList.find(w => w.word === correctWord);
         if (wrongWordObj) {
             gameState.wrongWords.push(wrongWordObj);
@@ -802,48 +734,17 @@ function handlePointerUp(event) {
         updateScoreDisplay();
 
         // Show wrong animation
-        startElement.classList.add('wrong');
-        targetItem.classList.add('wrong');
+        wordElement.classList.remove('selected');
+        imageElement.classList.remove('selected');
+        wordElement.classList.add('wrong');
+        imageElement.classList.add('wrong');
         setTimeout(() => {
-            startElement.classList.remove('wrong');
-            targetItem.classList.remove('wrong');
+            wordElement.classList.remove('wrong');
+            imageElement.classList.remove('wrong');
             // Move to next round
             gameState.currentRound++;
             startRound();
         }, 1000);
-    }
-}
-
-// Draw a permanent line between two elements
-function drawLine(fromEl, toEl) {
-    const svg = document.getElementById('lineSvg');
-    if (!svg) return;
-
-    const containerRect = matchingContainer.getBoundingClientRect();
-    const fromRect = fromEl.getBoundingClientRect();
-    const toRect = toEl.getBoundingClientRect();
-
-    const x1 = fromRect.left - containerRect.left + fromRect.width / 2;
-    const y1 = fromRect.top - containerRect.top + fromRect.height / 2;
-    const x2 = toRect.left - containerRect.left + toRect.width / 2;
-    const y2 = toRect.top - containerRect.top + toRect.height / 2;
-
-    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('x1', x1);
-    line.setAttribute('y1', y1);
-    line.setAttribute('x2', x2);
-    line.setAttribute('y2', y2);
-    line.setAttribute('stroke', '#4CAF50');
-    line.setAttribute('stroke-width', '4');
-    line.setAttribute('stroke-linecap', 'round');
-    svg.appendChild(line);
-}
-
-// Clear all lines from SVG
-function clearLines() {
-    const svg = document.getElementById('lineSvg');
-    if (svg) {
-        svg.innerHTML = '';
     }
 }
 
