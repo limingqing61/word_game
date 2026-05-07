@@ -120,6 +120,8 @@ function showQuestion() {
             input.dataset.vowelIndex = vowelIndex;
             input.dataset.expected = ch;
             input.autocomplete = 'off';
+            input.autocapitalize = 'off';
+            input.spellcheck = false;
             inputElements.push(input);
             wordDiv.appendChild(input);
             vowelIndex++;
@@ -143,7 +145,9 @@ function showQuestion() {
     inputElements.forEach((input, idx) => {
         input.addEventListener('input', function(e) {
             if (gameState.isAnswered) return;
-            const val = this.value.toLowerCase();
+            // Force lowercase
+            this.value = this.value.toLowerCase();
+            const val = this.value;
             // Only allow single letter
             if (val.length > 1) {
                 this.value = val.slice(0,1);
