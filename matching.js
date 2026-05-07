@@ -108,6 +108,18 @@ function startRound() {
     matchingContainer.appendChild(leftCol);
     matchingContainer.appendChild(rightCol);
 
+    // 为后10题（5组）添加紧凑样式
+    const scoreBoard = document.querySelector('.matching-score-board');
+    if (numPairs === 5) {
+        matchingContainer.classList.add('compact');
+        roundInfoEl.classList.add('compact');
+        if (scoreBoard) scoreBoard.classList.add('compact');
+    } else {
+        matchingContainer.classList.remove('compact');
+        roundInfoEl.classList.remove('compact');
+        if (scoreBoard) scoreBoard.classList.remove('compact');
+    }
+
     roundInfoEl.textContent = `Round ${gameState.currentRound + 1}: Match ${numPairs} pairs`;
     updateScoreDisplay();
 }

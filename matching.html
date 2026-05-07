@@ -162,6 +162,61 @@
                 height: 80px;
             }
         }
+
+        /* 后10题（5组）紧凑样式 */
+        .matching-container.compact {
+            gap: 40px;
+            margin-top: 10px;
+        }
+        .matching-container.compact .matching-column {
+            gap: 15px;
+        }
+        .matching-container.compact .matching-word-item {
+            padding: 8px 12px;
+            min-height: 80px;
+            font-size: 1.4rem;
+            border: none;
+            box-shadow: none;
+        }
+        .matching-container.compact .matching-image-item {
+            padding: 8px 12px;
+            min-height: 80px;
+            border: none;
+            box-shadow: none;
+        }
+        .matching-container.compact .matching-image-item img {
+            width: 60px;
+            height: 60px;
+            margin-right: 8px;
+        }
+        .matching-container.compact .matching-image-item .chinese-label {
+            font-size: 1rem;
+        }
+        .matching-container.compact .matching-word-item:hover,
+        .matching-container.compact .matching-image-item:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        .matching-container.compact .matching-word-item.selected,
+        .matching-container.compact .matching-image-item.selected {
+            border: 2px solid #FF9800;
+        }
+        .matching-container.compact .matching-word-item.matched,
+        .matching-container.compact .matching-image-item.matched {
+            border: 2px solid #4CAF50;
+        }
+        .matching-container.compact .matching-word-item.wrong,
+        .matching-container.compact .matching-image-item.wrong {
+            border: 2px solid #F44336;
+        }
+        .matching-round-info.compact {
+            margin: 10px 0;
+            font-size: 1.2rem;
+        }
+        .matching-score-board.compact {
+            gap: 40px;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
