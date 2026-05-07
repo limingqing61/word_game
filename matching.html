@@ -68,13 +68,13 @@
         .matching-image-item {
             background: white;
             border-radius: 15px;
-            padding: 15px 10px;
-            min-height: 140px;
+            padding: 10px 15px;
+            min-height: 100px;
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
-            justify-content: center;
-            text-align: center;
+            justify-content: flex-start;
+            text-align: left;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             border: 4px solid #4fc3f7;
             cursor: pointer;
@@ -101,10 +101,11 @@
             animation: shake 0.5s;
         }
         .matching-image-item img {
-            width: 100%;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             object-fit: contain;
-            margin-bottom: 5px;
+            margin-right: 10px;
+            margin-bottom: 0;
         }
         .matching-image-item .chinese-label {
             font-size: 1.2rem;
