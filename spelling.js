@@ -101,29 +101,27 @@ function showQuestion() {
     });
     questionDiv.appendChild(pronounceBtn);
 
-    // Word display with inputs for vowels
+    // Word display with vowel slots (clickable buttons below)
     const wordDiv = document.createElement('div');
     wordDiv.className = 'spelling-word';
 
     const word = correctWord.word.toLowerCase();
     const vowelSet = new Set(['a','e','i','o','u']);
-    const inputElements = [];
+    const vowelSlots = [];
+    const expectedVowels = [];
     let vowelIndex = 0;
 
     for (let i = 0; i < word.length; i++) {
         const ch = word[i];
         if (vowelSet.has(ch)) {
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.className = 'spelling-input';
-            input.maxLength = 1;
-            input.dataset.vowelIndex = vowelIndex;
-            input.dataset.expected = ch;
-            input.autocomplete = 'off';
-            input.autocapitalize = 'off';
-            input.spellcheck = false;
-            inputElements.push(input);
-            wordDiv.appendChild(input);
+            const slot = document.createElement('span');
+            slot.className = 'spelling-vowel-slot';
+            slot.dataset.vowelIndex = vowelIndex;
+            slot.dataset.expected = ch;
+            slot.textContent = '_';
+            vowelSlots.push(slot);
+            expectedVowels.push(ch);
+            wordDiv.appendChild(slot);
             vowelIndex++;
         } else {
             const span = document.createElement('span');
@@ -134,56 +132,96 @@ function showQuestion() {
     }
 
     questionDiv.appendChild(wordDiv);
+
+    // Vowel buttons row
+    const vowelButtonsDiv = document.createElement('div');
+    vowelButtonsDiv.className = 'spelling-vowel-buttons';
+
+    const vowels = ['a','e','i','o','u'];
+    const vowelBtns = [];
+    vowels.forEach(v => {
+        const btn = document.createElement('button');
+        btn.className = 'spelling-vowel-btn';
+        btn.textContent = v;
+        btn.dataset.vowel = v;
+        vowelBtns.push(btn);
+        vowelButtonsDiv.appendChild(btn);
+    });
+
+    // Backspace button
+    const backspaceBtn = document.createElement('button');
+    backspaceBtn.className = 'spelling-vowel-btn backspace';
+    backspaceBtn.innerHTML = '<i class="fas fa-backspace"></i>';
+    vowelButtonsDiv.appendChild(backspaceBtn);
+
+    questionDiv.appendChild(vowelButtonsDiv);
     spellingContainer.appendChild(questionDiv);
 
-    // Focus first input
-    if (inputElements.length > 0) {
-        inputElements[0].focus();
+    // State for current slot index
+    let currentSlotIndex = 0;
+
+    function updateSlots() {
+        vowelSlots.forEach((slot, idx) => {
+            if (idx < currentSlotIndex) {
+                slot.classList.add('filled');
+            } else {
+                slot.classList.remove('filled');
+                slot.textContent = '_';
+            }
+        });
+        // Enable/disable vowel buttons
+        const allBtns = vowelButtonsDiv.querySelectorAll('.spelling-vowel-btn');
+        allBtns.forEach(btn => {
+            btn.disabled = gameState.isAnswered || currentSlotIndex >= vowelSlots.length;
+        });
+        backspaceBtn.disabled = gameState.isAnswered || currentSlotIndex === 0;
     }
 
-    // Handle input events
-    inputElements.forEach((input, idx) => {
-        input.addEventListener('input', function(e) {
-            if (gameState.isAnswered) return;
-            // Force lowercase
-            this.value = this.value.toLowerCase();
-            const val = this.value;
-            // Only allow single letter
-            if (val.length > 1) {
-                this.value = val.slice(0,1);
-            }
-            // Move to next input if filled
-            if (this.value.length === 1) {
-                const nextIdx = idx + 1;
-                if (nextIdx < inputElements.length) {
-                    inputElements[nextIdx].focus();
-                } else {
-                    // Last vowel filled → check answer
-                    checkAnswer(inputElements);
-                }
-            }
-        });
+    function fillVowel(vowel) {
+        if (gameState.isAnswered) return;
+        if (currentSlotIndex >= vowelSlots.length) return;
+        const slot = vowelSlots[currentSlotIndex];
+        slot.textContent = vowel;
+        slot.dataset.filled = vowel;
+        currentSlotIndex++;
+        updateSlots();
+        if (currentSlotIndex === vowelSlots.length) {
+            // All slots filled → check answer
+            checkAnswer(vowelSlots, expectedVowels);
+        }
+    }
 
-        input.addEventListener('keydown', function(e) {
-            if (e.key === 'Backspace' && this.value.length === 0 && idx > 0) {
-                inputElements[idx - 1].focus();
-            }
+    vowelBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            fillVowel(btn.dataset.vowel);
         });
     });
+
+    backspaceBtn.addEventListener('click', () => {
+        if (gameState.isAnswered) return;
+        if (currentSlotIndex === 0) return;
+        currentSlotIndex--;
+        const slot = vowelSlots[currentSlotIndex];
+        slot.textContent = '_';
+        delete slot.dataset.filled;
+        updateSlots();
+    });
+
+    updateSlots();
 }
 
-function checkAnswer(inputElements) {
+function checkAnswer(vowelSlots, expectedVowels) {
     if (gameState.isAnswered) return;
     gameState.isAnswered = true;
 
     let allCorrect = true;
-    inputElements.forEach(input => {
-        const expected = input.dataset.expected;
-        const given = input.value.toLowerCase();
+    vowelSlots.forEach((slot, idx) => {
+        const expected = expectedVowels[idx];
+        const given = slot.dataset.filled || '';
         if (given === expected) {
-            input.classList.add('correct');
+            slot.classList.add('correct');
         } else {
-            input.classList.add('wrong');
+            slot.classList.add('wrong');
             allCorrect = false;
         }
     });
