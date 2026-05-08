@@ -18,6 +18,51 @@
             padding: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             border: 5px solid #fff;
+            transition: transform 0.5s ease;
+        }
+        .penalty-field.flipped {
+            transform: rotate(180deg);
+        }
+        .penalty-field.flipped .penalty-goal,
+        .penalty-field.flipped .penalty-word-box,
+        .penalty-field.flipped .penalty-image-box,
+        .penalty-field.flipped .penalty-ball {
+            transform: rotate(-180deg);
+        }
+        .penalty-penalty-area {
+            position: absolute;
+            width: 80%;
+            height: 40%;
+            background: rgba(255,255,255,0.2);
+            border: 3px solid #fff;
+            border-radius: 10px;
+            left: 10%;
+            top: 30%;
+            pointer-events: none;
+        }
+        .penalty-goal-net {
+            position: absolute;
+            width: 60%;
+            height: 20%;
+            background: repeating-linear-gradient(
+                45deg,
+                #fff 0px,
+                #fff 2px,
+                transparent 2px,
+                transparent 4px
+            );
+            border: 3px solid #fff;
+            border-radius: 5px;
+            left: 20%;
+            top: 5%;
+            pointer-events: none;
+        }
+        .penalty-goal-opponent .penalty-goal-net {
+            top: 5%;
+        }
+        .penalty-goal-player .penalty-goal-net {
+            bottom: 5%;
+            top: auto;
         }
         .penalty-goal {
             position: relative;
@@ -136,12 +181,15 @@
         <div id="roundInfo" class="penalty-round-info">Round 1 – Player shoots</div>
 
         <div id="penaltyField" class="penalty-field">
+            <div class="penalty-penalty-area"></div>
             <!-- Opponent goal -->
             <div id="opponentGoal" class="penalty-goal penalty-goal-opponent">
+                <div class="penalty-goal-net"></div>
                 <!-- word boxes will be generated -->
             </div>
             <!-- Player goal -->
             <div id="playerGoal" class="penalty-goal penalty-goal-player">
+                <div class="penalty-goal-net"></div>
                 <!-- image boxes will be generated -->
             </div>
             <!-- Ball element -->

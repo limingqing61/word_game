@@ -72,6 +72,14 @@ function startRound() {
     // Render goals
     renderGoals();
 
+    // Flip field based on turn
+    const field = document.getElementById('penaltyField');
+    if (gameState.isPlayerTurn) {
+        field.classList.remove('flipped');
+    } else {
+        field.classList.add('flipped');
+    }
+
     // Start turn
     if (gameState.isPlayerTurn) {
         roundInfoEl.textContent = `Round ${gameState.round + 1} – Player shoots`;
