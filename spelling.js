@@ -31,6 +31,14 @@ function shuffleArray(array) {
     return array;
 }
 
+function hasVowels(word) {
+    const vowels = new Set(['a','e','i','o','u']);
+    for (let ch of word.toLowerCase()) {
+        if (vowels.has(ch)) return true;
+    }
+    return false;
+}
+
 function updateScoreDisplay() {
     correctCountEl.textContent = gameState.correctCount;
     wrongCountEl.textContent = gameState.wrongCount;
@@ -52,8 +60,10 @@ function initSpellingGame() {
 
     const wordList = window.wordList;
     const allIndices = [...Array(wordList.length).keys()];
-    const shuffledAll = shuffleArray(allIndices);
-    gameState.questionOrder = shuffledAll.slice(0, Math.min(25, wordList.length));
+    // Filter out words that have no vowels (e.g., sky, fry, cry)
+    const vowelIndices = allIndices.filter(i => hasVowels(wordList[i].word));
+    const shuffledAll = shuffleArray(vowelIndices);
+    gameState.questionOrder = shuffledAll.slice(0, Math.min(25, vowelIndices.length));
     gameState.totalQuestions = gameState.questionOrder.length;
 
     updateScoreDisplay();
