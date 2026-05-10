@@ -471,6 +471,58 @@ header h1 {
     margin-top: 4px;
 }
 
+/* Opposite mode styles */
+.opposite-image-container {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    margin: 0 auto;
+}
+.opposite-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+.opposite-click-areas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    pointer-events: none;
+}
+.opposite-click-left,
+.opposite-click-right {
+    flex: 1;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border-radius: 20px;
+}
+.opposite-click-left:hover,
+.opposite-click-right:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+.opposite-feedback {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 15px;
+}
+.opposite-feedback.correct {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+.opposite-feedback.wrong {
+    background: #ffebee;
+    color: #c62828;
+}
+
 /* Penalty mode styles */
 .penalty-field {
     position: relative;
