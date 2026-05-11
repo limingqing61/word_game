@@ -67,3 +67,72 @@
     <script src="opposite.js"></script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opposite Adjectives</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-arrows-alt-h"></i> Opposite Adjectives</h1>
+            <p class="subtitle">Click the correct side!</p>
+        </header>
+
+        <div class="game-info">
+            <div class="score-board">
+                <div class="score-item">
+                    <span class="score-label">Score</span>
+                    <span class="score-value" id="scoreDisplay">0</span>
+                </div>
+                <div class="score-item">
+                    <span class="score-label">Question</span>
+                    <span class="score-value" id="questionDisplay">1/20</span>
+                </div>
+                <div class="score-item">
+                    <span class="score-label">Streak</span>
+                    <span class="score-value" id="streakDisplay">0</span>
+                </div>
+            </div>
+            <div class="controls">
+                <button class="btn start-btn" id="startBtn"><i class="fas fa-play"></i> Start</button>
+                <button class="btn reset-btn" id="resetBtn"><i class="fas fa-redo"></i> Reset</button>
+            </div>
+        </div>
+
+        <div class="game-area">
+            <div id="questionArea" style="display:none;">
+                <div id="imageContainer" class="opposite-image-container">
+                    <img id="oppositeImage" src="" alt="Opposite Image" class="opposite-image">
+                    <div class="opposite-click-areas">
+                        <div class="opposite-click-left" id="leftClickArea"></div>
+                        <div class="opposite-click-right" id="rightClickArea"></div>
+                    </div>
+                </div>
+                <div id="feedback" class="opposite-feedback"></div>
+            </div>
+            <div id="startMessage" class="instructions">
+                <h3><i class="fas fa-info-circle"></i> How to Play</h3>
+                <ol>
+                    <li>Click "Start" to begin.</li>
+                    <li>You will see an image with two opposite adjectives.</li>
+                    <li>Listen to the voice: "this is [target], not [opposite]".</li>
+                    <li>Click the correct side of the image (left or right).</li>
+                    <li>Each correct answer gives 5 points.</li>
+                    <li>Get 5 in a row for a celebration!</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="instructions" style="margin-top:30px;">
+            <p class="note"><i class="fas fa-arrow-left"></i> <a href="../index.html">Back to Home</a></p>
+        </div>
+    </div>
+
+    <script src="opposite.js"></script>
+</body>
+</html>

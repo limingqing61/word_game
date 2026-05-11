@@ -89,7 +89,7 @@
             const targetWord = targetSide === 'left' ? leftWord : rightWord;
             const oppositeWord = targetSide === 'left' ? rightWord : leftWord;
             return {
-                image: `../opposite/${name}.jpeg`,
+                image: `./${name}.jpeg`,
                 targetSide,
                 targetWord,
                 oppositeWord,
