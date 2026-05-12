@@ -224,6 +224,7 @@ function handleItemClick(event, element, word) {
 
 // 游戏结束界面
 function showGameComplete() {
+    updateScoreDisplay();
     matchingContainer.innerHTML = '';
 
     let wrongHtml = '';
