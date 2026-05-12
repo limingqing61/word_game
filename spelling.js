@@ -252,18 +252,17 @@ function checkAnswer(vowelSlots, expectedVowels) {
         playSoundEffect('wrong');
     }
 
+    gameState.currentQuestionIndex++;
     updateScoreDisplay();
 
     const advanceDelay = 2000;
     if (streakCount >= 5) {
         showCelebration(() => {
             streakCount = 0;
-            gameState.currentQuestionIndex++;
             showQuestion();
         });
     } else {
         setTimeout(() => {
-            gameState.currentQuestionIndex++;
             showQuestion();
         }, advanceDelay);
     }
