@@ -3552,3 +3552,26 @@ const wordData = {
 };
 
 window.wordData = wordData;
+const wordData = [
+  { word: "axe", image: "images/axe.jpeg", color: "#8B4513", phonetic: "/æks/", chinese: "斧头" },
+  { word: "envelope", image: "images/envelope.jpeg", color: "#FF6347", phonetic: "/ˈenvələʊp/", chinese: "信封" },
+  { word: "fan", image: "images/fan.jpeg", color: "#FF69B4", phonetic: "/fæn/", chinese: "风扇" },
+  { word: "gift", image: "images/gift.jpeg", color: "#FFD700", phonetic: "/ɡɪft/", chinese: "礼物" },
+  { word: "ice", image: "images/ice.jpeg", color: "#00BFFF", phonetic: "/aɪs/", chinese: "冰" },
+  { word: "jam", image: "images/jam.jpeg", color: "#DC143C", phonetic: "/dʒæm/", chinese: "果酱" },
+  { word: "boy", image: "images/boy.jpeg", color: "#4169E1", phonetic: "/bɔɪ/", chinese: "男孩" },
+  { word: "girl", image: "images/girl.jpeg", color: "#FF69B4", phonetic: "/ɡɜːl/", chinese: "女孩" },
+  { word: "ink", image: "images/ink.jpeg", color: "#000080", phonetic: "/ɪŋk/", chinese: "墨水" },
+  { word: "net", image: "images/net.jpeg", color: "#808080", phonetic: "/net/", chinese: "网" },
+  { word: "ostrich", image: "images/ostrich.jpeg", color: "#8B4513", phonetic: "/ˈɒstrɪtʃ/", chinese: "鸵鸟" },
+  { word: "ox", image: "images/ox.jpeg", color: "#A0522D", phonetic: "/ɒks/", chinese: "公牛" },
+  { word: "pen", image: "images/pen.jpeg", color: "#0000FF", phonetic: "/pen/", chinese: "钢笔" },
+  { word: "pencil", image: "images/pencil.jpeg", color: "#FFD700", phonetic: "/ˈpensl/", chinese: "铅笔" },
+  { word: "robot", image: "images/robot.jpeg", color: "#C0C0C0", phonetic: "/ˈrəʊbɒt/", chinese: "机器人" },
+  { word: "basketball", image: "images/basketball.jpeg", color: "#FF4500", phonetic: "/ˈbɑːskɪtbɔːl/", chinese: "篮球" },
+  { word: "football", image: "images/football.jpeg", color: "#8B0000", phonetic: "/ˈfʊtbɔːl/", chinese: "足球" },
+  { word: "badminton", image: "images/badminton.jpeg", color: "#006400", phonetic: "/ˈbædmɪntən/", chinese: "羽毛球" },
+  { word: "rose", image: "images/rose.jpeg", color: "#FF1493", phonetic: "/rəʊz/", chinese: "玫瑰" },
+  { word: "tent", image: "images/tent.jpeg", color: "#2E8B57", phonetic: "/tent/", chinese: "帐篷" },
+  { word: "box", image: "images/box.jpeg", color: "#8B4513", phonetic: "/bɒks/", chinese: "盒子" }
+];
