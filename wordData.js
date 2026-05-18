@@ -3857,6 +3857,27 @@ const wordData = {
     phonetic: "/lɪd/",
     guide: "lid",
   },
+  yak: {
+    image: "images/yak.jpeg",
+    chinese: "牦牛",
+    color: "#8B4513",
+    phonetic: "/jæk/",
+    guide: "YAK",
+  },
+  fig: {
+    image: "images/fig.jpeg",
+    chinese: "无花果",
+    color: "#8B4513",
+    phonetic: "/fɪɡ/",
+    guide: "FIG",
+  },
+  tennis: {
+    image: "images/tennis.jpeg",
+    chinese: "网球",
+    color: "#8B4513",
+    phonetic: "/ˈten.ɪs/",
+    guide: "TEN-iss",
+  },
 };
 
 window.wordData = wordData;
