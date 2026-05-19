@@ -4432,6 +4432,14 @@ const wordData = {
     guide: "TEN-iss",
     type: "other",
   },
+  leopard: {
+    image: "images/leopard.jpeg",
+    chinese: "豹子",
+    color: "#FF9800",
+    phonetic: "/ˈlep.ərd/",
+    guide: "LEP-urd",
+    type: "animal",
+  },
 };
 
 window.wordData = wordData;
