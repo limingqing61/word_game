@@ -6,6 +6,7 @@ const wordData = {
     color: "#FF6B6B",
     phonetic: "/ˈæp.əl/",
     guide: "AP-uhl",
+    type: "fruit",
   },
   banana: {
     image: "images/banana.jpeg",
@@ -13,6 +14,7 @@ const wordData = {
     color: "#FFD166",
     phonetic: "/bəˈnæn.ə/",
     guide: "buh-NAH-nuh",
+    type: "fruit",
   },
   orange: {
     image: "images/orange.jpeg",
@@ -20,6 +22,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/ˈɔːr.ɪndʒ/",
     guide: "ORR-inj",
+    type: "fruit",
   },
   strawberry: {
     image: "images/strawberry.jpeg",
@@ -27,6 +30,7 @@ const wordData = {
     color: "#EF476F",
     phonetic: "/ˈstrɔː.bər.i/",
     guide: "STRAW-buh-ree",
+    type: "fruit",
   },
   pear: {
     image: "images/pear.jpeg",
@@ -34,6 +38,7 @@ const wordData = {
     color: "#8BC34A",
     phonetic: "/per/",
     guide: "PAIR",
+    type: "fruit",
   },
   peach: {
     image: "images/peach.jpeg",
@@ -41,6 +46,7 @@ const wordData = {
     color: "#FF8A65",
     phonetic: "/piːtʃ/",
     guide: "PEECH",
+    type: "fruit",
   },
   grape: {
     image: "images/grape.jpeg",
@@ -48,6 +54,7 @@ const wordData = {
     color: "#9C27B0",
     phonetic: "/ɡreɪp/",
     guide: "GRAYP",
+    type: "fruit",
   },
   watermelon: {
     image: "images/watermelon.jpeg",
@@ -55,6 +62,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ˈwɔː.tər.mel.ən/",
     guide: "WAW-tuh-mel-uhn",
+    type: "fruit",
   },
   pineapple: {
     image: "images/pineapple.jpeg",
@@ -62,6 +70,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/ˈpaɪn.æp.əl/",
     guide: "PY-nap-uhl",
+    type: "fruit",
   },
   mango: {
     image: "images/mango.jpeg",
@@ -69,6 +78,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ˈmæŋ.ɡoʊ/",
     guide: "MANG-goh",
+    type: "fruit",
   },
   kiwi: {
     image: "images/kiwi.jpeg",
@@ -76,6 +86,7 @@ const wordData = {
     color: "#8BC34A",
     phonetic: "/ˈkiː.wiː/",
     guide: "KEE-wee",
+    type: "fruit",
   },
   lemon: {
     image: "images/lemon.jpeg",
@@ -83,6 +94,7 @@ const wordData = {
     color: "#FFEB3B",
     phonetic: "/ˈlem.ən/",
     guide: "LEM-uhn",
+    type: "fruit",
   },
   cherry: {
     image: "images/cherry.jpeg",
@@ -90,6 +102,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈtʃer.i/",
     guide: "CHERR-ee",
+    type: "fruit",
   },
   blueberry: {
     image: "images/blueberry.jpeg",
@@ -97,6 +110,7 @@ const wordData = {
     color: "#3F51B5",
     phonetic: "/ˈbluː.bər.i/",
     guide: "BLOO-buh-ree",
+    type: "fruit",
   },
   coconut: {
     image: "images/coconut.jpeg",
@@ -104,6 +118,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈkoʊ.kə.nʌt/",
     guide: "KOH-kuh-nut",
+    type: "fruit",
   },
   avocado: {
     image: "images/avocado.jpeg",
@@ -111,6 +126,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ˌæv.əˈkɑː.doʊ/",
     guide: "av-uh-KAH-doh",
+    type: "fruit",
   },
   plum: {
     image: "images/plum.jpeg",
@@ -118,6 +134,7 @@ const wordData = {
     color: "#9C27B0",
     phonetic: "/plʌm/",
     guide: "PLUM",
+    type: "fruit",
   },
   apricot: {
     image: "images/apricot.jpeg",
@@ -125,6 +142,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/ˈeɪ.prɪ.kɑːt/",
     guide: "AY-pri-kot",
+    type: "fruit",
   },
   grapefruit: {
     image: "images/grapefruit.jpeg",
@@ -132,6 +150,7 @@ const wordData = {
     color: "#FF5722",
     phonetic: "/ˈɡreɪp.fruːt/",
     guide: "GRAYP-froot",
+    type: "fruit",
   },
   pomegranate: {
     image: "images/pomegranate.jpeg",
@@ -139,6 +158,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈpɑːm.ɪ.ɡræn.ɪt/",
     guide: "POM-i-gran-it",
+    type: "fruit",
   },
   lychee: {
     image: "images/lychee.jpeg",
@@ -146,6 +166,7 @@ const wordData = {
     color: "#FF4081",
     phonetic: "/ˈliː.tʃiː/",
     guide: "LEE-chee",
+    type: "fruit",
   },
   durian: {
     image: "images/durian.jpeg",
@@ -153,6 +174,7 @@ const wordData = {
     color: "#8BC34A",
     phonetic: "/ˈdʊr.i.ən/",
     guide: "DOOR-ee-uhn",
+    type: "fruit",
   },
   cantaloupe: {
     image: "images/cantaloupe.jpeg",
@@ -160,6 +182,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/ˈkæn.tə.loʊp/",
     guide: "KAN-tuh-loop",
+    type: "fruit",
   },
   tomato: {
     image: "images/tomato.jpeg",
@@ -167,6 +190,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/təˈmeɪ.toʊ/",
     guide: "tuh-MAY-toh",
+    type: "vegetable",
   },
   potato: {
     image: "images/potato.jpeg",
@@ -174,6 +198,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/pəˈteɪ.toʊ/",
     guide: "puh-TAY-toh",
+    type: "vegetable",
   },
   carrot: {
     image: "images/carrot.jpeg",
@@ -181,6 +206,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/ˈkær.ət/",
     guide: "KARR-uht",
+    type: "vegetable",
   },
   onion: {
     image: "images/onion.jpeg",
@@ -188,6 +214,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ˈʌn.jən/",
     guide: "UN-yuhn",
+    type: "vegetable",
   },
   cabbage: {
     image: "images/cabbage.jpeg",
@@ -195,6 +222,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ˈkæb.ɪdʒ/",
     guide: "KAB-ij",
+    type: "vegetable",
   },
   lettuce: {
     image: "images/lettuce.jpeg",
@@ -202,6 +230,7 @@ const wordData = {
     color: "#8BC34A",
     phonetic: "/ˈlet.ɪs/",
     guide: "LET-iss",
+    type: "vegetable",
   },
   cucumber: {
     image: "images/cucumber.jpeg",
@@ -209,6 +238,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ˈkjuː.kʌm.bər/",
     guide: "KYOO-kum-buh",
+    type: "vegetable",
   },
   pumpkin: {
     image: "images/pumpkin.jpeg",
@@ -216,6 +246,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/ˈpʌmp.kɪn/",
     guide: "PUMP-kin",
+    type: "vegetable",
   },
   broccoli: {
     image: "images/broccoli.jpeg",
@@ -223,6 +254,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ˈbrɑː.kəl.i/",
     guide: "BRAH-kuh-lee",
+    type: "vegetable",
   },
   cauliflower: {
     image: "images/cauliflower.jpeg",
@@ -230,6 +262,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/ˈkɔː.lɪ.flaʊ.ər/",
     guide: "KAW-li-flow-ur",
+    type: "vegetable",
   },
   spinach: {
     image: "images/spinach.jpeg",
@@ -237,6 +270,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ˈspɪn.ɪtʃ/",
     guide: "SPIN-itch",
+    type: "vegetable",
   },
   eggplant: {
     image: "images/eggplant.jpeg",
@@ -244,6 +278,7 @@ const wordData = {
     color: "#9C27B0",
     phonetic: "/ˈeɡ.plænt/",
     guide: "EG-plant",
+    type: "vegetable",
   },
   pepper: {
     image: "images/pepper.jpeg",
@@ -251,6 +286,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈpep.ər/",
     guide: "PEP-ur",
+    type: "vegetable",
   },
   chili: {
     image: "images/chili.jpeg",
@@ -258,6 +294,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈtʃɪl.i/",
     guide: "CHIL-ee",
+    type: "vegetable",
   },
   garlic: {
     image: "images/garlic.jpeg",
@@ -265,6 +302,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/ˈɡɑːr.lɪk/",
     guide: "GAR-lik",
+    type: "vegetable",
   },
   mushroom: {
     image: "images/mushroom.jpeg",
@@ -272,6 +310,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈmʌʃ.ruːm/",
     guide: "MUSH-room",
+    type: "vegetable",
   },
   corn: {
     image: "images/corn.jpeg",
@@ -279,6 +318,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/kɔːrn/",
     guide: "KORN",
+    type: "vegetable",
   },
   pea: {
     image: "images/pea.jpeg",
@@ -286,6 +326,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/piː/",
     guide: "PEE",
+    type: "vegetable",
   },
   radish: {
     image: "images/radish.jpeg",
@@ -293,6 +334,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈræd.ɪʃ/",
     guide: "RAD-ish",
+    type: "vegetable",
   },
   leek: {
     image: "images/leek.jpeg",
@@ -300,6 +342,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/liːk/",
     guide: "LEEK",
+    type: "vegetable",
   },
   asparagus: {
     image: "images/asparagus.jpeg",
@@ -307,6 +350,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/əˈsper.ə.ɡəs/",
     guide: "uh-SPER-uh-gus",
+    type: "vegetable",
   },
   zucchini: {
     image: "images/zucchini.jpeg",
@@ -314,6 +358,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/zuːˈkiː.ni/",
     guide: "zoo-KEE-nee",
+    type: "vegetable",
   },
   cat: {
     image: "images/cat.jpeg",
@@ -321,6 +366,7 @@ const wordData = {
     color: "#FFD166",
     phonetic: "/kæt/",
     guide: "KAT",
+    type: "animal",
   },
   dog: {
     image: "images/dog.jpeg",
@@ -328,6 +374,7 @@ const wordData = {
     color: "#06D6A0",
     phonetic: "/dɔːɡ/",
     guide: "DOG",
+    type: "animal",
   },
   fish: {
     image: "images/fish.jpeg",
@@ -335,6 +382,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/fɪʃ/",
     guide: "FISH",
+    type: "animal",
   },
   bird: {
     image: "images/bird.jpeg",
@@ -342,6 +390,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/bɜːrd/",
     guide: "BURD",
+    type: "animal",
   },
   lion: {
     image: "images/lion.jpeg",
@@ -349,6 +398,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/ˈlaɪ.ən/",
     guide: "LY-uhn",
+    type: "animal",
   },
   elephant: {
     image: "images/elephant.jpeg",
@@ -356,6 +406,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/ˈel.ɪ.fənt/",
     guide: "EL-uh-fuhnt",
+    type: "animal",
   },
   fox: {
     image: "images/fox.jpeg",
@@ -363,6 +414,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/fɑːks/",
     guide: "FAHKS",
+    type: "animal",
   },
   wolf: {
     image: "images/wolf.jpeg",
@@ -370,6 +422,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/wʊlf/",
     guide: "WUULF",
+    type: "animal",
   },
   dolphin: {
     image: "images/dolphin.jpeg",
@@ -377,6 +430,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈdɑːl.fɪn/",
     guide: "DAHL-fin",
+    type: "animal",
   },
   whale: {
     image: "images/whale.jpeg",
@@ -384,6 +438,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/weɪl/",
     guide: "WAYL",
+    type: "animal",
   },
   alligator: {
     image: "images/alligator.jpeg",
@@ -391,6 +446,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ˈæl.ɪ.ɡeɪ.tər/",
     guide: "AL-uh-gay-tur",
+    type: "animal",
   },
   rabbit: {
     image: "images/rabbit.jpeg",
@@ -398,6 +454,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/ˈræb.ɪt/",
     guide: "RAB-it",
+    type: "animal",
   },
   monkey: {
     image: "images/monkey.jpeg",
@@ -405,6 +462,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈmʌŋ.ki/",
     guide: "MUNG-kee",
+    type: "animal",
   },
   panda: {
     image: "images/panda.jpeg",
@@ -412,6 +470,7 @@ const wordData = {
     color: "#212121",
     phonetic: "/ˈpæn.də/",
     guide: "PAN-duh",
+    type: "animal",
   },
   bear: {
     image: "images/bear.jpeg",
@@ -419,6 +478,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ber/",
     guide: "BAIR",
+    type: "animal",
   },
   tiger: {
     image: "images/tiger.jpeg",
@@ -426,6 +486,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/ˈtaɪ.ɡər/",
     guide: "TY-gur",
+    type: "animal",
   },
   giraffe: {
     image: "images/giraffe.jpeg",
@@ -433,6 +494,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/dʒəˈræf/",
     guide: "juh-RAF",
+    type: "animal",
   },
   zebra: {
     image: "images/zebra.jpeg",
@@ -440,6 +502,7 @@ const wordData = {
     color: "#212121",
     phonetic: "/ˈziː.brə/",
     guide: "ZEE-bruh",
+    type: "animal",
   },
   deer: {
     image: "images/deer.jpeg",
@@ -447,6 +510,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/dɪr/",
     guide: "DEER",
+    type: "animal",
   },
   kangaroo: {
     image: "images/kangaroo.jpeg",
@@ -454,6 +518,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˌkæŋ.ɡəˈruː/",
     guide: "kang-guh-ROO",
+    type: "animal",
   },
   snake: {
     image: "images/snake.jpeg",
@@ -461,6 +526,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/sneɪk/",
     guide: "SNAYK",
+    type: "animal",
   },
   turtle: {
     image: "images/turtle.jpeg",
@@ -468,6 +534,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ˈtɜːr.təl/",
     guide: "TUR-tuhl",
+    type: "animal",
   },
   frog: {
     image: "images/frog.jpeg",
@@ -475,6 +542,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/frɔːɡ/",
     guide: "FROG",
+    type: "animal",
   },
   penguin: {
     image: "images/penguin.jpeg",
@@ -482,6 +550,7 @@ const wordData = {
     color: "#212121",
     phonetic: "/ˈpeŋ.ɡwɪn/",
     guide: "PENG-gwin",
+    type: "animal",
   },
   eagle: {
     image: "images/eagle.jpeg",
@@ -489,6 +558,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈiː.ɡəl/",
     guide: "EE-guhl",
+    type: "animal",
   },
   owl: {
     image: "images/owl.jpeg",
@@ -496,6 +566,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/aʊl/",
     guide: "OWL",
+    type: "animal",
   },
   parrot: {
     image: "images/parrot.jpeg",
@@ -503,6 +574,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈper.ət/",
     guide: "PAIR-uht",
+    type: "animal",
   },
   crow: {
     image: "images/crow.jpeg",
@@ -510,6 +582,7 @@ const wordData = {
     color: "#212121",
     phonetic: "/kroʊ/",
     guide: "KROH",
+    type: "animal",
   },
   swan: {
     image: "images/swan.jpeg",
@@ -517,6 +590,7 @@ const wordData = {
     color: "#FFFFFF",
     phonetic: "/swɑːn/",
     guide: "SWAHN",
+    type: "animal",
   },
   butterfly: {
     image: "images/butterfly.jpeg",
@@ -524,6 +598,7 @@ const wordData = {
     color: "#E91E63",
     phonetic: "/ˈbʌt.ər.flaɪ/",
     guide: "BUT-ur-fly",
+    type: "animal",
   },
   bee: {
     image: "images/bee.jpeg",
@@ -531,6 +606,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/biː/",
     guide: "BEE",
+    type: "animal",
   },
   ladybug: {
     image: "images/ladybug.jpeg",
@@ -538,6 +614,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈleɪ.di.bʌɡ/",
     guide: "LAY-dee-bug",
+    type: "animal",
   },
   ant: {
     image: "images/ant.jpeg",
@@ -545,6 +622,7 @@ const wordData = {
     color: "#212121",
     phonetic: "/ænt/",
     guide: "ANT",
+    type: "animal",
   },
   spider: {
     image: "images/spider.jpeg",
@@ -552,6 +630,7 @@ const wordData = {
     color: "#212121",
     phonetic: "/ˈspaɪ.dər/",
     guide: "SPY-dur",
+    type: "animal",
   },
   duck: {
     image: "images/duck.jpeg",
@@ -559,6 +638,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/dʌk/",
     guide: "DUK",
+    type: "animal",
   },
   chicken: {
     image: "images/chicken.jpeg",
@@ -566,13 +646,15 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/ˈtʃɪk.ɪn/",
     guide: "CHIK-in",
+    type: "animal",
   },
   cow: {
     image: "images/cow.jpeg",
-    chinese: "牛",
+    chinese: "奶牛",
     color: "#FFFFFF",
     phonetic: "/kaʊ/",
     guide: "KOW",
+    type: "animal",
   },
   pig: {
     image: "images/pig.jpeg",
@@ -580,6 +662,7 @@ const wordData = {
     color: "#FF8A80",
     phonetic: "/pɪɡ/",
     guide: "PIG",
+    type: "animal",
   },
   horse: {
     image: "images/horse.jpeg",
@@ -587,6 +670,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/hɔːrs/",
     guide: "HORS",
+    type: "animal",
   },
   sheep: {
     image: "images/sheep.jpeg",
@@ -594,6 +678,7 @@ const wordData = {
     color: "#FFFFFF",
     phonetic: "/ʃiːp/",
     guide: "SHEEP",
+    type: "animal",
   },
   goat: {
     image: "images/goat.jpeg",
@@ -601,6 +686,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/ɡoʊt/",
     guide: "GOHT",
+    type: "animal",
   },
   hen: {
     image: "images/hen.jpeg",
@@ -608,6 +694,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/hen/",
     guide: "HEN",
+    type: "animal",
   },
   squirrel: {
     image: "images/squirrel.jpeg",
@@ -615,6 +702,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈskwɜːr.əl/",
     guide: "SKWUR-uhl",
+    type: "animal",
   },
   hedgehog: {
     image: "images/hedgehog.jpeg",
@@ -622,6 +710,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈhedʒ.hɔːɡ/",
     guide: "HEJ-hog",
+    type: "animal",
   },
   camel: {
     image: "images/camel.jpeg",
@@ -629,6 +718,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ˈkæm.əl/",
     guide: "KAM-uhl",
+    type: "animal",
   },
   eye: {
     image: "images/eye.jpeg",
@@ -636,6 +726,7 @@ const wordData = {
     color: "#9C27B0",
     phonetic: "/aɪ/",
     guide: "EYE",
+    type: "body",
   },
   nose: {
     image: "images/nose.jpeg",
@@ -643,6 +734,7 @@ const wordData = {
     color: "#FF8A65",
     phonetic: "/noʊz/",
     guide: "NOHZ",
+    type: "body",
   },
   ear: {
     image: "images/ear.jpeg",
@@ -650,6 +742,7 @@ const wordData = {
     color: "#FFD166",
     phonetic: "/ɪr/",
     guide: "EER",
+    type: "body",
   },
   mouth: {
     image: "images/mouth.jpeg",
@@ -657,6 +750,7 @@ const wordData = {
     color: "#EF476F",
     phonetic: "/maʊθ/",
     guide: "MOWTH",
+    type: "body",
   },
   leg: {
     image: "images/leg.jpeg",
@@ -664,6 +758,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/leɡ/",
     guide: "LEG",
+    type: "body",
   },
   foot: {
     image: "images/foot.jpeg",
@@ -671,6 +766,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/fʊt/",
     guide: "FOOT",
+    type: "body",
   },
   bread: {
     image: "images/bread.jpeg",
@@ -678,6 +774,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/bred/",
     guide: "BRED",
+    type: "food",
   },
   rice: {
     image: "images/rice.jpeg",
@@ -685,6 +782,7 @@ const wordData = {
     color: "#FFFFFF",
     phonetic: "/raɪs/",
     guide: "RICE",
+    type: "food",
   },
   noodles: {
     image: "images/noodles.jpeg",
@@ -692,6 +790,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ˈnuː.dəlz/",
     guide: "NOO-duhlz",
+    type: "food",
   },
   pizza: {
     image: "images/pizza.jpeg",
@@ -699,6 +798,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/ˈpiːt.sə/",
     guide: "PEET-suh",
+    type: "food",
   },
   hamburger: {
     image: "images/hamburger.jpeg",
@@ -706,6 +806,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈhæm.bɜːr.ɡər/",
     guide: "HAM-bur-gur",
+    type: "food",
   },
   sandwich: {
     image: "images/sandwich.jpeg",
@@ -713,6 +814,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈsænd.wɪtʃ/",
     guide: "SAND-wich",
+    type: "food",
   },
   meat: {
     image: "images/meat.jpeg",
@@ -720,6 +822,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/miːt/",
     guide: "MEET",
+    type: "food",
   },
   cookie: {
     image: "images/cookie.jpeg",
@@ -727,6 +830,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈkʊk.i/",
     guide: "KOO-kee",
+    type: "food",
   },
   candy: {
     image: "images/candy.jpeg",
@@ -734,6 +838,7 @@ const wordData = {
     color: "#E91E63",
     phonetic: "/ˈkæn.di/",
     guide: "KAN-dee",
+    type: "food",
   },
   chocolate: {
     image: "images/chocolate.jpeg",
@@ -741,6 +846,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈtʃɔːk.lət/",
     guide: "CHAWK-lit",
+    type: "food",
   },
   cake: {
     image: "images/cake.jpeg",
@@ -748,6 +854,7 @@ const wordData = {
     color: "#FF8A65",
     phonetic: "/keɪk/",
     guide: "KAYK",
+    type: "food",
   },
   donut: {
     image: "images/donut.jpeg",
@@ -755,6 +862,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/ˈdoʊ.nʌt/",
     guide: "DOH-nut",
+    type: "food",
   },
   popcorn: {
     image: "images/popcorn.jpeg",
@@ -762,6 +870,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ˈpɑːp.kɔːrn/",
     guide: "PAHP-korn",
+    type: "food",
   },
   milk: {
     image: "images/milk.jpeg",
@@ -769,6 +878,7 @@ const wordData = {
     color: "#FFFFFF",
     phonetic: "/mɪlk/",
     guide: "MILK",
+    type: "food",
   },
   juice: {
     image: "images/juice.jpeg",
@@ -776,6 +886,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/dʒuːs/",
     guide: "JOOSE",
+    type: "food",
   },
   water: {
     image: "images/water.jpeg",
@@ -783,6 +894,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈwɔː.tər/",
     guide: "WAW-tur",
+    type: "food",
   },
   tea: {
     image: "images/tea.jpeg",
@@ -790,6 +902,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/tiː/",
     guide: "TEE",
+    type: "food",
   },
   cup: {
     image: "images/cup.jpeg",
@@ -797,6 +910,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/kʌp/",
     guide: "KUP",
+    type: "household",
   },
   plate: {
     image: "images/plate.jpeg",
@@ -804,6 +918,7 @@ const wordData = {
     color: "#FFFFFF",
     phonetic: "/pleɪt/",
     guide: "PLAYT",
+    type: "household",
   },
   bowl: {
     image: "images/bowl.jpeg",
@@ -811,6 +926,7 @@ const wordData = {
     color: "#FFFFFF",
     phonetic: "/boʊl/",
     guide: "BOHL",
+    type: "household",
   },
   spoon: {
     image: "images/spoon.jpeg",
@@ -818,6 +934,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/spuːn/",
     guide: "SPOON",
+    type: "household",
   },
   fork: {
     image: "images/fork.jpeg",
@@ -825,6 +942,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/fɔːrk/",
     guide: "FORK",
+    type: "household",
   },
   knife: {
     image: "images/knife.jpeg",
@@ -832,6 +950,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/naɪf/",
     guide: "NYFE",
+    type: "household",
   },
   chopsticks: {
     image: "images/chopsticks.jpeg",
@@ -839,6 +958,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈtʃɑːp.stɪks/",
     guide: "CHAH-p-stiks",
+    type: "household",
   },
   toothbrush: {
     image: "images/toothbrush.jpeg",
@@ -846,6 +966,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈtuːθ.brʌʃ/",
     guide: "TOOTH-brush",
+    type: "household",
   },
   toothpaste: {
     image: "images/toothpaste.jpeg",
@@ -853,6 +974,7 @@ const wordData = {
     color: "#FFFFFF",
     phonetic: "/ˈtuːθ.peɪst/",
     guide: "TOOTH-payst",
+    type: "household",
   },
   towel: {
     image: "images/towel.jpeg",
@@ -860,6 +982,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈtaʊ.əl/",
     guide: "TOW-uhl",
+    type: "household",
   },
   soap: {
     image: "images/soap.jpeg",
@@ -867,6 +990,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/soʊp/",
     guide: "SOHP",
+    type: "household",
   },
   shampoo: {
     image: "images/shampoo.jpeg",
@@ -874,6 +998,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ʃæmˈpuː/",
     guide: "sham-POO",
+    type: "household",
   },
   comb: {
     image: "images/comb.jpeg",
@@ -881,6 +1006,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/koʊm/",
     guide: "KOHM",
+    type: "household",
   },
   mirror: {
     image: "images/mirror.jpeg",
@@ -888,6 +1014,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/ˈmɪr.ər/",
     guide: "MIR-ur",
+    type: "household",
   },
   umbrella: {
     image: "images/umbrella.jpeg",
@@ -895,6 +1022,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ʌmˈbrel.ə/",
     guide: "um-BREL-uh",
+    type: "household",
   },
   clock: {
     image: "images/clock.jpeg",
@@ -902,6 +1030,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/klɑːk/",
     guide: "KLAHK",
+    type: "household",
   },
   lamp: {
     image: "images/lamp.jpeg",
@@ -909,6 +1038,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/læmp/",
     guide: "LAMP",
+    type: "household",
   },
   phone: {
     image: "images/phone.jpeg",
@@ -916,6 +1046,7 @@ const wordData = {
     color: "#212121",
     phonetic: "/foʊn/",
     guide: "FOHN",
+    type: "household",
   },
   computer: {
     image: "images/computer.jpeg",
@@ -923,6 +1054,7 @@ const wordData = {
     color: "#212121",
     phonetic: "/kəmˈpjuː.tər/",
     guide: "kuhm-PYOO-tur",
+    type: "household",
   },
   television: {
     image: "images/television.jpeg",
@@ -930,6 +1062,7 @@ const wordData = {
     color: "#212121",
     phonetic: "/ˈtel.ɪ.vɪʒ.ən/",
     guide: "TEL-i-vizh-uhn",
+    type: "household",
   },
   remote: {
     image: "images/remote.jpeg",
@@ -937,6 +1070,7 @@ const wordData = {
     color: "#212121",
     phonetic: "/rɪˈmoʊt/",
     guide: "ri-MOHT",
+    type: "household",
   },
   battery: {
     image: "images/battery.jpeg",
@@ -944,6 +1078,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈbæt.ər.i/",
     guide: "BAT-ur-ee",
+    type: "household",
   },
   key: {
     image: "images/key.jpeg",
@@ -951,6 +1086,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/kiː/",
     guide: "KEE",
+    type: "household",
   },
   lock: {
     image: "images/lock.jpeg",
@@ -958,6 +1094,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/lɑːk/",
     guide: "LAHK",
+    type: "household",
   },
   candle: {
     image: "images/candle.jpeg",
@@ -965,6 +1102,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ˈkæn.dəl/",
     guide: "KAN-duhl",
+    type: "household",
   },
   scissors: {
     image: "images/scissors.jpeg",
@@ -972,6 +1110,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/ˈsɪz.ərz/",
     guide: "SIZ-urz",
+    type: "household",
   },
   ruler: {
     image: "images/ruler.jpeg",
@@ -979,6 +1118,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈruː.lər/",
     guide: "ROO-lur",
+    type: "household",
   },
   eraser: {
     image: "images/eraser.jpeg",
@@ -986,6 +1126,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ɪˈreɪ.zər/",
     guide: "i-RAY-zur",
+    type: "household",
   },
   tape: {
     image: "images/tape.jpeg",
@@ -993,6 +1134,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/teɪp/",
     guide: "TAYP",
+    type: "household",
   },
   shirt: {
     image: "images/shirt.jpeg",
@@ -1000,6 +1142,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ʃɜːrt/",
     guide: "SHURT",
+    type: "clothing",
   },
   skirt: {
     image: "images/skirt.jpeg",
@@ -1007,6 +1150,7 @@ const wordData = {
     color: "#E91E63",
     phonetic: "/skɜːrt/",
     guide: "SKURT",
+    type: "clothing",
   },
   dress: {
     image: "images/dress.jpeg",
@@ -1014,6 +1158,7 @@ const wordData = {
     color: "#E91E63",
     phonetic: "/dres/",
     guide: "DRES",
+    type: "clothing",
   },
   shorts: {
     image: "images/shorts.jpeg",
@@ -1021,6 +1166,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ʃɔːrts/",
     guide: "SHORTS",
+    type: "clothing",
   },
   jeans: {
     image: "images/jeans.jpeg",
@@ -1028,6 +1174,7 @@ const wordData = {
     color: "#3F51B5",
     phonetic: "/dʒiːnz/",
     guide: "JEENZ",
+    type: "clothing",
   },
   jacket: {
     image: "images/jacket.jpeg",
@@ -1035,6 +1182,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈdʒæk.ɪt/",
     guide: "JAK-it",
+    type: "clothing",
   },
   coat: {
     image: "images/coat.jpeg",
@@ -1042,6 +1190,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/koʊt/",
     guide: "KOHT",
+    type: "clothing",
   },
   sweater: {
     image: "images/sweater.jpeg",
@@ -1049,6 +1198,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈswet.ər/",
     guide: "SWET-ur",
+    type: "clothing",
   },
   tie: {
     image: "images/tie.jpeg",
@@ -1056,6 +1206,7 @@ const wordData = {
     color: "#3F51B5",
     phonetic: "/taɪ/",
     guide: "TYE",
+    type: "clothing",
   },
   hat: {
     image: "images/hat.jpeg",
@@ -1063,6 +1214,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/hæt/",
     guide: "HAT",
+    type: "clothing",
   },
   cap: {
     image: "images/cap.jpeg",
@@ -1070,6 +1222,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/kæp/",
     guide: "KAP",
+    type: "clothing",
   },
   glove: {
     image: "images/glove.jpeg",
@@ -1077,6 +1230,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ɡlʌv/",
     guide: "GLUV",
+    type: "clothing",
   },
   sock: {
     image: "images/sock.jpeg",
@@ -1084,6 +1238,7 @@ const wordData = {
     color: "#FFFFFF",
     phonetic: "/sɑːk/",
     guide: "SAHK",
+    type: "clothing",
   },
   shoe: {
     image: "images/shoe.jpeg",
@@ -1091,6 +1246,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ʃuː/",
     guide: "SHOO",
+    type: "clothing",
   },
   boot: {
     image: "images/boot.jpeg",
@@ -1098,6 +1254,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/buːt/",
     guide: "BOOT",
+    type: "clothing",
   },
   slipper: {
     image: "images/slipper.jpeg",
@@ -1105,6 +1262,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ˈslɪp.ər/",
     guide: "SLIP-ur",
+    type: "clothing",
   },
   belt: {
     image: "images/belt.jpeg",
@@ -1112,6 +1270,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/belt/",
     guide: "BELT",
+    type: "clothing",
   },
   scarf: {
     image: "images/scarf.jpeg",
@@ -1119,6 +1278,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/skɑːrf/",
     guide: "SKARF",
+    type: "clothing",
   },
   car: {
     image: "images/car.jpeg",
@@ -1126,6 +1286,7 @@ const wordData = {
     color: "#FF6347",
     phonetic: "/kɑːr/",
     guide: "KAR",
+    type: "transport",
   },
   bus: {
     image: "images/bus.jpeg",
@@ -1133,6 +1294,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/bʌs/",
     guide: "BUS",
+    type: "transport",
   },
   train: {
     image: "images/train.jpeg",
@@ -1140,6 +1302,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/treɪn/",
     guide: "TRAYN",
+    type: "transport",
   },
   subway: {
     image: "images/subway.jpeg",
@@ -1147,6 +1310,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/ˈsʌb.weɪ/",
     guide: "SUB-way",
+    type: "transport",
   },
   taxi: {
     image: "images/taxi.jpeg",
@@ -1154,6 +1318,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ˈtæk.si/",
     guide: "TAK-see",
+    type: "transport",
   },
   bicycle: {
     image: "images/bicycle.jpeg",
@@ -1161,6 +1326,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈbaɪ.sɪ.kəl/",
     guide: "BY-sik-uhl",
+    type: "transport",
   },
   motorcycle: {
     image: "images/motorcycle.jpeg",
@@ -1168,6 +1334,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈmoʊ.tər.saɪ.kəl/",
     guide: "MOH-tur-sy-kuhl",
+    type: "transport",
   },
   plane: {
     image: "images/plane.jpeg",
@@ -1175,6 +1342,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/pleɪn/",
     guide: "PLAYN",
+    type: "transport",
   },
   ship: {
     image: "images/ship.jpeg",
@@ -1182,6 +1350,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ʃɪp/",
     guide: "SHIP",
+    type: "transport",
   },
   boat: {
     image: "images/boat.jpeg",
@@ -1189,6 +1358,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/boʊt/",
     guide: "BOHT",
+    type: "transport",
   },
   truck: {
     image: "images/truck.jpeg",
@@ -1196,6 +1366,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/trʌk/",
     guide: "TRUK",
+    type: "transport",
   },
   ambulance: {
     image: "images/ambulance.jpeg",
@@ -1203,6 +1374,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈæm.bjə.ləns/",
     guide: "AM-byuh-luhns",
+    type: "transport",
   },
   helicopter: {
     image: "images/helicopter.jpeg",
@@ -1210,6 +1382,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈhel.ɪ.kɑːp.tər/",
     guide: "HEL-i-kahp-tur",
+    type: "transport",
   },
   moon: {
     image: "images/moon.jpeg",
@@ -1217,6 +1390,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/muːn/",
     guide: "MOON",
+    type: "nature",
   },
   sky: {
     image: "images/sky.jpeg",
@@ -1224,6 +1398,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/skaɪ/",
     guide: "SKY",
+    type: "nature",
   },
   rainbow: {
     image: "images/rainbow.jpeg",
@@ -1231,6 +1406,7 @@ const wordData = {
     color: "#E91E63",
     phonetic: "/ˈreɪn.boʊ/",
     guide: "RAYN-boh",
+    type: "nature",
   },
   tree: {
     image: "images/tree.jpeg",
@@ -1238,6 +1414,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/triː/",
     guide: "TREE",
+    type: "nature",
   },
   leaf: {
     image: "images/leaf.jpeg",
@@ -1245,6 +1422,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/liːf/",
     guide: "LEEF",
+    type: "nature",
   },
   grass: {
     image: "images/grass.jpeg",
@@ -1252,6 +1430,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ɡræs/",
     guide: "GRASS",
+    type: "nature",
   },
   mountain: {
     image: "images/mountain.jpeg",
@@ -1259,6 +1438,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈmaʊn.tən/",
     guide: "MOUN-tuhn",
+    type: "nature",
   },
   sea: {
     image: "images/sea.jpeg",
@@ -1266,6 +1446,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/siː/",
     guide: "SEE",
+    type: "nature",
   },
   star: {
     image: "images/star.jpeg",
@@ -1273,6 +1454,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/stɑːr/",
     guide: "STAR",
+    type: "nature",
   },
   cloud: {
     image: "images/cloud.jpeg",
@@ -1280,6 +1462,7 @@ const wordData = {
     color: "#FFFFFF",
     phonetic: "/klaʊd/",
     guide: "KLOWD",
+    type: "nature",
   },
   rain: {
     image: "images/rain.jpeg",
@@ -1287,6 +1470,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/reɪn/",
     guide: "RAYN",
+    type: "nature",
   },
   snow: {
     image: "images/snow.jpeg",
@@ -1294,6 +1478,7 @@ const wordData = {
     color: "#FFFFFF",
     phonetic: "/snoʊ/",
     guide: "SNOH",
+    type: "nature",
   },
   wind: {
     image: "images/wind.jpeg",
@@ -1301,6 +1486,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/wɪnd/",
     guide: "WIND",
+    type: "nature",
   },
   thunder: {
     image: "images/thunder.jpeg",
@@ -1308,6 +1494,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ˈθʌn.dər/",
     guide: "THUN-dur",
+    type: "nature",
   },
   lightning: {
     image: "images/lightning.jpeg",
@@ -1315,6 +1502,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ˈlaɪt.nɪŋ/",
     guide: "LYT-ning",
+    type: "nature",
   },
   fog: {
     image: "images/fog.jpeg",
@@ -1322,6 +1510,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/fɑːɡ/",
     guide: "FAHG",
+    type: "nature",
   },
   river: {
     image: "images/river.jpeg",
@@ -1329,6 +1518,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈrɪv.ər/",
     guide: "RIV-ur",
+    type: "nature",
   },
   lake: {
     image: "images/lake.jpeg",
@@ -1336,6 +1526,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/leɪk/",
     guide: "LAYK",
+    type: "nature",
   },
   egg: {
     image: "images/egg.jpeg",
@@ -1343,6 +1534,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/eɡ/",
     guide: "EG",
+    type: "food",
   },
   house: {
     image: "images/house.jpeg",
@@ -1350,6 +1542,7 @@ const wordData = {
     color: "#FF8A65",
     phonetic: "/haʊs/",
     guide: "HOWSS",
+    type: "household",
   },
   flower: {
     image: "images/flower.jpeg",
@@ -1357,6 +1550,7 @@ const wordData = {
     color: "#E91E63",
     phonetic: "/ˈflaʊ.ər/",
     guide: "FLOW-ur",
+    type: "nature",
   },
   ball: {
     image: "images/ball.jpeg",
@@ -1364,6 +1558,7 @@ const wordData = {
     color: "#4ECDC4",
     phonetic: "/bɔːl/",
     guide: "BAWL",
+    type: "other",
   },
   sun: {
     image: "images/sun.jpeg",
@@ -1371,6 +1566,7 @@ const wordData = {
     color: "#FFD700",
     phonetic: "/sʌn/",
     guide: "SUN",
+    type: "nature",
   },
   brother: {
     image: "images/brother.jpeg",
@@ -1378,6 +1574,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈbrʌð.ər/",
     guide: "BRUH-thur",
+    type: "people",
   },
   mother: {
     image: "images/mother.jpeg",
@@ -1385,6 +1582,7 @@ const wordData = {
     color: "#E91E63",
     phonetic: "/ˈmʌð.ər/",
     guide: "MUH-thur",
+    type: "people",
   },
   father: {
     image: "images/father.jpeg",
@@ -1392,6 +1590,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈfɑː.ðər/",
     guide: "FAH-thur",
+    type: "people",
   },
   grandpa: {
     image: "images/grandpa.jpeg",
@@ -1399,6 +1598,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈɡræn.pɑː/",
     guide: "GRAN-pah",
+    type: "people",
   },
   grandma: {
     image: "images/grandma.jpeg",
@@ -1406,6 +1606,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈɡræn.mɑː/",
     guide: "GRAN-mah",
+    type: "people",
   },
   uncle: {
     image: "images/uncle.jpeg",
@@ -1413,6 +1614,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/ˈʌŋ.kəl/",
     guide: "UNG-kuhl",
+    type: "people",
   },
   aunt: {
     image: "images/aunt.jpeg",
@@ -1420,6 +1622,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/ænt/",
     guide: "ANT",
+    type: "people",
   },
   sister: {
     image: "images/sister.jpeg",
@@ -1427,6 +1630,7 @@ const wordData = {
     color: "#E91E63",
     phonetic: "/ˈsɪs.tər/",
     guide: "SIS-tur",
+    type: "people",
   },
   family: {
     image: "images/family.jpeg",
@@ -1434,6 +1638,7 @@ const wordData = {
     color: "#E91E63",
     phonetic: "/ˈfæm.əl.i/",
     guide: "FAM-uh-lee",
+    type: "people",
   },
   queen: {
     image: "images/queen.jpeg",
@@ -1441,6 +1646,7 @@ const wordData = {
     color: "#9C27B0",
     phonetic: "/kwiːn/",
     guide: "KWEEN",
+    type: "people",
   },
   king: {
     image: "images/king.jpeg",
@@ -1448,6 +1654,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/kɪŋ/",
     guide: "KING",
+    type: "people",
   },
   giant: {
     image: "images/giant.jpeg",
@@ -1455,6 +1662,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ˈdʒaɪ.ənt/",
     guide: "JY-uhnt",
+    type: "people",
   },
   elf: {
     image: "images/elf.jpeg",
@@ -1462,6 +1670,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/elf/",
     guide: "ELF",
+    type: "people",
   },
   witch: {
     image: "images/witch.jpeg",
@@ -1469,6 +1678,7 @@ const wordData = {
     color: "#9C27B0",
     phonetic: "/wɪtʃ/",
     guide: "WICH",
+    type: "people",
   },
   wizard: {
     image: "images/wizard.jpeg",
@@ -1476,6 +1686,7 @@ const wordData = {
     color: "#3F51B5",
     phonetic: "/ˈwɪz.ərd/",
     guide: "WIZ-urd",
+    type: "people",
   },
   clown: {
     image: "images/clown.jpeg",
@@ -1483,6 +1694,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/klaʊn/",
     guide: "KLOWN",
+    type: "people",
   },
   soldier: {
     image: "images/soldier.jpeg",
@@ -1490,6 +1702,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈsoʊl.dʒər/",
     guide: "SOHL-jur",
+    type: "people",
   },
   teacher: {
     image: "images/teacher.jpeg",
@@ -1497,6 +1710,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈtiː.tʃər/",
     guide: "TEE-chur",
+    type: "people",
   },
   doctor: {
     image: "images/doctor.jpeg",
@@ -1504,6 +1718,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ˈdɑːk.tər/",
     guide: "DAHK-tur",
+    type: "people",
   },
   nurse: {
     image: "images/nurse.jpeg",
@@ -1511,6 +1726,7 @@ const wordData = {
     color: "#E91E63",
     phonetic: "/nɜːrs/",
     guide: "NURS",
+    type: "people",
   },
   farmer: {
     image: "images/farmer.jpeg",
@@ -1518,6 +1734,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈfɑːr.mər/",
     guide: "FAR-mur",
+    type: "people",
   },
   chef: {
     image: "images/chef.jpeg",
@@ -1525,6 +1742,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/ʃef/",
     guide: "SHEF",
+    type: "people",
   },
   pilot: {
     image: "images/pilot.jpeg",
@@ -1532,6 +1750,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈpaɪ.lət/",
     guide: "PY-luht",
+    type: "people",
   },
   driver: {
     image: "images/driver.jpeg",
@@ -1539,6 +1758,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈdraɪ.vər/",
     guide: "DRY-vur",
+    type: "people",
   },
   crab: {
     image: "images/crab.jpeg",
@@ -1546,6 +1766,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/kræb/",
     guide: "KRAB",
+    type: "animal",
   },
   lobster: {
     image: "images/lobster.jpeg",
@@ -1553,6 +1774,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈlɑːb.stər/",
     guide: "LAHB-stur",
+    type: "animal",
   },
   shrimp: {
     image: "images/shrimp.jpeg",
@@ -1560,6 +1782,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/ʃrɪmp/",
     guide: "SHRIMP",
+    type: "animal",
   },
   octopus: {
     image: "images/octopus.jpeg",
@@ -1567,6 +1790,7 @@ const wordData = {
     color: "#9C27B0",
     phonetic: "/ˈɑːk.tə.pəs/",
     guide: "AHK-tuh-puhs",
+    type: "animal",
   },
   squid: {
     image: "images/squid.jpeg",
@@ -1574,6 +1798,7 @@ const wordData = {
     color: "#9C27B0",
     phonetic: "/skwɪd/",
     guide: "SKWID",
+    type: "animal",
   },
   seal: {
     image: "images/seal.jpeg",
@@ -1581,6 +1806,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/siːl/",
     guide: "SEEL",
+    type: "animal",
   },
   walrus: {
     image: "images/walrus.jpeg",
@@ -1588,6 +1814,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈwɔːl.rəs/",
     guide: "WAWL-ruhs",
+    type: "animal",
   },
   otter: {
     image: "images/otter.jpeg",
@@ -1595,6 +1822,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈɑː.tər/",
     guide: "AH-tur",
+    type: "animal",
   },
   bat: {
     image: "images/bat.jpeg",
@@ -1602,6 +1830,7 @@ const wordData = {
     color: "#212121",
     phonetic: "/bæt/",
     guide: "BAT",
+    type: "animal",
   },
   rat: {
     image: "images/rat.jpeg",
@@ -1609,6 +1838,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ræt/",
     guide: "RAT",
+    type: "animal",
   },
   hamster: {
     image: "images/hamster.jpeg",
@@ -1616,6 +1846,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ˈhæm.stər/",
     guide: "HAM-stur",
+    type: "animal",
   },
   ferret: {
     image: "images/ferret.jpeg",
@@ -1623,6 +1854,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ˈfer.ɪt/",
     guide: "FER-it",
+    type: "animal",
   },
   pony: {
     image: "images/pony.jpeg",
@@ -1630,6 +1862,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈpoʊ.ni/",
     guide: "POH-nee",
+    type: "animal",
   },
   donkey: {
     image: "images/donkey.jpeg",
@@ -1637,6 +1870,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/ˈdɑːŋ.ki/",
     guide: "DAHNG-kee",
+    type: "animal",
   },
   goose: {
     image: "images/goose.jpeg",
@@ -1644,6 +1878,7 @@ const wordData = {
     color: "#FFFFFF",
     phonetic: "/ɡuːs/",
     guide: "GOOSS",
+    type: "animal",
   },
   pigeon: {
     image: "images/pigeon.jpeg",
@@ -1651,6 +1886,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/ˈpɪdʒ.ɪn/",
     guide: "PIJ-in",
+    type: "animal",
   },
   seagull: {
     image: "images/seagull.jpeg",
@@ -1658,6 +1894,7 @@ const wordData = {
     color: "#FFFFFF",
     phonetic: "/ˈsiː.ɡʌl/",
     guide: "SEE-guhl",
+    type: "animal",
   },
   woodpecker: {
     image: "images/woodpecker.jpeg",
@@ -1665,6 +1902,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈwʊd.pek.ər/",
     guide: "WOOD-pek-ur",
+    type: "animal",
   },
   peacock: {
     image: "images/peacock.jpeg",
@@ -1672,6 +1910,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈpiː.kɑːk/",
     guide: "PEE-kahk",
+    type: "animal",
   },
   firefly: {
     image: "images/firefly.jpeg",
@@ -1679,6 +1918,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ˈfaɪər.flaɪ/",
     guide: "FY-ur-fly",
+    type: "animal",
   },
   caterpillar: {
     image: "images/caterpillar.jpeg",
@@ -1686,6 +1926,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ˈkæt.ər.pɪl.ər/",
     guide: "KAT-ur-pil-ur",
+    type: "animal",
   },
   snail: {
     image: "images/snail.jpeg",
@@ -1693,6 +1934,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/sneɪl/",
     guide: "SNAYL",
+    type: "animal",
   },
   worm: {
     image: "images/worm.jpeg",
@@ -1700,6 +1942,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/wɜːrm/",
     guide: "WURM",
+    type: "animal",
   },
   dinosaur: {
     image: "images/dinosaur.jpeg",
@@ -1707,6 +1950,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ˈdaɪ.nə.sɔːr/",
     guide: "DY-nuh-sawr",
+    type: "animal",
   },
   date: {
     image: "images/date.jpeg",
@@ -1714,6 +1958,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/deɪt/",
     guide: "DAYT",
+    type: "fruit",
   },
   papaya: {
     image: "images/papaya.jpeg",
@@ -1721,6 +1966,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/pəˈpaɪ.ə/",
     guide: "puh-PY-uh",
+    type: "fruit",
   },
   nectarine: {
     image: "images/nectarine.jpeg",
@@ -1728,6 +1974,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/ˈnek.tər.iːn/",
     guide: "NEK-tur-een",
+    type: "fruit",
   },
   olive: {
     image: "images/olive.jpeg",
@@ -1735,6 +1982,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ˈɑː.lɪv/",
     guide: "AH-liv",
+    type: "fruit",
   },
   celery: {
     image: "images/celery.jpeg",
@@ -1742,6 +1990,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ˈsel.ər.i/",
     guide: "SEL-ur-ee",
+    type: "vegetable",
   },
   okra: {
     image: "images/okra.jpeg",
@@ -1749,6 +1998,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ˈoʊ.krə/",
     guide: "OH-kruh",
+    type: "vegetable",
   },
   shallot: {
     image: "images/shallot.jpeg",
@@ -1756,6 +2006,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/ʃəˈlɑːt/",
     guide: "shuh-LAHT",
+    type: "vegetable",
   },
   endive: {
     image: "images/endive.jpeg",
@@ -1763,6 +2014,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ˈen.daɪv/",
     guide: "EN-dyv",
+    type: "vegetable",
   },
   bed: {
     image: "images/bed.jpeg",
@@ -1770,6 +2022,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/bed/",
     guide: "BED",
+    type: "household",
   },
   desk: {
     image: "images/desk.jpeg",
@@ -1777,6 +2030,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/desk/",
     guide: "DESK",
+    type: "household",
   },
   chair: {
     image: "images/chair.jpeg",
@@ -1784,6 +2038,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/tʃer/",
     guide: "CHAIR",
+    type: "household",
   },
   sofa: {
     image: "images/sofa.jpeg",
@@ -1791,6 +2046,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈsoʊ.fə/",
     guide: "SOH-fuh",
+    type: "household",
   },
   blanket: {
     image: "images/blanket.jpeg",
@@ -1798,6 +2054,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈblæŋ.kɪt/",
     guide: "BLANG-kit",
+    type: "household",
   },
   pillow: {
     image: "images/pillow.jpeg",
@@ -1805,6 +2062,7 @@ const wordData = {
     color: "#FFFFFF",
     phonetic: "/ˈpɪl.oʊ/",
     guide: "PIL-oh",
+    type: "household",
   },
   sheet: {
     image: "images/sheet.jpeg",
@@ -1812,6 +2070,7 @@ const wordData = {
     color: "#FFFFFF",
     phonetic: "/ʃiːt/",
     guide: "SHEET",
+    type: "household",
   },
   sponge: {
     image: "images/sponge.jpeg",
@@ -1819,6 +2078,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/spʌndʒ/",
     guide: "SPUNJ",
+    type: "household",
   },
   bucket: {
     image: "images/bucket.jpeg",
@@ -1826,6 +2086,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈbʌk.ɪt/",
     guide: "BUK-it",
+    type: "household",
   },
   broom: {
     image: "images/broom.jpeg",
@@ -1833,6 +2094,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/bruːm/",
     guide: "BROOM",
+    type: "household",
   },
   mop: {
     image: "images/mop.jpeg",
@@ -1840,6 +2102,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/mɑːp/",
     guide: "MAHP",
+    type: "household",
   },
   detergent: {
     image: "images/detergent.jpeg",
@@ -1847,6 +2110,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/dɪˈtɜːr.dʒənt/",
     guide: "di-TUR-juhnt",
+    type: "household",
   },
   clothespin: {
     image: "images/clothespin.jpeg",
@@ -1854,6 +2118,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈkloʊðz.pɪn/",
     guide: "KLOHTHZ-pin",
+    type: "household",
   },
   hanger: {
     image: "images/hanger.jpeg",
@@ -1861,6 +2126,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/ˈhæŋ.ər/",
     guide: "HANG-ur",
+    type: "household",
   },
   iron: {
     image: "images/iron.jpeg",
@@ -1868,6 +2134,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/ˈaɪ.ərn/",
     guide: "EYE-urn",
+    type: "household",
   },
   needle: {
     image: "images/needle.jpeg",
@@ -1875,6 +2142,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/ˈniː.dəl/",
     guide: "NEE-dul",
+    type: "household",
   },
   thread: {
     image: "images/thread.jpeg",
@@ -1882,6 +2150,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/θred/",
     guide: "THRED",
+    type: "household",
   },
   button: {
     image: "images/button.jpeg",
@@ -1889,6 +2158,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈbʌt.ən/",
     guide: "BUT-uhn",
+    type: "household",
   },
   zipper: {
     image: "images/zipper.jpeg",
@@ -1896,6 +2166,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/ˈzɪp.ər/",
     guide: "ZIP-ur",
+    type: "household",
   },
   wallet: {
     image: "images/wallet.jpeg",
@@ -1903,6 +2174,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈwɑː.lɪt/",
     guide: "WAH-lit",
+    type: "household",
   },
   backpack: {
     image: "images/backpack.jpeg",
@@ -1910,6 +2182,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈbæk.pæk/",
     guide: "BAK-pak",
+    type: "household",
   },
   suitcase: {
     image: "images/suitcase.jpeg",
@@ -1917,6 +2190,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈsuːt.keɪs/",
     guide: "SOOT-kayss",
+    type: "household",
   },
   ladder: {
     image: "images/ladder.jpeg",
@@ -1924,6 +2198,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈlæd.ər/",
     guide: "LAD-ur",
+    type: "household",
   },
   hammer: {
     image: "images/hammer.jpeg",
@@ -1931,6 +2206,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈhæm.ər/",
     guide: "HAM-ur",
+    type: "household",
   },
   nail: {
     image: "images/nail.jpeg",
@@ -1938,6 +2214,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/neɪl/",
     guide: "NAYL",
+    type: "household",
   },
   screwdriver: {
     image: "images/screwdriver.jpeg",
@@ -1945,6 +2222,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈskruː.draɪ.vər/",
     guide: "SKROO-dry-vur",
+    type: "household",
   },
   wrench: {
     image: "images/wrench.jpeg",
@@ -1952,6 +2230,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/rentʃ/",
     guide: "RENCH",
+    type: "household",
   },
   pliers: {
     image: "images/pliers.jpeg",
@@ -1959,6 +2238,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/ˈplaɪ.ərz/",
     guide: "PLY-urz",
+    type: "household",
   },
   crayon: {
     image: "images/crayon.jpeg",
@@ -1966,6 +2246,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈkreɪ.ɑːn/",
     guide: "KRAY-ahn",
+    type: "household",
   },
   chalk: {
     image: "images/chalk.jpeg",
@@ -1973,6 +2254,7 @@ const wordData = {
     color: "#FFFFFF",
     phonetic: "/tʃɔːk/",
     guide: "CHAWK",
+    type: "household",
   },
   glue: {
     image: "images/glue.jpeg",
@@ -1980,6 +2262,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ɡluː/",
     guide: "GLOO",
+    type: "household",
   },
   vest: {
     image: "images/vest.jpeg",
@@ -1987,6 +2270,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/vest/",
     guide: "VEST",
+    type: "clothing",
   },
   raincoat: {
     image: "images/raincoat.jpeg",
@@ -1994,6 +2278,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ˈreɪn.koʊt/",
     guide: "RAYN-koht",
+    type: "clothing",
   },
   pajamas: {
     image: "images/pajamas.jpeg",
@@ -2001,6 +2286,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/pəˈdʒɑː.məz/",
     guide: "puh-JAH-muhz",
+    type: "clothing",
   },
   swimsuit: {
     image: "images/swimsuit.jpeg",
@@ -2008,6 +2294,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈswɪm.suːt/",
     guide: "SWIM-soot",
+    type: "clothing",
   },
   underwear: {
     image: "images/underwear.jpeg",
@@ -2015,6 +2302,7 @@ const wordData = {
     color: "#FFFFFF",
     phonetic: "/ˈʌn.dər.wer/",
     guide: "UN-dur-wair",
+    type: "clothing",
   },
   overalls: {
     image: "images/overalls.jpeg",
@@ -2022,6 +2310,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈoʊ.vər.ɔːlz/",
     guide: "OH-vur-awlz",
+    type: "clothing",
   },
   helmet: {
     image: "images/helmet.jpeg",
@@ -2029,6 +2318,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈhel.mɪt/",
     guide: "HEL-mit",
+    type: "clothing",
   },
   earring: {
     image: "images/earring.jpeg",
@@ -2036,6 +2326,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ˈɪr.rɪŋ/",
     guide: "EER-ring",
+    type: "clothing",
   },
   necklace: {
     image: "images/necklace.jpeg",
@@ -2043,6 +2334,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ˈnek.lɪs/",
     guide: "NEK-lis",
+    type: "clothing",
   },
   bracelet: {
     image: "images/bracelet.jpeg",
@@ -2050,6 +2342,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ˈbreɪs.lɪt/",
     guide: "BRAYSS-lit",
+    type: "clothing",
   },
   ring: {
     image: "images/ring.jpeg",
@@ -2057,6 +2350,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/rɪŋ/",
     guide: "RING",
+    type: "clothing",
   },
   watch: {
     image: "images/watch.jpeg",
@@ -2064,6 +2358,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/wɑːtʃ/",
     guide: "WAHCH",
+    type: "clothing",
   },
   glasses: {
     image: "images/glasses.jpeg",
@@ -2071,6 +2366,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈɡlæs.ɪz/",
     guide: "GLASS-iz",
+    type: "clothing",
   },
   suspenders: {
     image: "images/suspenders.jpeg",
@@ -2078,6 +2374,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/səˈspen.dərz/",
     guide: "suh-SPEN-durz",
+    type: "clothing",
   },
   handkerchief: {
     image: "images/handkerchief.jpeg",
@@ -2085,6 +2382,7 @@ const wordData = {
     color: "#FFFFFF",
     phonetic: "/ˈhæŋ.kər.tʃiːf/",
     guide: "HANG-kur-cheef",
+    type: "clothing",
   },
   scooter: {
     image: "images/scooter.jpeg",
@@ -2092,6 +2390,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈskuː.tər/",
     guide: "SKOO-tur",
+    type: "transport",
   },
   skateboard: {
     image: "images/skateboard.jpeg",
@@ -2099,6 +2398,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈskeɪt.bɔːrd/",
     guide: "SKAYT-bord",
+    type: "transport",
   },
   sailboat: {
     image: "images/sailboat.jpeg",
@@ -2106,6 +2406,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈseɪl.boʊt/",
     guide: "SAYL-boht",
+    type: "transport",
   },
   yacht: {
     image: "images/yacht.jpeg",
@@ -2113,6 +2414,7 @@ const wordData = {
     color: "#FFFFFF",
     phonetic: "/jɑːt/",
     guide: "YAHT",
+    type: "transport",
   },
   submarine: {
     image: "images/submarine.jpeg",
@@ -2120,6 +2422,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˌsʌb.məˈriːn/",
     guide: "sub-muh-REEN",
+    type: "transport",
   },
   blimp: {
     image: "images/blimp.jpeg",
@@ -2127,6 +2430,7 @@ const wordData = {
     color: "#FFFFFF",
     phonetic: "/blɪmp/",
     guide: "BLIMP",
+    type: "transport",
   },
   rocket: {
     image: "images/rocket.jpeg",
@@ -2134,6 +2438,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈrɑː.kɪt/",
     guide: "RAH-kit",
+    type: "transport",
   },
   tractor: {
     image: "images/tractor.jpeg",
@@ -2141,6 +2446,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈtræk.tər/",
     guide: "TRAK-tur",
+    type: "transport",
   },
   bulldozer: {
     image: "images/bulldozer.jpeg",
@@ -2148,6 +2454,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ˈbʊl.doʊ.zər/",
     guide: "BOOL-doh-zur",
+    type: "transport",
   },
   crane: {
     image: "images/crane.jpeg",
@@ -2155,6 +2462,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/kreɪn/",
     guide: "KRAYN",
+    type: "transport",
   },
   forklift: {
     image: "images/forklift.jpeg",
@@ -2162,6 +2470,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ˈfɔːrk.lɪft/",
     guide: "FORK-lift",
+    type: "transport",
   },
   convertible: {
     image: "images/convertible.jpeg",
@@ -2169,6 +2478,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/kənˈvɜːr.tə.bəl/",
     guide: "kuhn-VUR-tuh-buhl",
+    type: "transport",
   },
   island: {
     image: "images/island.jpeg",
@@ -2176,6 +2486,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ˈaɪ.lənd/",
     guide: "EYE-luhnd",
+    type: "nature",
   },
   beach: {
     image: "images/beach.jpeg",
@@ -2183,6 +2494,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/biːtʃ/",
     guide: "BEECH",
+    type: "nature",
   },
   cliff: {
     image: "images/cliff.jpeg",
@@ -2190,6 +2502,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/klɪf/",
     guide: "KLIF",
+    type: "nature",
   },
   cave: {
     image: "images/cave.jpeg",
@@ -2197,6 +2510,7 @@ const wordData = {
     color: "#212121",
     phonetic: "/keɪv/",
     guide: "KAYV",
+    type: "nature",
   },
   desert: {
     image: "images/desert.jpeg",
@@ -2204,6 +2518,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ˈdez.ərt/",
     guide: "DEZ-urt",
+    type: "nature",
   },
   forest: {
     image: "images/forest.jpeg",
@@ -2211,6 +2526,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ˈfɔːr.ɪst/",
     guide: "FOR-ist",
+    type: "nature",
   },
   waterfall: {
     image: "images/waterfall.jpeg",
@@ -2218,6 +2534,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈwɔː.tər.fɔːl/",
     guide: "WAW-tur-fawl",
+    type: "nature",
   },
   stream: {
     image: "images/stream.jpeg",
@@ -2225,6 +2542,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/striːm/",
     guide: "STREEM",
+    type: "nature",
   },
   pond: {
     image: "images/pond.jpeg",
@@ -2232,6 +2550,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/pɑːnd/",
     guide: "PAHND",
+    type: "nature",
   },
   wave: {
     image: "images/wave.jpeg",
@@ -2239,6 +2558,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/weɪv/",
     guide: "WAYV",
+    type: "nature",
   },
   sand: {
     image: "images/sand.jpeg",
@@ -2246,6 +2566,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/sænd/",
     guide: "SAND",
+    type: "nature",
   },
   rock: {
     image: "images/rock.jpeg",
@@ -2253,6 +2574,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/rɑːk/",
     guide: "RAHK",
+    type: "nature",
   },
   stone: {
     image: "images/stone.jpeg",
@@ -2260,6 +2582,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/stoʊn/",
     guide: "STOHN",
+    type: "nature",
   },
   flood: {
     image: "images/flood.jpeg",
@@ -2267,6 +2590,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/flʌd/",
     guide: "FLUD",
+    type: "nature",
   },
   drought: {
     image: "images/drought.jpeg",
@@ -2274,6 +2598,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/draʊt/",
     guide: "DROWT",
+    type: "nature",
   },
   earthquake: {
     image: "images/earthquake.jpeg",
@@ -2281,6 +2606,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈɜːrθ.kweɪk/",
     guide: "URTH-kwayk",
+    type: "nature",
   },
   volcano: {
     image: "images/volcano.jpeg",
@@ -2288,6 +2614,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/vɑːlˈkeɪ.noʊ/",
     guide: "vahl-KAY-noh",
+    type: "nature",
   },
   dew: {
     image: "images/dew.jpeg",
@@ -2295,6 +2622,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/duː/",
     guide: "DOO",
+    type: "nature",
   },
   balloon: {
     image: "images/balloon.jpeg",
@@ -2302,6 +2630,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/bəˈluːn/",
     guide: "buh-LOON",
+    type: "other",
   },
   kite: {
     image: "images/kite.jpeg",
@@ -2309,6 +2638,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/kaɪt/",
     guide: "KYT",
+    type: "other",
   },
   doll: {
     image: "images/doll.jpeg",
@@ -2316,6 +2646,7 @@ const wordData = {
     color: "#E91E63",
     phonetic: "/dɑːl/",
     guide: "DAHL",
+    type: "other",
   },
   puzzle: {
     image: "images/puzzle.jpeg",
@@ -2323,6 +2654,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/ˈpʌz.əl/",
     guide: "PUZ-uhl",
+    type: "other",
   },
   lego: {
     image: "images/lego.jpeg",
@@ -2330,6 +2662,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈleɡ.oʊ/",
     guide: "LEG-oh",
+    type: "other",
   },
   checkers: {
     image: "images/checkers.jpeg",
@@ -2337,6 +2670,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈtʃek.ərz/",
     guide: "CHEK-urz",
+    type: "other",
   },
   marbles: {
     image: "images/marbles.jpeg",
@@ -2344,6 +2678,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈmɑːr.bəlz/",
     guide: "MAR-buhlz",
+    type: "other",
   },
   top: {
     image: "images/top.jpeg",
@@ -2351,6 +2686,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/tɑːp/",
     guide: "TAHP",
+    type: "other",
   },
   whistle: {
     image: "images/whistle.jpeg",
@@ -2358,6 +2694,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/ˈwɪs.əl/",
     guide: "WIS-uhl",
+    type: "other",
   },
   drum: {
     image: "images/drum.jpeg",
@@ -2365,6 +2702,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/drʌm/",
     guide: "DRUM",
+    type: "other",
   },
   guitar: {
     image: "images/guitar.jpeg",
@@ -2372,6 +2710,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ɡɪˈtɑːr/",
     guide: "gi-TAR",
+    type: "other",
   },
   piano: {
     image: "images/piano.jpeg",
@@ -2379,6 +2718,7 @@ const wordData = {
     color: "#212121",
     phonetic: "/piˈæn.oʊ/",
     guide: "pee-AN-oh",
+    type: "other",
   },
   violin: {
     image: "images/violin.jpeg",
@@ -2386,6 +2726,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˌvaɪ.əˈlɪn/",
     guide: "vy-uh-LIN",
+    type: "other",
   },
   microscope: {
     image: "images/microscope.jpeg",
@@ -2393,6 +2734,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/ˈmaɪ.krə.skoʊp/",
     guide: "MY-kruh-skohp",
+    type: "other",
   },
   telescope: {
     image: "images/telescope.jpeg",
@@ -2400,6 +2742,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈtel.ɪ.skoʊp/",
     guide: "TEL-uh-skohp",
+    type: "other",
   },
   compass: {
     image: "images/compass.jpeg",
@@ -2407,6 +2750,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈkʌm.pəs/",
     guide: "KUM-puhs",
+    type: "other",
   },
   map: {
     image: "images/map.jpeg",
@@ -2414,6 +2758,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/mæp/",
     guide: "MAP",
+    type: "other",
   },
   hospital: {
     image: "images/hospital.jpeg",
@@ -2421,6 +2766,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈhɑː.spɪ.təl/",
     guide: "HAH-spi-tuhl",
+    type: "other",
   },
   school: {
     image: "images/school.jpeg",
@@ -2428,6 +2774,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/skuːl/",
     guide: "SKOOL",
+    type: "other",
   },
   library: {
     image: "images/library.jpeg",
@@ -2435,6 +2782,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈlaɪ.brer.i/",
     guide: "LY-brer-ee",
+    type: "other",
   },
   museum: {
     image: "images/museum.jpeg",
@@ -2442,6 +2790,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/mjuːˈziː.əm/",
     guide: "myoo-ZEE-uhm",
+    type: "other",
   },
   zoo: {
     image: "images/zoo.jpeg",
@@ -2449,6 +2798,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/zuː/",
     guide: "ZOO",
+    type: "other",
   },
   farm: {
     image: "images/farm.jpeg",
@@ -2456,6 +2806,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/fɑːrm/",
     guide: "FARM",
+    type: "other",
   },
   park: {
     image: "images/park.jpeg",
@@ -2463,6 +2814,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/pɑːrk/",
     guide: "PARK",
+    type: "other",
   },
   garden: {
     image: "images/garden.jpeg",
@@ -2470,6 +2822,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ˈɡɑːr.dən/",
     guide: "GAR-duhn",
+    type: "other",
   },
   restaurant: {
     image: "images/restaurant.jpeg",
@@ -2477,6 +2830,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈres.tə.rɑːnt/",
     guide: "RES-tuh-rahnt",
+    type: "other",
   },
   bakery: {
     image: "images/bakery.jpeg",
@@ -2484,6 +2838,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ˈbeɪ.kər.i/",
     guide: "BAY-kur-ee",
+    type: "other",
   },
   cafe: {
     image: "images/cafe.jpeg",
@@ -2491,6 +2846,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/kæˈfeɪ/",
     guide: "ka-FAY",
+    type: "other",
   },
   supermarket: {
     image: "images/supermarket.jpeg",
@@ -2498,6 +2854,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈsuː.pər.mɑːr.kɪt/",
     guide: "SOO-pur-mar-kit",
+    type: "other",
   },
   cinema: {
     image: "images/cinema.jpeg",
@@ -2505,6 +2862,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈsɪn.ə.mə/",
     guide: "SIN-uh-muh",
+    type: "other",
   },
   stadium: {
     image: "images/stadium.jpeg",
@@ -2512,6 +2870,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈsteɪ.di.əm/",
     guide: "STAY-dee-uhm",
+    type: "other",
   },
   airport: {
     image: "images/airport.jpeg",
@@ -2519,6 +2878,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈer.pɔːrt/",
     guide: "AIR-port",
+    type: "other",
   },
   head: {
     image: "images/head.jpeg",
@@ -2526,6 +2886,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/hed/",
     guide: "HED",
+    type: "body",
   },
   hair: {
     image: "images/hair.jpeg",
@@ -2533,6 +2894,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/her/",
     guide: "HAIR",
+    type: "body",
   },
   forehead: {
     image: "images/forehead.jpeg",
@@ -2540,6 +2902,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/ˈfɔːr.hed/",
     guide: "FOR-hed",
+    type: "body",
   },
   eyebrow: {
     image: "images/eyebrow.jpeg",
@@ -2547,6 +2910,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈaɪ.braʊ/",
     guide: "EYE-brow",
+    type: "body",
   },
   eyelash: {
     image: "images/eyelash.jpeg",
@@ -2554,6 +2918,7 @@ const wordData = {
     color: "#212121",
     phonetic: "/ˈaɪ.læʃ/",
     guide: "EYE-lash",
+    type: "body",
   },
   cheek: {
     image: "images/cheek.jpeg",
@@ -2561,6 +2926,7 @@ const wordData = {
     color: "#FF8A80",
     phonetic: "/tʃiːk/",
     guide: "CHEEK",
+    type: "body",
   },
   chin: {
     image: "images/chin.jpeg",
@@ -2568,6 +2934,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/tʃɪn/",
     guide: "CHIN",
+    type: "body",
   },
   neck: {
     image: "images/neck.jpeg",
@@ -2575,6 +2942,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/nek/",
     guide: "NEK",
+    type: "body",
   },
   shoulder: {
     image: "images/shoulder.jpeg",
@@ -2582,6 +2950,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/ˈʃoʊl.dər/",
     guide: "SHOHL-dur",
+    type: "body",
   },
   arm: {
     image: "images/arm.jpeg",
@@ -2589,6 +2958,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/ɑːrm/",
     guide: "ARM",
+    type: "body",
   },
   elbow: {
     image: "images/elbow.jpeg",
@@ -2596,6 +2966,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/ˈel.boʊ/",
     guide: "EL-boh",
+    type: "body",
   },
   wrist: {
     image: "images/wrist.jpeg",
@@ -2603,6 +2974,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/rɪst/",
     guide: "RIST",
+    type: "body",
   },
   hand: {
     image: "images/hand.jpeg",
@@ -2610,6 +2982,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/hænd/",
     guide: "HAND",
+    type: "body",
   },
   finger: {
     image: "images/finger.jpeg",
@@ -2617,6 +2990,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/ˈfɪŋ.ɡər/",
     guide: "FING-gur",
+    type: "body",
   },
   thumb: {
     image: "images/thumb.jpeg",
@@ -2624,6 +2998,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/θʌm/",
     guide: "THUM",
+    type: "body",
   },
   chest: {
     image: "images/chest.jpeg",
@@ -2631,6 +3006,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/tʃest/",
     guide: "CHEST",
+    type: "body",
   },
   back: {
     image: "images/back.jpeg",
@@ -2638,6 +3014,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/bæk/",
     guide: "BAK",
+    type: "body",
   },
   stomach: {
     image: "images/stomach.jpeg",
@@ -2645,6 +3022,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/ˈstʌm.ək/",
     guide: "STUM-uhk",
+    type: "body",
   },
   hip: {
     image: "images/hip.jpeg",
@@ -2652,6 +3030,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/hɪp/",
     guide: "HIP",
+    type: "body",
   },
   knee: {
     image: "images/knee.jpeg",
@@ -2659,6 +3038,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/niː/",
     guide: "NEE",
+    type: "body",
   },
   ankle: {
     image: "images/ankle.jpeg",
@@ -2666,6 +3046,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/ˈæŋ.kəl/",
     guide: "ANG-kuhl",
+    type: "body",
   },
   heel: {
     image: "images/heel.jpeg",
@@ -2673,6 +3054,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/hiːl/",
     guide: "HEEL",
+    type: "body",
   },
   toe: {
     image: "images/toe.jpeg",
@@ -2680,6 +3062,7 @@ const wordData = {
     color: "#FFE082",
     phonetic: "/toʊ/",
     guide: "TOH",
+    type: "body",
   },
   run: {
     image: "images/run.jpeg",
@@ -2687,6 +3070,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/rʌn/",
     guide: "RUN",
+    type: "action",
   },
   walk: {
     image: "images/walk.jpeg",
@@ -2694,6 +3078,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/wɔːk/",
     guide: "WAWK",
+    type: "action",
   },
   jump: {
     image: "images/jump.jpeg",
@@ -2701,6 +3086,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/dʒʌmp/",
     guide: "JUMP",
+    type: "action",
   },
   climb: {
     image: "images/climb.jpeg",
@@ -2708,6 +3094,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/klaɪm/",
     guide: "KLYM",
+    type: "action",
   },
   crawl: {
     image: "images/crawl.jpeg",
@@ -2715,6 +3102,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/krɔːl/",
     guide: "KRAWL",
+    type: "action",
   },
   swim: {
     image: "images/swim.jpeg",
@@ -2722,6 +3110,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/swɪm/",
     guide: "SWIM",
+    type: "action",
   },
   dance: {
     image: "images/dance.jpeg",
@@ -2729,6 +3118,7 @@ const wordData = {
     color: "#E91E63",
     phonetic: "/dæns/",
     guide: "DANS",
+    type: "action",
   },
   sing: {
     image: "images/sing.jpeg",
@@ -2736,6 +3126,7 @@ const wordData = {
     color: "#9C27B0",
     phonetic: "/sɪŋ/",
     guide: "SING",
+    type: "action",
   },
   eat: {
     image: "images/eat.jpeg",
@@ -2743,6 +3134,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/iːt/",
     guide: "EET",
+    type: "action",
   },
   drink: {
     image: "images/drink.jpeg",
@@ -2750,6 +3142,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/drɪŋk/",
     guide: "DRINK",
+    type: "action",
   },
   bite: {
     image: "images/bite.jpeg",
@@ -2757,6 +3150,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/baɪt/",
     guide: "BYT",
+    type: "action",
   },
   lick: {
     image: "images/lick.jpeg",
@@ -2764,6 +3158,7 @@ const wordData = {
     color: "#E91E63",
     phonetic: "/lɪk/",
     guide: "LIK",
+    type: "action",
   },
   smell: {
     image: "images/smell.jpeg",
@@ -2771,6 +3166,7 @@ const wordData = {
     color: "#9C27B0",
     phonetic: "/smel/",
     guide: "SMEL",
+    type: "action",
   },
   look: {
     image: "images/look.jpeg",
@@ -2778,6 +3174,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/lʊk/",
     guide: "LOOK",
+    type: "action",
   },
   listen: {
     image: "images/listen.jpeg",
@@ -2785,6 +3182,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ˈlɪs.ən/",
     guide: "LIS-uhn",
+    type: "action",
   },
   touch: {
     image: "images/touch.jpeg",
@@ -2792,6 +3190,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/tʌtʃ/",
     guide: "TUCH",
+    type: "action",
   },
   hold: {
     image: "images/hold.jpeg",
@@ -2799,6 +3198,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/hoʊld/",
     guide: "HOHLD",
+    type: "action",
   },
   catch: {
     image: "images/catch.jpeg",
@@ -2806,6 +3206,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/kætʃ/",
     guide: "KACH",
+    type: "action",
   },
   throw: {
     image: "images/throw.jpeg",
@@ -2813,6 +3214,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/θroʊ/",
     guide: "THROH",
+    type: "action",
   },
   kick: {
     image: "images/kick.jpeg",
@@ -2820,6 +3222,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/kɪk/",
     guide: "KIK",
+    type: "action",
   },
   hit: {
     image: "images/hit.jpeg",
@@ -2827,6 +3230,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/hɪt/",
     guide: "HIT",
+    type: "action",
   },
   push: {
     image: "images/push.jpeg",
@@ -2834,6 +3238,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/pʊʃ/",
     guide: "POOSH",
+    type: "action",
   },
   pull: {
     image: "images/pull.jpeg",
@@ -2841,6 +3246,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/pʊl/",
     guide: "POOL",
+    type: "action",
   },
   lift: {
     image: "images/lift.jpeg",
@@ -2848,6 +3254,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/lɪft/",
     guide: "LIFT",
+    type: "action",
   },
   carry: {
     image: "images/carry.jpeg",
@@ -2855,6 +3262,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/ˈkær.i/",
     guide: "KAR-ee",
+    type: "action",
   },
   drop: {
     image: "images/drop.jpeg",
@@ -2862,6 +3270,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/drɑːp/",
     guide: "DRAHP",
+    type: "action",
   },
   press: {
     image: "images/press.jpeg",
@@ -2869,6 +3278,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/pres/",
     guide: "PRES",
+    type: "action",
   },
   break: {
     image: "images/break.jpeg",
@@ -2876,6 +3286,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/breɪk/",
     guide: "BRAY",
+    type: "action",
   },
   fix: {
     image: "images/fix.jpeg",
@@ -2883,6 +3294,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/fɪks/",
     guide: "FIKS",
+    type: "action",
   },
   build: {
     image: "images/build.jpeg",
@@ -2890,6 +3302,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/bɪld/",
     guide: "BILD",
+    type: "action",
   },
   draw: {
     image: "images/draw.jpeg",
@@ -2897,6 +3310,7 @@ const wordData = {
     color: "#E91E63",
     phonetic: "/drɔː/",
     guide: "DRAW",
+    type: "action",
   },
   write: {
     image: "images/write.jpeg",
@@ -2904,6 +3318,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/raɪt/",
     guide: "RYT",
+    type: "action",
   },
   read: {
     image: "images/read.jpeg",
@@ -2911,6 +3326,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/riːd/",
     guide: "REED",
+    type: "action",
   },
   count: {
     image: "images/count.jpeg",
@@ -2918,6 +3334,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/kaʊnt/",
     guide: "KOWNT",
+    type: "action",
   },
   think: {
     image: "images/think.jpeg",
@@ -2925,6 +3342,7 @@ const wordData = {
     color: "#9C27B0",
     phonetic: "/θɪŋk/",
     guide: "THINK",
+    type: "action",
   },
   know: {
     image: "images/know.jpeg",
@@ -2932,6 +3350,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/noʊ/",
     guide: "NOH",
+    type: "action",
   },
   remember: {
     image: "images/remember.jpeg",
@@ -2939,6 +3358,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/rɪˈmem.bər/",
     guide: "ri-MEM-bur",
+    type: "action",
   },
   forget: {
     image: "images/forget.jpeg",
@@ -2946,6 +3366,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/fərˈɡet/",
     guide: "fur-GET",
+    type: "action",
   },
   sleep: {
     image: "images/sleep.jpeg",
@@ -2953,6 +3374,7 @@ const wordData = {
     color: "#9E9E9E",
     phonetic: "/sliːp/",
     guide: "SLEEP",
+    type: "action",
   },
   sit: {
     image: "images/sit.jpeg",
@@ -2960,6 +3382,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/sɪt/",
     guide: "SIT",
+    type: "action",
   },
   stand: {
     image: "images/stand.jpeg",
@@ -2967,6 +3390,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/stænd/",
     guide: "STAND",
+    type: "action",
   },
   bend: {
     image: "images/bend.jpeg",
@@ -2974,6 +3398,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/bend/",
     guide: "BEND",
+    type: "action",
   },
   kneel: {
     image: "images/kneel.jpeg",
@@ -2981,6 +3406,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/niːl/",
     guide: "NEEL",
+    type: "action",
   },
   stretch: {
     image: "images/stretch.jpeg",
@@ -2988,6 +3414,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/stretʃ/",
     guide: "STRECH",
+    type: "action",
   },
   wash: {
     image: "images/wash.jpeg",
@@ -2995,6 +3422,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/wɑːʃ/",
     guide: "WAHSH",
+    type: "action",
   },
   clean: {
     image: "images/clean.jpeg",
@@ -3002,6 +3430,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/kliːn/",
     guide: "KLEEN",
+    type: "action",
   },
   sweep: {
     image: "images/sweep.jpeg",
@@ -3009,6 +3438,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/swiːp/",
     guide: "SWEEP",
+    type: "action",
   },
   wipe: {
     image: "images/wipe.jpeg",
@@ -3016,6 +3446,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/waɪp/",
     guide: "WYP",
+    type: "action",
   },
   cook: {
     image: "images/cook.jpeg",
@@ -3023,6 +3454,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/kʊk/",
     guide: "KOOK",
+    type: "action",
   },
   bake: {
     image: "images/bake.jpeg",
@@ -3030,6 +3462,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/beɪk/",
     guide: "BAYK",
+    type: "action",
   },
   fry: {
     image: "images/fry.jpeg",
@@ -3037,6 +3470,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/fraɪ/",
     guide: "FRY",
+    type: "action",
   },
   boil: {
     image: "images/boil.jpeg",
@@ -3044,6 +3478,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/bɔɪl/",
     guide: "BOYL",
+    type: "action",
   },
   cut: {
     image: "images/cut.jpeg",
@@ -3051,6 +3486,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/kʌt/",
     guide: "KUT",
+    type: "action",
   },
   peel: {
     image: "images/peel.jpeg",
@@ -3058,6 +3494,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/piːl/",
     guide: "PEEL",
+    type: "action",
   },
   pour: {
     image: "images/pour.jpeg",
@@ -3065,6 +3502,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/pɔːr/",
     guide: "POR",
+    type: "action",
   },
   mix: {
     image: "images/mix.jpeg",
@@ -3072,6 +3510,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/mɪks/",
     guide: "MIKS",
+    type: "action",
   },
   stir: {
     image: "images/stir.jpeg",
@@ -3079,6 +3518,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/stɜːr/",
     guide: "STUR",
+    type: "action",
   },
   spread: {
     image: "images/spread.jpeg",
@@ -3086,6 +3526,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/spred/",
     guide: "SPRED",
+    type: "action",
   },
   plant: {
     image: "images/plant.jpeg",
@@ -3093,6 +3534,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/plænt/",
     guide: "PLANT",
+    type: "action",
   },
   dig: {
     image: "images/dig.jpeg",
@@ -3100,6 +3542,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/dɪɡ/",
     guide: "DIG",
+    type: "action",
   },
   hide: {
     image: "images/hide.jpeg",
@@ -3107,6 +3550,7 @@ const wordData = {
     color: "#795548",
     phonetic: "/haɪd/",
     guide: "HYD",
+    type: "action",
   },
   find: {
     image: "images/find.jpeg",
@@ -3114,6 +3558,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/faɪnd/",
     guide: "FYND",
+    type: "action",
   },
   search: {
     image: "images/search.jpeg",
@@ -3121,6 +3566,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/sɜːrtʃ/",
     guide: "SURCH",
+    type: "action",
   },
   give: {
     image: "images/give.jpeg",
@@ -3128,6 +3574,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ɡɪv/",
     guide: "GIV",
+    type: "action",
   },
   take: {
     image: "images/take.jpeg",
@@ -3135,6 +3582,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/teɪk/",
     guide: "TAYK",
+    type: "action",
   },
   bring: {
     image: "images/bring.jpeg",
@@ -3142,6 +3590,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/brɪŋ/",
     guide: "BRING",
+    type: "action",
   },
   send: {
     image: "images/send.jpeg",
@@ -3149,6 +3598,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/send/",
     guide: "SEND",
+    type: "action",
   },
   receive: {
     image: "images/receive.jpeg",
@@ -3156,6 +3606,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/rɪˈsiːv/",
     guide: "ri-SEEV",
+    type: "action",
   },
   buy: {
     image: "images/buy.jpeg",
@@ -3163,6 +3614,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/baɪ/",
     guide: "BY",
+    type: "action",
   },
   sell: {
     image: "images/sell.jpeg",
@@ -3170,6 +3622,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/sel/",
     guide: "SEL",
+    type: "action",
   },
   pay: {
     image: "images/pay.jpeg",
@@ -3177,6 +3630,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/peɪ/",
     guide: "PAY",
+    type: "action",
   },
   earn: {
     image: "images/earn.jpeg",
@@ -3184,6 +3638,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ɜːrn/",
     guide: "URN",
+    type: "action",
   },
   save: {
     image: "images/save.jpeg",
@@ -3191,6 +3646,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/seɪv/",
     guide: "SAYV",
+    type: "action",
   },
   spend: {
     image: "images/spend.jpeg",
@@ -3198,6 +3654,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/spend/",
     guide: "SPEND",
+    type: "action",
   },
   help: {
     image: "images/help.jpeg",
@@ -3205,6 +3662,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/help/",
     guide: "HELP",
+    type: "action",
   },
   share: {
     image: "images/share.jpeg",
@@ -3212,6 +3670,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/ʃer/",
     guide: "SHAIR",
+    type: "action",
   },
   laugh: {
     image: "images/laugh.jpeg",
@@ -3219,6 +3678,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/læf/",
     guide: "LAF",
+    type: "action",
   },
   cry: {
     image: "images/cry.jpeg",
@@ -3226,6 +3686,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/kraɪ/",
     guide: "KRY",
+    type: "action",
   },
   smile: {
     image: "images/smile.jpeg",
@@ -3233,6 +3694,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/smaɪl/",
     guide: "SMYL",
+    type: "action",
   },
   one: {
     image: "images/one.jpeg",
@@ -3240,6 +3702,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/wʌn/",
     guide: "WUN",
+    type: "number",
   },
   two: {
     image: "images/two.jpeg",
@@ -3247,6 +3710,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/tuː/",
     guide: "TOO",
+    type: "number",
   },
   three: {
     image: "images/three.jpeg",
@@ -3254,6 +3718,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/θriː/",
     guide: "THREE",
+    type: "number",
   },
   four: {
     image: "images/four.jpeg",
@@ -3261,6 +3726,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/fɔːr/",
     guide: "FOUR",
+    type: "number",
   },
   five: {
     image: "images/five.jpeg",
@@ -3268,6 +3734,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/faɪv/",
     guide: "FYV",
+    type: "number",
   },
   six: {
     image: "images/six.jpeg",
@@ -3275,6 +3742,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/sɪks/",
     guide: "SIKS",
+    type: "number",
   },
   seven: {
     image: "images/seven.jpeg",
@@ -3282,6 +3750,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈsev.ən/",
     guide: "SEV-en",
+    type: "number",
   },
   eight: {
     image: "images/eight.jpeg",
@@ -3289,6 +3758,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/eɪt/",
     guide: "AYT",
+    type: "number",
   },
   nine: {
     image: "images/nine.jpeg",
@@ -3296,6 +3766,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/naɪn/",
     guide: "NYN",
+    type: "number",
   },
   ten: {
     image: "images/ten.jpeg",
@@ -3303,6 +3774,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ten/",
     guide: "TEN",
+    type: "number",
   },
   eleven: {
     image: "images/eleven.jpeg",
@@ -3310,6 +3782,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ɪˈlev.ən/",
     guide: "i-LEV-en",
+    type: "number",
   },
   twelve: {
     image: "images/twelve.jpeg",
@@ -3317,6 +3790,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/twelv/",
     guide: "TWELV",
+    type: "number",
   },
   thirteen: {
     image: "images/thirteen.jpeg",
@@ -3324,6 +3798,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/θɜːrˈtiːn/",
     guide: "thur-TEEN",
+    type: "number",
   },
   fourteen: {
     image: "images/fourteen.jpeg",
@@ -3331,6 +3806,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/fɔːrˈtiːn/",
     guide: "for-TEEN",
+    type: "number",
   },
   fifteen: {
     image: "images/fifteen.jpeg",
@@ -3338,6 +3814,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/fɪfˈtiːn/",
     guide: "fif-TEEN",
+    type: "number",
   },
   sixteen: {
     image: "images/sixteen.jpeg",
@@ -3345,6 +3822,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/sɪksˈtiːn/",
     guide: "siks-TEEN",
+    type: "number",
   },
   seventeen: {
     image: "images/seventeen.jpeg",
@@ -3352,6 +3830,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˌsev.ənˈtiːn/",
     guide: "sev-en-TEEN",
+    type: "number",
   },
   eighteen: {
     image: "images/eighteen.jpeg",
@@ -3359,6 +3838,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˌeɪˈtiːn/",
     guide: "ay-TEEN",
+    type: "number",
   },
   nineteen: {
     image: "images/nineteen.jpeg",
@@ -3366,6 +3846,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˌnaɪnˈtiːn/",
     guide: "nyn-TEEN",
+    type: "number",
   },
   twenty: {
     image: "images/twenty.jpeg",
@@ -3373,6 +3854,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈtwen.ti/",
     guide: "TWEN-tee",
+    type: "number",
   },
   thirty: {
     image: "images/thirty.jpeg",
@@ -3380,6 +3862,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈθɜːr.ti/",
     guide: "THUR-tee",
+    type: "number",
   },
   forty: {
     image: "images/forty.jpeg",
@@ -3387,6 +3870,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈfɔːr.ti/",
     guide: "FOR-tee",
+    type: "number",
   },
   fifty: {
     image: "images/fifty.jpeg",
@@ -3394,6 +3878,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈfɪf.ti/",
     guide: "FIF-tee",
+    type: "number",
   },
   sixty: {
     image: "images/sixty.jpeg",
@@ -3401,6 +3886,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈsɪks.ti/",
     guide: "SIKS-tee",
+    type: "number",
   },
   seventy: {
     image: "images/seventy.jpeg",
@@ -3408,6 +3894,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈsev.ən.ti/",
     guide: "SEV-en-tee",
+    type: "number",
   },
   eighty: {
     image: "images/eighty.jpeg",
@@ -3415,6 +3902,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈeɪ.ti/",
     guide: "AY-tee",
+    type: "number",
   },
   ninety: {
     image: "images/ninety.jpeg",
@@ -3422,6 +3910,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈnaɪn.ti/",
     guide: "NYN-tee",
+    type: "number",
   },
   hundred: {
     image: "images/hundred.jpeg",
@@ -3429,6 +3918,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈhʌn.drəd/",
     guide: "HUN-dred",
+    type: "number",
   },
   thousand: {
     image: "images/thousand.jpeg",
@@ -3436,6 +3926,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈθaʊ.zənd/",
     guide: "THOW-zend",
+    type: "number",
   },
   spring: {
     image: "images/spring.jpeg",
@@ -3443,6 +3934,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/sprɪŋ/",
     guide: "SPRING",
+    type: "nature",
   },
   summer: {
     image: "images/summer.jpeg",
@@ -3450,6 +3942,7 @@ const wordData = {
     color: "#FF9800",
     phonetic: "/ˈsʌm.ər/",
     guide: "SUM-ur",
+    type: "nature",
   },
   autumn: {
     image: "images/autumn.jpeg",
@@ -3457,6 +3950,7 @@ const wordData = {
     color: "#FFC107",
     phonetic: "/ˈɔː.təm/",
     guide: "AW-tum",
+    type: "nature",
   },
   winter: {
     image: "images/winter.jpeg",
@@ -3464,6 +3958,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈwɪn.tər/",
     guide: "WIN-tur",
+    type: "nature",
   },
   red: {
     image: "images/red.jpeg",
@@ -3471,6 +3966,7 @@ const wordData = {
     color: "#FF0000",
     phonetic: "/red/",
     guide: "RED",
+    type: "color",
   },
   green: {
     image: "images/green.jpeg",
@@ -3478,6 +3974,7 @@ const wordData = {
     color: "#00FF00",
     phonetic: "/ɡriːn/",
     guide: "GREEN",
+    type: "color",
   },
   yellow: {
     image: "images/yellow.jpeg",
@@ -3485,6 +3982,7 @@ const wordData = {
     color: "#FFFF00",
     phonetic: "/ˈjel.oʊ/",
     guide: "YEL-oh",
+    type: "color",
   },
   blue: {
     image: "images/blue.jpeg",
@@ -3492,6 +3990,7 @@ const wordData = {
     color: "#0000FF",
     phonetic: "/bluː/",
     guide: "BLUE",
+    type: "color",
   },
   purple: {
     image: "images/purple.jpeg",
@@ -3499,6 +3998,7 @@ const wordData = {
     color: "#800080",
     phonetic: "/ˈpɜːr.pəl/",
     guide: "PUR-puhl",
+    type: "color",
   },
   black: {
     image: "images/black.jpeg",
@@ -3506,6 +4006,7 @@ const wordData = {
     color: "#000000",
     phonetic: "/blæk/",
     guide: "BLACK",
+    type: "color",
   },
   white: {
     image: "images/white.jpeg",
@@ -3513,6 +4014,7 @@ const wordData = {
     color: "#FFFFFF",
     phonetic: "/waɪt/",
     guide: "WHITE",
+    type: "color",
   },
   pink: {
     image: "images/pink.jpeg",
@@ -3520,6 +4022,7 @@ const wordData = {
     color: "#FFC0CB",
     phonetic: "/pɪŋk/",
     guide: "PINK",
+    type: "color",
   },
   brown: {
     image: "images/brown.jpeg",
@@ -3527,6 +4030,7 @@ const wordData = {
     color: "#A52A2A",
     phonetic: "/braʊn/",
     guide: "BROWN",
+    type: "color",
   },
   gray: {
     image: "images/gray.jpeg",
@@ -3534,6 +4038,7 @@ const wordData = {
     color: "#808080",
     phonetic: "/ɡreɪ/",
     guide: "GRAY",
+    type: "color",
   },
   gold: {
     image: "images/gold.jpeg",
@@ -3541,6 +4046,7 @@ const wordData = {
     color: "#FFD700",
     phonetic: "/ɡoʊld/",
     guide: "GOLD",
+    type: "color",
   },
   silver: {
     image: "images/silver.jpeg",
@@ -3548,6 +4054,7 @@ const wordData = {
     color: "#C0C0C0",
     phonetic: "/ˈsɪl.vər/",
     guide: "SIL-vur",
+    type: "color",
   },
   axe: {
     image: "images/axe.jpeg",
@@ -3555,6 +4062,7 @@ const wordData = {
     color: "#8B4513",
     phonetic: "/æks/",
     guide: "ax",
+    type: "household",
   },
   envelope: {
     image: "images/envelope.jpeg",
@@ -3562,6 +4070,7 @@ const wordData = {
     color: "#F5F5DC",
     phonetic: "/ˈen.və.loʊp/",
     guide: "EN-vuh-lope",
+    type: "household",
   },
   fan: {
     image: "images/fan.jpeg",
@@ -3569,6 +4078,7 @@ const wordData = {
     color: "#87CEEB",
     phonetic: "/fæn/",
     guide: "fan",
+    type: "household",
   },
   gift: {
     image: "images/gift.jpeg",
@@ -3576,6 +4086,7 @@ const wordData = {
     color: "#FF69B4",
     phonetic: "/ɡɪft/",
     guide: "gift",
+    type: "household",
   },
   ice: {
     image: "images/ice.jpeg",
@@ -3583,6 +4094,7 @@ const wordData = {
     color: "#E0FFFF",
     phonetic: "/aɪs/",
     guide: "ice",
+    type: "nature",
   },
   jam: {
     image: "images/jam.jpeg",
@@ -3590,6 +4102,7 @@ const wordData = {
     color: "#B22222",
     phonetic: "/dʒæm/",
     guide: "jam",
+    type: "food",
   },
   boy: {
     image: "images/boy.jpeg",
@@ -3597,6 +4110,7 @@ const wordData = {
     color: "#4169E1",
     phonetic: "/bɔɪ/",
     guide: "boy",
+    type: "people",
   },
   girl: {
     image: "images/girl.jpeg",
@@ -3604,6 +4118,7 @@ const wordData = {
     color: "#FF69B4",
     phonetic: "/ɡɜːrl/",
     guide: "gurl",
+    type: "people",
   },
   ink: {
     image: "images/ink.jpeg",
@@ -3611,6 +4126,7 @@ const wordData = {
     color: "#000080",
     phonetic: "/ɪŋk/",
     guide: "ink",
+    type: "household",
   },
   net: {
     image: "images/net.jpeg",
@@ -3618,6 +4134,7 @@ const wordData = {
     color: "#808080",
     phonetic: "/net/",
     guide: "net",
+    type: "other",
   },
   ostrich: {
     image: "images/ostrich.jpeg",
@@ -3625,6 +4142,7 @@ const wordData = {
     color: "#D2B48C",
     phonetic: "/ˈɑː.strɪtʃ/",
     guide: "OS-trich",
+    type: "animal",
   },
   ox: {
     image: "images/ox.jpeg",
@@ -3632,6 +4150,7 @@ const wordData = {
     color: "#8B4513",
     phonetic: "/ɑːks/",
     guide: "ox",
+    type: "animal",
   },
   pen: {
     image: "images/pen.jpeg",
@@ -3639,6 +4158,7 @@ const wordData = {
     color: "#000080",
     phonetic: "/pen/",
     guide: "pen",
+    type: "household",
   },
   pencil: {
     image: "images/pencil.jpeg",
@@ -3646,6 +4166,7 @@ const wordData = {
     color: "#FFD700",
     phonetic: "/ˈpen.səl/",
     guide: "PEN-suhl",
+    type: "household",
   },
   robot: {
     image: "images/robot.jpeg",
@@ -3653,6 +4174,7 @@ const wordData = {
     color: "#C0C0C0",
     phonetic: "/ˈroʊ.bɑːt/",
     guide: "ROH-bot",
+    type: "other",
   },
   basketball: {
     image: "images/basketball.jpeg",
@@ -3660,6 +4182,7 @@ const wordData = {
     color: "#FF8C00",
     phonetic: "/ˈbæs.kɪt.bɔːl/",
     guide: "BAS-kit-bawl",
+    type: "other",
   },
   football: {
     image: "images/football.jpeg",
@@ -3667,6 +4190,7 @@ const wordData = {
     color: "#FFFFFF",
     phonetic: "/ˈfʊt.bɔːl/",
     guide: "FOOT-bawl",
+    type: "other",
   },
   badminton: {
     image: "images/badminton.jpeg",
@@ -3674,6 +4198,7 @@ const wordData = {
     color: "#F0E68C",
     phonetic: "/ˈbæd.mɪn.tən/",
     guide: "BAD-min-tun",
+    type: "other",
   },
   rose: {
     image: "images/rose.jpeg",
@@ -3681,6 +4206,7 @@ const wordData = {
     color: "#FF1493",
     phonetic: "/roʊz/",
     guide: "rohz",
+    type: "nature",
   },
   tent: {
     image: "images/tent.jpeg",
@@ -3688,6 +4214,7 @@ const wordData = {
     color: "#228B22",
     phonetic: "/tent/",
     guide: "tent",
+    type: "household",
   },
   box: {
     image: "images/box.jpeg",
@@ -3695,6 +4222,7 @@ const wordData = {
     color: "#CD853F",
     phonetic: "/bɑːks/",
     guide: "box",
+    type: "household",
   },
   nut: {
     image: "images/nut.jpeg",
@@ -3702,6 +4230,7 @@ const wordData = {
     color: "#8B4513",
     phonetic: "/nʌt/",
     guide: "nuht",
+    type: "food",
   },
   fire: {
     image: "images/fire.jpeg",
@@ -3709,6 +4238,7 @@ const wordData = {
     color: "#FF4500",
     phonetic: "/ˈfaɪər/",
     guide: "FYE-ur",
+    type: "nature",
   },
   yam: {
     image: "images/yam.jpeg",
@@ -3716,6 +4246,7 @@ const wordData = {
     color: "#D2B48C",
     phonetic: "/jæm/",
     guide: "yam",
+    type: "vegetable",
   },
   ram: {
     image: "images/ram.jpeg",
@@ -3723,6 +4254,7 @@ const wordData = {
     color: "#A0522D",
     phonetic: "/ræm/",
     guide: "ram",
+    type: "animal",
   },
   dam: {
     image: "images/dam.jpeg",
@@ -3730,6 +4262,7 @@ const wordData = {
     color: "#4682B4",
     phonetic: "/dæm/",
     guide: "dam",
+    type: "nature",
   },
   pan: {
     image: "images/pan.jpeg",
@@ -3737,6 +4270,7 @@ const wordData = {
     color: "#696969",
     phonetic: "/pæn/",
     guide: "pan",
+    type: "household",
   },
   can: {
     image: "images/can.jpeg",
@@ -3744,6 +4278,7 @@ const wordData = {
     color: "#C0C0C0",
     phonetic: "/kæn/",
     guide: "kan",
+    type: "household",
   },
   rag: {
     image: "images/rag.jpeg",
@@ -3751,6 +4286,7 @@ const wordData = {
     color: "#A9A9A9",
     phonetic: "/ræɡ/",
     guide: "rag",
+    type: "household",
   },
   pad: {
     image: "images/pad.jpeg",
@@ -3758,6 +4294,7 @@ const wordData = {
     color: "#F5F5DC",
     phonetic: "/pæd/",
     guide: "pad",
+    type: "household",
   },
   bag: {
     image: "images/bag.jpeg",
@@ -3765,6 +4302,7 @@ const wordData = {
     color: "#8B4513",
     phonetic: "/bæɡ/",
     guide: "bag",
+    type: "household",
   },
   tap: {
     image: "images/tap.jpeg",
@@ -3772,6 +4310,7 @@ const wordData = {
     color: "#B0C4DE",
     phonetic: "/tæp/",
     guide: "tap",
+    type: "household",
   },
   nap: {
     image: "images/nap.jpeg",
@@ -3779,6 +4318,7 @@ const wordData = {
     color: "#87CEEB",
     phonetic: "/næp/",
     guide: "nap",
+    type: "action",
   },
   mat: {
     image: "images/mat.jpeg",
@@ -3786,6 +4326,7 @@ const wordData = {
     color: "#D2B48C",
     phonetic: "/mæt/",
     guide: "mat",
+    type: "household",
   },
   vet: {
     image: "images/vet.jpeg",
@@ -3793,6 +4334,7 @@ const wordData = {
     color: "#2E8B57",
     phonetic: "/vet/",
     guide: "vet",
+    type: "people",
   },
   pet: {
     image: "images/pet.jpeg",
@@ -3800,6 +4342,7 @@ const wordData = {
     color: "#FFB6C1",
     phonetic: "/pet/",
     guide: "pet",
+    type: "animal",
   },
   lip: {
     image: "images/lip.jpeg",
@@ -3807,6 +4350,7 @@ const wordData = {
     color: "#FFC0CB",
     phonetic: "/lɪp/",
     guide: "lip",
+    type: "body",
   },
   sip: {
     image: "images/sip.jpeg",
@@ -3814,6 +4358,7 @@ const wordData = {
     color: "#00CED1",
     phonetic: "/sɪp/",
     guide: "sip",
+    type: "action",
   },
   tip: {
     image: "images/tip.jpeg",
@@ -3821,6 +4366,7 @@ const wordData = {
     color: "#FFDAB9",
     phonetic: "/tɪp/",
     guide: "tip",
+    type: "body",
   },
   rip: {
     image: "images/rip.jpeg",
@@ -3828,6 +4374,7 @@ const wordData = {
     color: "#CD5C5C",
     phonetic: "/rɪp/",
     guide: "rip",
+    type: "action",
   },
   bib: {
     image: "images/bib.jpeg",
@@ -3835,6 +4382,7 @@ const wordData = {
     color: "#FF69B4",
     phonetic: "/bɪb/",
     guide: "bib",
+    type: "clothing",
   },
   rib: {
     image: "images/rib.jpeg",
@@ -3842,6 +4390,7 @@ const wordData = {
     color: "#F5DEB3",
     phonetic: "/rɪb/",
     guide: "rib",
+    type: "body",
   },
   kid: {
     image: "images/kid.jpeg",
@@ -3849,6 +4398,7 @@ const wordData = {
     color: "#FFA07A",
     phonetic: "/kɪd/",
     guide: "kid",
+    type: "people",
   },
   lid: {
     image: "images/lid.jpeg",
@@ -3856,6 +4406,7 @@ const wordData = {
     color: "#D3D3D3",
     phonetic: "/lɪd/",
     guide: "lid",
+    type: "household",
   },
   yak: {
     image: "images/yak.jpeg",
@@ -3863,6 +4414,7 @@ const wordData = {
     color: "#8B4513",
     phonetic: "/jæk/",
     guide: "YAK",
+    type: "animal",
   },
   fig: {
     image: "images/fig.jpeg",
@@ -3870,6 +4422,7 @@ const wordData = {
     color: "#8B4513",
     phonetic: "/fɪɡ/",
     guide: "FIG",
+    type: "fruit",
   },
   tennis: {
     image: "images/tennis.jpeg",
@@ -3877,6 +4430,7 @@ const wordData = {
     color: "#8B4513",
     phonetic: "/ˈten.ɪs/",
     guide: "TEN-iss",
+    type: "other",
   },
 };
 
