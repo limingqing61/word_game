@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Word Runner · 单词跑酷</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #1a472a 0%, #0e2a1a 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Comic Neue', 'Comic Sans MS', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .game-container {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(30, 50, 30, 0.6);
+            backdrop-filter: blur(4px);
+            border-radius: 60px;
+            padding: 20px;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        header {
+            text-align: center;
+            color: #FFE484;
+            text-shadow: 4px 4px 0 #B45309;
+            margin-bottom: 10px;
+        }
+
+        .score-panel {
+            display: flex;
+            justify-content: space-between;
+            background: #31220e;
+            padding: 8px 20px;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            color: #ffecb3;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .game-area {
+            position: relative;
+            background: #3b8c5a;
+            border-radius: 40px;
+            min-height: 300px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .runner {
+            position: absolute;
+            left: 20px;
+            bottom: 20px;
+            width: 70px;
+            height: 70px;
+            background: #ffd966;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            box-shadow: 0 5px 0 #b97f44;
+            z-index: 10;
+            transform: scaleX(-1);
+        }
+
+        .question-card {
+            position: absolute;
+            right: -100px;
+            bottom: 20px;
+            width: 80px;
+            height: 80px;
+            background: #2c5a2c;
+            background-image: radial-gradient(circle at 30% 35%, #4a7a4a 2%, transparent 2.5%);
+            background-size: 15px 15px;
+            border-radius: 20px;
+            border: 3px solid #f3c26b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ffd966;
+            cursor: pointer;
+            transition: left 0.02s linear;
+            z-index: 20;
+        }
+
+        .question-card .repeat-sound {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffaa33;
+            border-radius: 30px;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .options-area {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .option-card {
+            background: #fef3c7;
+            border-radius: 28px;
+            padding: 12px;
+            width: 100px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #b97f44;
+            transition: 0.05s linear;
+        }
+
+        .option-card:active {
+            transform: translateY(3px);
+        }
+
+        .option-card img {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+        }
+
+        .message-area {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffeaac;
+        }
+
+        button {
+            background: #ffaa33;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 40px;
+            font-weight: bold;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .feedback {
+            position: fixed;
+            font-size: 1.8rem;
+            font-weight: bold;
+            pointer-events: none;
+            z-index: 200;
+            animation: floatUp 0.5s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-60px);
+            }
+        }
+
+        /* 启动遮罩层样式 */
+        #startOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a472a 0%, #0e2a1a 100%);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+            backdrop-filter: blur(8px);
+        }
+
+        #startOverlay h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 4px 4px 0 #b45309;
+        }
+
+        #startOverlay .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        /* 分类学习区 */
+        .categories-learn {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 30px;
+            padding: 12px 20px;
+            margin-bottom: 25px;
+            max-width: 550px;
+            width: 90%;
+        }
+
+        .categories-title {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        .categories-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .cat-item {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 40px;
+            padding: 6px 14px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.1s linear;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .cat-item:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        #startBtn {
+            background: #ffaa33;
+            border: none;
+            padding: 16px 48px;
+            font-size: 1.8rem;
+            border-radius: 60px;
+            color: #31220e;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #b97f44;
+            transition: 0.05s linear;
+        }
+
+        #startBtn:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #b97f44;
+        }
+
+        #startOverlay .tip {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 700px) {
+            .option-card {
+                width: 70px;
+                padding: 6px;
+            }
+
+            .option-card img {
+                width: 50px;
+                height: 50px;
+            }
+
+            .runner {
+                width: 55px;
+                height: 55px;
+                font-size: 2rem;
+            }
+
+            .question-card {
+                width: 65px;
+                height: 65px;
+                font-size: 1.8rem;
+            }
+
+            #startOverlay h1 {
+                font-size: 2rem;
+            }
+
+            #startBtn {
+                font-size: 1.3rem;
+                padding: 12px 32px;
+            }
+
+            .cat-item {
+                font-size: 0.75rem;
+                padding: 4px 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 启动遮罩层 -->
+    <div id="startOverlay">
+        <h1>🏃‍♂️ Word Runner</h1>
+        <div class="subtitle">🎧 听音识词 · 分类挑战</div>
+
+        <!-- 分类学习区 -->
+        <div class="categories-learn" id="categoriesLearn">
+            <div class="categories-title">📚 点击学习分类</div>
+            <div class="categories-grid" id="categoriesGrid"></div>
+        </div>
+
+        <button id="startBtn">🔊 点击开始游戏</button>
+        <div class="tip">💡 需要点击按钮以启用音频和语音</div>
+    </div>
+
+    <div class="game-container" style="display: none;" id="gameContainer">
+        <header>
+            <h1><i class="fas fa-running"></i> Word Runner · 单词跑酷</h1>
+        </header>
+        <div class="score-panel">
+            <span>🏆 得分: <span id="scoreValue">0</span></span>
+            <span>📋 进度: <span id="progressValue">0</span> / <span id="totalQuestions">0</span></span>
+        </div>
+        <div class="game-area" id="gameArea">
+            <div class="runner" id="runner">🏃‍♂️</div>
+            <div id="questionCard" class="question-card" style="display: none;">
+                ❓
+                <div class="repeat-sound" id="repeatSoundBtn">🔊 重听</div>
+            </div>
+        </div>
+        <div id="optionsArea" class="options-area"></div>
+        <div id="messageArea" class="message-area"></div>
+        <div style="text-align: center; margin-top: 15px;">
+            <button id="backMenuBtn"><i class="fas fa-arrow-left"></i> 返回主页</button>
+        </div>
+    </div>
+
+    <script src="utils.js"></script>
+    <script src="wordData.js"></script>
+    <script src="wordlistConfig.js"></script>
+    <script src="wordRunner.js"></script>
+</body>
+
+</html>

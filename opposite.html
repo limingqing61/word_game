@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Opposite Adjectives · 反义词挑战</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .opposite-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff9ef;
+            border-radius: 60px;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .score-stats {
+            display: flex;
+            justify-content: center;
+            gap: 35px;
+            margin-bottom: 20px;
+        }
+
+        .score-card {
+            text-align: center;
+            background: #f0e5d2;
+            padding: 6px 18px;
+            border-radius: 40px;
+        }
+
+        .score-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+            line-height: 1.2;
+        }
+
+        .score-card .label {
+            font-size: 0.8rem;
+            color: #5a4a2e;
+        }
+
+        .opposite-image-area {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+        }
+
+        .opposite-image {
+            width: 400px;
+            height: 300px;
+            object-fit: contain;
+            border-radius: 48px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            display: block;
+            background-color: #f0e5d2;
+        }
+
+        @media (max-width: 600px) {
+            .opposite-image {
+                width: 280px;
+                height: 210px;
+            }
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 15px 0;
+        }
+
+        .action-btn {
+            background: #ffd966;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #b47c2e;
+            transition: 0.05s linear;
+        }
+
+        .action-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #b47c2e;
+        }
+
+        .choice-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 25px 0;
+        }
+
+        .choice {
+            background: #ffd966;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #b47c2e;
+            transition: 0.05s linear;
+        }
+
+        .choice:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #b47c2e;
+        }
+
+        .feedback {
+            font-size: 1.3rem;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .feedback.correct {
+            color: #2e7d32;
+        }
+
+        .feedback.wrong {
+            color: #c62828;
+        }
+
+        .next-btn {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 8px 28px;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+        }
+
+        .back-btn {
+            margin-top: 25px;
+        }
+
+        #resultArea {
+            margin-top: 20px;
+        }
+
+        .result-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        /* 启动遮罩层样式 */
+        #startOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+            backdrop-filter: blur(8px);
+        }
+
+        #startOverlay h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        #startOverlay .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        #startBtn {
+            background: #ff6b6b;
+            border: none;
+            padding: 16px 48px;
+            font-size: 1.8rem;
+            border-radius: 60px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #c04e4e;
+            transition: 0.05s linear;
+        }
+
+        #startBtn:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #c04e4e;
+        }
+
+        #startOverlay .tip {
+            margin-top: 40px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 600px) {
+            #startOverlay h1 {
+                font-size: 2rem;
+            }
+
+            #startBtn {
+                font-size: 1.3rem;
+                padding: 12px 32px;
+            }
+
+            .opposite-image {
+                width: 280px;
+                height: 210px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 启动遮罩层 -->
+    <div id="startOverlay">
+        <h1>⚖️ Opposite Challenge</h1>
+        <div class="subtitle">🎧 听音辨义 · 选择正确的反义词方向</div>
+        <button id="startBtn">🔊 点击开始游戏</button>
+        <div class="tip">💡 需要点击按钮以启用音频和语音</div>
+    </div>
+
+    <div class="container" style="display: none;" id="gameContainer">
+        <header>
+            <h1><i class="fas fa-balance-scale"></i> Opposite Adjectives</h1>
+            <p>Listen & choose LEFT or RIGHT ✅</p>
+        </header>
+
+        <div class="opposite-container">
+            <div class="score-stats">
+                <div class="score-card">
+                    <div class="label">Correct</div>
+                    <span id="correctCount" class="value">0</span>
+                </div>
+                <div class="score-card">
+                    <div class="label">Wrong</div>
+                    <span id="wrongCount" class="value">0</span>
+                </div>
+                <div class="score-card">
+                    <div class="label">Score</div>
+                    <span id="totalScore" class="value">0</span>
+                </div>
+                <div class="score-card">
+                    <div class="label">Progress</div>
+                    <span id="progressCount" class="value">0/20</span>
+                </div>
+            </div>
+
+            <div id="gameArea">
+                <div class="opposite-image-area">
+                    <img id="oppositeImage" class="opposite-image" alt="opposite word">
+                </div>
+                <div class="action-buttons">
+                    <button id="repeatBtn" class="action-btn"><i class="fas fa-volume-up"></i> 重播</button>
+                    <button id="slowBtn" class="action-btn"><i class="fas fa-turtle"></i> 慢放</button>
+                </div>
+                <div class="choice-buttons">
+                    <div id="leftClickArea" class="choice">⬅️ LEFT</div>
+                    <div id="rightClickArea" class="choice">RIGHT ➡️</div>
+                </div>
+                <div id="feedback" class="feedback"></div>
+            </div>
+
+            <div id="resultArea" style="display:none;"></div>
+
+            <!-- 返回主页按钮（答题过程中可见，和 spelling/listening 保持一致） -->
+            <div style="text-align:center; margin-top:20px;">
+                <button id="backBtn" class="back-btn"><i class="fas fa-arrow-left"></i> Back</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="utils.js"></script>
+    <script src="oppositeData.js"></script>
+    <script src="opposite.js"></script>
+</body>
+
+</html>

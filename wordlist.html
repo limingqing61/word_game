@@ -1,136 +1,411 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📖</text></svg>">
-    <title>Word List</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>单词列表 - 儿童英语学习</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        .word-list-container {
-            max-width: 800px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
             margin: 0 auto;
         }
-        .word-list-header {
+
+        .header {
             text-align: center;
             margin-bottom: 30px;
         }
-        .word-list-header h1 {
-            color: #ff3366;
-            font-size: 3rem;
-            text-shadow: 3px 3px 0 #ffcc00;
+
+        .header h1 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
-        .word-list-header p {
-            font-size: 1.5rem;
-            color: #3366ff;
-            font-weight: bold;
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
         }
-        .word-list-table {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        .word-list-row {
-            display: flex;
-            align-items: center;
-            gap: 20px;
+
+        .search-section {
             background: white;
-            border-radius: 15px;
-            padding: 15px 25px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            border: 2px solid #4fc3f7;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        .word-list-row img {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            border-radius: 10px;
-        }
-        .word-list-info {
-            flex: 1;
+
+        .search-box {
             display: flex;
-            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
         }
-        .word-list-word {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #333;
+
+        .search-input-wrapper {
+            flex: 3;
+            position: relative;
         }
-        .word-list-phonetic {
-            font-size: 1.4rem;
-            color: #3366ff;
-            font-weight: bold;
-            font-family: 'Arial', sans-serif;
+
+        .search-input-wrapper i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
         }
-        
-        .word-list-chinese {
-            font-size: 1.4rem;
-            color: #4CAF50;
-            font-weight: bold;
-            margin-top: 4px;
+
+        #searchWordInput {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
         }
-        .word-list-play-btn {
-            background: linear-gradient(to right, #2196F3, #03A9F4);
+
+        #searchWordInput:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        #searchWordBtn {
+            background: #667eea;
             color: white;
             border: none;
+            padding: 0 24px;
+            border-radius: 12px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #searchWordBtn:hover {
+            background: #5a67d8;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .radio-group input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        /* 分类下拉框样式 */
+        .type-filter-wrapper {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .type-select {
+            padding: 8px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            background: white;
+            cursor: pointer;
+        }
+
+        .type-select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .word-list-container {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .word-list-header {
+            display: grid;
+            grid-template-columns: 80px 1fr 60px;
+            background: #f8f9fa;
+            padding: 14px 20px;
+            border-bottom: 2px solid #e9ecef;
+            color: #666;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        #wordListTable {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .word-list-row {
+            display: grid;
+            grid-template-columns: 80px 1fr 60px;
+            align-items: center;
+            padding: 12px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.2s;
+        }
+
+        .word-list-row:hover {
+            background: #f8f9ff;
+        }
+
+        .word-list-row img {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .word-list-row img:hover {
+            transform: scale(1.05);
+        }
+
+        .word-list-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding-left: 10px;
+        }
+
+        .word-list-word {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .word-list-phonetic {
+            font-size: 0.8rem;
+            color: #999;
+            font-family: monospace;
+        }
+
+        .word-list-chinese {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .word-list-play-btn {
+            background: #667eea;
+            border: none;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-            flex-shrink: 0;
         }
-        .word-list-play-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
+
         .word-list-play-btn i {
-            font-size: 1.8rem;
+            color: white;
+            font-size: 1.1rem;
         }
-        .back-btn-container {
-            text-align: center;
+
+        .word-list-play-btn:hover {
+            background: #5a67d8;
+            transform: scale(1.05);
+        }
+
+        .word-list-play-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* 分页样式 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            padding: 20px;
+            flex-wrap: wrap;
+            background: white;
+            border-top: 1px solid #eee;
+        }
+
+        .page-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            background: #5a67d8;
+            transform: scale(1.02);
+        }
+
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .page-btn.active {
+            background: #764ba2;
+        }
+
+        .page-dots {
+            color: #999;
+            padding: 0 4px;
+        }
+
+        .page-info {
+            color: #666;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+
+        .back-btn-wrapper {
             margin-top: 30px;
+            text-align: center;
         }
-        @media (max-width: 768px) {
+
+        #backToMenuBtn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        #backToMenuBtn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            color: #999;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+
+            .word-list-header {
+                display: none;
+            }
+
             .word-list-row {
-                flex-wrap: wrap;
+                grid-template-columns: 70px 1fr 50px;
+                padding: 12px;
                 gap: 10px;
             }
+
             .word-list-row img {
-                width: 60px;
-                height: 60px;
+                width: 50px;
+                height: 50px;
             }
+
+            .word-list-info {
+                padding-left: 0;
+            }
+
             .word-list-word {
-                font-size: 1.4rem;
+                font-size: 1rem;
             }
-            .word-list-phonetic {
-                font-size: 1.2rem;
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            #searchWordBtn {
+                padding: 12px;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
+        <div class="header">
+            <h1>📖 单词列表</h1>
+            <p>点击图片放大 | 点击 🔊 发音 | 可按分类筛选</p>
+        </div>
+
+        <div class="search-section">
+            <div class="search-box">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchWordInput" placeholder="输入要查找的单词...">
+                </div>
+                <button id="searchWordBtn">查找</button>
+            </div>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" name="searchType" value="en" checked> 🔤 按英文查找
+                </label>
+                <label>
+                    <input type="radio" name="searchType" value="zh"> 🇨🇳 按中文查找
+                </label>
+            </div>
+            <!-- 分类下拉框容器 - wordlist.js 会在这里生成下拉框 -->
+            <div id="typeFilterContainer" class="type-filter-wrapper"></div>
+        </div>
+
         <div class="word-list-container">
             <div class="word-list-header">
-                <h1><i class="fas fa-list"></i> Word List</h1>
-                <p>All words with images and pronunciation</p>
+                <span>📷 图片</span>
+                <span>📝 单词信息</span>
+                <span>🔊 发音</span>
             </div>
-            <div id="wordListTable" class="word-list-table">
-                <!-- Generated by JavaScript -->
+            <div id="wordListTable">
+                <!-- JS 会动态生成单词列表 -->
+                <div style="text-align: center; padding: 40px; color: #999;">加载中...</div>
             </div>
-            <div class="back-btn-container">
-                <button id="backToMenuBtn" class="back-btn" style="display:inline-flex;">
-                    <i class="fas fa-arrow-left"></i> Back to Menu
-                </button>
-            </div>
+            <!-- 分页容器 -->
+            <div id="paginationContainer"></div>
+        </div>
+
+        <div class="back-btn-wrapper">
+            <button id="backToMenuBtn">← 返回首页</button>
         </div>
     </div>
+
+    <!-- 引入依赖（顺序很重要） -->
+    <script src="utils.js"></script>
+    <script src="wordData.js"></script>
+    <script src="wordlistConfig.js"></script>
     <script src="wordlist.js"></script>
 </body>
+
 </html>

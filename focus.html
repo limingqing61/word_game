@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>专注力挑战 · 眼力大考验</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #1a472a 0%, #0e2a1a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .game-container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(30, 50, 30, 0.6);
+            backdrop-filter: blur(4px);
+            border-radius: 60px;
+            padding: 20px;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        header {
+            text-align: center;
+            color: #FFE484;
+            text-shadow: 4px 4px 0 #B45309;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .score-panel {
+            display: flex;
+            justify-content: space-between;
+            background: #31220e;
+            padding: 8px 20px;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            color: #ffecb3;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .game-area {
+            position: relative;
+            background: #2c4a2e;
+            border-radius: 40px;
+            padding: 20px;
+            min-height: 400px;
+            border: 3px solid #ffaa33;
+        }
+
+        .control-area {
+            text-align: center;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .next-btn {
+            background: linear-gradient(to right, #4CAF50, #8BC34A);
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #2e7d32;
+            transition: 0.05s linear;
+        }
+
+        .next-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #2e7d32;
+        }
+
+        .next-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .restart-btn {
+            background: linear-gradient(to right, #607D8B, #455A64);
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            font-size: 1.3rem;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #2c3a42;
+            transition: 0.05s linear;
+        }
+
+        .restart-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #2c3a42;
+        }
+
+        .back-btn {
+            background: #ffaa33;
+            border: none;
+            padding: 10px 24px;
+            font-size: 1rem;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .message {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 15px;
+            color: #ffeaac;
+        }
+
+        /* 爆炸效果 */
+        .explosion-effect {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5rem;
+            pointer-events: none;
+            z-index: 1000;
+            animation: explodeAnim 1s ease-out forwards;
+        }
+
+        @keyframes explodeAnim {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(0.3);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(2.5);
+            }
+        }
+
+        /* 启动遮罩 */
+        #startOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a472a 0%, #0e2a1a 100%);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+        }
+
+        #startOverlay h1 {
+            font-size: 2.5rem;
+            text-shadow: 4px 4px 0 #b45309;
+        }
+
+        #startBtn {
+            background: #ffaa33;
+            border: none;
+            padding: 16px 48px;
+            font-size: 1.5rem;
+            border-radius: 60px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #b97f44;
+        }
+
+        @media (max-width: 700px) {
+
+            .next-btn,
+            .restart-btn {
+                padding: 8px 20px;
+                font-size: 1rem;
+            }
+
+            .back-btn {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="startOverlay">
+        <h1>🎯 专注力挑战 🎯</h1>
+        <div class="subtitle" style="margin-bottom: 20px;">👀 记住目标图片，移动结束后找出它！</div>
+        <button id="startBtn">🔊 开始挑战</button>
+    </div>
+
+    <div class="game-container" id="gameContainer" style="display: none;">
+        <header>
+            <h1><i class="fas fa-eye"></i> 专注力挑战 <i class="fas fa-brain"></i></h1>
+        </header>
+
+        <div class="score-panel">
+            <span>🎯 得分: <span id="scoreValue">0</span></span>
+            <span>📊 第 <span id="roundValue">1</span> / <span id="totalRounds">8</span> 关</span>
+            <span>⭐ 本关分值: <span id="roundScore">0</span></span>
+        </div>
+
+        <div class="game-area" id="gameArea">
+            <canvas id="gameCanvas" width="800" height="500"
+                style="width:100%; height:auto; background:#2c4a2e; border-radius:30px;"></canvas>
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <div class="control-area">
+            <button id="restartGameBtn" class="restart-btn" style="display: none;">🔄 再来一局</button>
+            <button id="backMenuBtn" class="back-btn"><i class="fas fa-arrow-left"></i> 返回主页</button>
+        </div>
+    </div>
+
+    <script src="utils.js"></script>
+    <script src="wordData.js"></script>
+    <script src="wordlistConfig.js"></script>
+    <script src="focus.js"></script>
+</body>
+
+</html>

@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧩</text></svg>">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧩</text></svg>">
     <title>Word Game - Matching Mode</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -17,12 +19,14 @@
             margin-top: 30px;
             flex-wrap: wrap;
         }
+
         .matching-column {
             display: flex;
             flex-direction: column;
             gap: 30px;
             min-width: 250px;
         }
+
         .matching-word-item {
             background: white;
             border-radius: 15px;
@@ -32,7 +36,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             border: 4px solid #4fc3f7;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -41,30 +45,83 @@
             color: #333;
             user-select: none;
         }
+
         .matching-word-item:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
+
         .matching-word-item.selected {
             border-color: #FF9800;
             background: #fff3e0;
         }
+
         .matching-word-item.matched {
             border-color: #4CAF50;
             background: #e8f5e9;
             pointer-events: none;
             opacity: 0.7;
         }
+
         .matching-word-item.wrong {
             border-color: #F44336;
             background: #ffebee;
             animation: shake 0.5s;
         }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
+
+        /* 错题本收藏按钮样式 */
+        .wrong-word-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
         }
+
+        .wrong-word-fav-btn {
+            background: #28a745;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            flex-shrink: 0;
+        }
+
+        .wrong-word-fav-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .wrong-word-fav-btn:active {
+            transform: scale(0.95);
+        }
+
+        .wrong-word-fav-btn i {
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-10px);
+            }
+
+            75% {
+                transform: translateX(10px);
+            }
+        }
+
         .matching-image-item {
             background: white;
             border-radius: 15px;
@@ -75,31 +132,36 @@
             align-items: center;
             justify-content: flex-start;
             text-align: left;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             border: 4px solid #4fc3f7;
             cursor: pointer;
             transition: all 0.3s ease;
             user-select: none;
         }
+
         .matching-image-item:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
+
         .matching-image-item.selected {
             border-color: #FF9800;
             background: #fff3e0;
         }
+
         .matching-image-item.matched {
             border-color: #4CAF50;
             background: #e8f5e9;
             pointer-events: none;
             opacity: 0.7;
         }
+
         .matching-image-item.wrong {
             border-color: #F44336;
             background: #ffebee;
             animation: shake 0.5s;
         }
+
         .matching-image-item img {
             width: 80px;
             height: 80px;
@@ -107,57 +169,70 @@
             margin-right: 10px;
             margin-bottom: 0;
         }
+
         .matching-image-item .chinese-label {
             font-size: 1.2rem;
             color: #4CAF50;
             font-weight: bold;
         }
+
         .matching-round-info {
             text-align: center;
             font-size: 1.5rem;
             color: #3366ff;
             margin: 20px 0;
         }
+
         .matching-score-board {
             display: flex;
             justify-content: center;
             gap: 80px;
             margin: 20px 0;
         }
+
         .matching-score-item {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
+
         .matching-score-label {
             font-size: 1.2rem;
             color: #555;
         }
+
         .matching-score-value {
             font-size: 2rem;
             font-weight: bold;
         }
+
         .matching-score-value.correct {
             color: #4CAF50;
         }
+
         .matching-score-value.wrong {
             color: #F44336;
         }
+
         .matching-score-value.score {
             color: #ff3366;
         }
+
         @media (max-width: 768px) {
             .matching-container {
                 flex-direction: column;
                 align-items: center;
             }
+
             .matching-column {
                 min-width: 150px;
             }
+
             .matching-word-item {
                 font-size: 1.4rem;
                 padding: 10px 15px;
             }
+
             .matching-image-item img {
                 height: 80px;
             }
@@ -168,9 +243,11 @@
             gap: 40px;
             margin-top: 10px;
         }
+
         .matching-container.compact .matching-column {
             gap: 15px;
         }
+
         .matching-container.compact .matching-word-item {
             padding: 8px 12px;
             min-height: 80px;
@@ -178,47 +255,57 @@
             border: none;
             box-shadow: none;
         }
+
         .matching-container.compact .matching-image-item {
             padding: 8px 12px;
             min-height: 80px;
             border: none;
             box-shadow: none;
         }
+
         .matching-container.compact .matching-image-item img {
             width: 60px;
             height: 60px;
             margin-right: 8px;
         }
+
         .matching-container.compact .matching-image-item .chinese-label {
             font-size: 1rem;
         }
+
         .matching-container.compact .matching-word-item:hover,
         .matching-container.compact .matching-image-item:hover {
             transform: none;
             box-shadow: none;
         }
+
         .matching-container.compact .matching-word-item.selected,
         .matching-container.compact .matching-image-item.selected {
             border: 2px solid #FF9800;
         }
+
         .matching-container.compact .matching-word-item.matched,
         .matching-container.compact .matching-image-item.matched {
             border: 2px solid #4CAF50;
         }
+
         .matching-container.compact .matching-word-item.wrong,
         .matching-container.compact .matching-image-item.wrong {
             border: 2px solid #F44336;
         }
+
         .matching-round-info.compact {
             margin: 10px 0;
             font-size: 1.2rem;
         }
+
         .matching-score-board.compact {
             gap: 40px;
             margin: 10px 0;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -226,7 +313,7 @@
             <p class="subtitle">Match each word to its picture and Chinese!</p>
         </header>
 
-        <div class="matching-score-board">
+        <div id="scoreArea" class="matching-score-board">
             <div class="matching-score-item">
                 <span class="matching-score-label">Correct:</span>
                 <span id="correctCount" class="matching-score-value correct">0</span>
@@ -262,8 +349,56 @@
         </div>
     </div>
 
+    <script src="utils.js"></script>
     <script src="wordData.js"></script>
     <script src="wordlistConfig.js"></script>
+    <script src="wordlist.js"></script>
     <script src="matching.js"></script>
+    <script>
+        // ✅ 监听容器变化，自动根据配对数量切换紧凑模式
+        function updateMatchLayout() {
+            const container = document.getElementById('matchingContainer');
+            const roundInfo = document.getElementById('roundInfo');
+            const scoreArea = document.getElementById('scoreArea');
+
+            if (!container) return;
+
+            // 获取当前配对数量（从 DOM 元素大小或全局变量获取）
+            const wordItems = container.querySelectorAll('.matching-word-item');
+            const pairCount = wordItems.length;
+
+            if (pairCount === 5) {
+                // 后10局：5组 → 紧凑模式
+                container.classList.add('compact');
+                if (roundInfo) roundInfo.classList.add('compact');
+                if (scoreArea) scoreArea.classList.add('compact');
+            } else {
+                // 前20局：3组 → 正常模式
+                container.classList.remove('compact');
+                if (roundInfo) roundInfo.classList.remove('compact');
+                if (scoreArea) scoreArea.classList.remove('compact');
+            }
+        }
+
+        // 监听匹配容器变化（当新的一轮渲染完成后自动调整）
+        const observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                if (mutation.type === 'childList') {
+                    updateMatchLayout();
+                }
+            });
+        });
+
+        // 启动监听
+        window.addEventListener('load', function () {
+            const container = document.getElementById('matchingContainer');
+            if (container) {
+                observer.observe(container, { childList: true, subtree: true });
+                // 初始检查
+                setTimeout(updateMatchLayout, 100);
+            }
+        });
+    </script>
 </body>
+
 </html>

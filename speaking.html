@@ -1,12 +1,229 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Word Game - Speaking Mode</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 额外样式，移除单词网格相关 */
+        .words-grid {
+            display: none;
+        }
+
+        .game-info {
+            margin-bottom: 20px;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .score-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px 20px;
+            border-radius: 40px;
+            text-align: center;
+        }
+
+        .score-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .score-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 40px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.1s linear;
+            font-family: inherit;
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+        }
+
+        .hint-btn {
+            background: linear-gradient(to right, #FF9800, #FFC107);
+            color: white;
+            box-shadow: 0 4px 0 #b47c00;
+        }
+
+        .skip-btn {
+            background: linear-gradient(to right, #9C27B0, #673AB7);
+            color: white;
+            box-shadow: 0 4px 0 #4a1a6e;
+        }
+
+        .back-btn {
+            background: linear-gradient(to right, #607D8B, #455A64);
+            color: white;
+            box-shadow: 0 4px 0 #2c3a42;
+        }
+
+        .current-word {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .word-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .image-container {
+            text-align: center;
+        }
+
+        .image-container img {
+            max-width: 300px;
+            max-height: 250px;
+            object-fit: contain;
+            border-radius: 30px;
+            background: white;
+            padding: 20px;
+        }
+
+        .word-text {
+            margin-top: 20px;
+        }
+
+        .word-text span {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ffd966;
+            text-shadow: 2px 2px 0 #b45309;
+        }
+
+        .phonetic {
+            font-size: 1.2rem;
+            color: #aaddff;
+            margin-top: 5px;
+        }
+
+        .recognition-status {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .status {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 50px;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .status.listening {
+            background: #4caf50;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        .status.correct {
+            background: #4caf50;
+            color: white;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .speech-result {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 30px;
+            font-size: 1rem;
+        }
+
+        .instructions {
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 30px;
+            padding: 15px;
+            font-size: 0.85rem;
+        }
+
+        .instructions h3 {
+            margin: 0 0 10px 0;
+            font-size: 1rem;
+        }
+
+        .instructions ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #4CAF50, #8BC34A);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 600px) {
+            .image-container img {
+                max-width: 200px;
+                max-height: 180px;
+            }
+
+            .word-text span {
+                font-size: 1.8rem;
+            }
+
+            .score-value {
+                font-size: 1.3rem;
+            }
+
+            .btn {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -17,32 +234,38 @@
         <div class="game-info">
             <div class="score-board">
                 <div class="score-item">
-                    <span class="score-label">Words Found:</span>
-                    <span id="score" class="score-value">0</span>
+                    <span class="score-label">Correct:</span>
+                    <span id="correctCount" class="score-value">0</span>
                 </div>
                 <div class="score-item">
-                    <span class="score-label">Words Left:</span>
-                    <span id="remaining" class="score-value">24</span>
+                    <span class="score-label">Wrong/Skip:</span>
+                    <span id="wrongCount" class="score-value">0</span>
+                </div>
+                <div class="score-item">
+                    <span class="score-label">Progress:</span>
+                    <span id="progressCount" class="score-value">0/25</span>
+                </div>
+                <div class="score-item">
+                    <span class="score-label">Score:</span>
+                    <span id="totalScore" class="score-value">0</span>
                 </div>
             </div>
-            
+
             <div class="controls">
-                <button id="startBtn" class="btn start-btn">
-                    <i class="fas fa-microphone"></i> Start Game
-                </button>
                 <button id="hintBtn" class="btn hint-btn">
                     <i class="fas fa-lightbulb"></i> Hint
                 </button>
                 <button id="skipBtn" class="btn skip-btn">
                     <i class="fas fa-forward"></i> Skip
                 </button>
-                <button id="resetBtn" class="btn reset-btn">
-                    <i class="fas fa-redo"></i> Reset
-                </button>
-                <button id="backBtn" class="btn back-btn" style="background: linear-gradient(to right, #607D8B, #455A64);">
+                <button id="backBtn" class="btn back-btn">
                     <i class="fas fa-arrow-left"></i> Back
                 </button>
             </div>
+        </div>
+
+        <div class="progress-bar">
+            <div id="progressFill" class="progress-fill" style="width: 0%"></div>
         </div>
 
         <div class="game-area">
@@ -63,34 +286,26 @@
                     <i class="fas fa-microphone"></i> Ready to listen... Speak now!
                 </div>
                 <div class="speech-result">
-                    <p>Say: <strong id="targetHint">apple</strong> (sounds like "AP-pul")</p>
                     <p>You said: <span id="result">...</span></p>
                 </div>
-            </div>
-
-            <div class="words-grid">
-                <!-- Words will be generated by JavaScript -->
             </div>
         </div>
 
         <div class="instructions">
             <h3><i class="fas fa-info-circle"></i> How to Play</h3>
             <ol>
-                <li>Click "Start Game" to activate the microphone</li>
                 <li>Look at the picture and say the English word</li>
-                <li>If you say it correctly, the word will explode!</li>
-                <li>Find all words to win the game!</li>
+                <li>If you say it correctly, you get 4 points!</li>
+                <li>Use Hint to hear the pronunciation</li>
+                <li>Use Skip to skip a word (counts as wrong)</li>
+                <li>Complete all 25 words to win!</li>
             </ol>
-            <p class="note"><i class="fas fa-exclamation-triangle"></i> Note: This game works best in Chrome browser on iPad</p>
         </div>
     </div>
 
-    <!-- Audio elements for sound effects -->
-    <audio id="correctSound" src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3" preload="auto"></audio>
-    <audio id="explosionSound" src="https://assets.mixkit.co/sfx/preview/mixkit-bomb-explosion-2806.mp3" preload="auto"></audio>
-    <audio id="winSound" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3" preload="auto"></audio>
-    <audio id="clickSound" src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3" preload="auto"></audio>
-
-    <script src="game.js"></script>
+    <script src="wordData.js"></script>
+    <script src="wordlistConfig.js"></script>
+    <script src="speaking.js"></script>
 </body>
+
 </html>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>羊了个羊 · 动物版</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #1a472a 0%, #0e2a1a 100%);
+            min-height: 100vh;
+            font-family: 'Comic Neue', 'Comic Sans MS', 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-container {
+            max-width: 1200px;
+            width: 95%;
+            background: rgba(30, 50, 30, 0.8);
+            backdrop-filter: blur(5px);
+            border-radius: 50px;
+            padding: 20px;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .slot-area {
+            background: #4a2a1a;
+            border-radius: 40px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #ffaa33;
+        }
+
+        .slot-title {
+            color: #ffd966;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .slots {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .slot {
+            width: 90px;
+            height: 90px;
+            background: #3a2510;
+            border-radius: 15px;
+            border: 2px solid #c99e3e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .slot img {
+            width: 75px;
+            height: 75px;
+            object-fit: contain;
+        }
+
+        .slot.empty {
+            background: #2a1a0a;
+            border-color: #7a5a2a;
+            opacity: 0.6;
+        }
+
+        .slot.empty::after {
+            content: "?";
+            font-size: 1.5rem;
+            color: #6a4a2a;
+        }
+
+        .slot.new-slot {
+            background: #5a4a2a;
+            border-color: #ffd966;
+            animation: slotPop 0.3s ease-out;
+        }
+
+        @keyframes slotPop {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            80% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .cards-area {
+            background: #2c4a2e;
+            border-radius: 40px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #ffaa33;
+            min-height: 300px;
+        }
+
+        .cards-title {
+            color: #ffd966;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .stacks-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .card-stack {
+            position: relative;
+            width: 100px;
+            height: 120px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .card-stack.empty-stack {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.8);
+            width: 0;
+            margin: 0;
+        }
+
+        .stack-card {
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            background: #fef3c7;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ffaa33;
+            box-shadow: 0 3px 0 #b97f44;
+            transition: all 0.15s ease;
+            left: 5px;
+        }
+
+        .stack-card:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #b97f44;
+        }
+
+        .stack-card img {
+            width: 75px;
+            height: 75px;
+            object-fit: contain;
+            pointer-events: none;
+        }
+
+        .stack-card.depth-0 {
+            top: 0;
+            z-index: 5;
+            opacity: 1;
+        }
+
+        .stack-card.depth-1 {
+            top: 8px;
+            z-index: 4;
+            opacity: 0.95;
+        }
+
+        .stack-card.depth-2 {
+            top: 16px;
+            z-index: 3;
+            opacity: 0.9;
+        }
+
+        .stack-card.depth-3 {
+            top: 24px;
+            z-index: 2;
+            opacity: 0.85;
+        }
+
+        .control-area {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .control-btn {
+            background: #ffaa33;
+            border: none;
+            padding: 10px 24px;
+            font-size: 1rem;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #b97f44;
+            transition: 0.05s linear;
+            font-family: inherit;
+        }
+
+        .control-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #b97f44;
+        }
+
+        .control-btn.undo-btn {
+            background: #2196f3;
+            color: white;
+            box-shadow: 0 4px 0 #0b5e7e;
+        }
+
+        .control-btn.undo-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #0b5e7e;
+        }
+
+        .control-btn.undo-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status-area {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #ffecb3;
+        }
+
+        .remaining {
+            background: #31220e;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 30px;
+        }
+
+        .result-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 20000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #fff9ef, #ffe0b3);
+            border-radius: 50px;
+            padding: 30px;
+            text-align: center;
+            max-width: 300px;
+            width: 80%;
+            border: 4px solid #ffaa33;
+        }
+
+        .result-card h2 {
+            font-size: 2rem;
+            margin: 0 0 15px;
+        }
+
+        .result-card button {
+            background: #4caf50;
+            border: none;
+            padding: 10px 25px;
+            font-size: 1rem;
+            border-radius: 40px;
+            margin: 8px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .fairy-egg {
+            position: fixed;
+            bottom: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.5rem;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 60px;
+            padding: 20px 30px;
+            z-index: 30000;
+            animation: fairyDance 0.5s ease-in-out infinite alternate;
+            pointer-events: none;
+            text-align: center;
+            white-space: nowrap;
+            color: #ffd966;
+            border: 2px solid #ffaa33;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(255, 170, 51, 0.5);
+        }
+
+        @keyframes fairyDance {
+            0% {
+                transform: translateX(-50%) scale(0.9) rotate(-5deg);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateX(-50%) scale(1.2) rotate(5deg);
+                opacity: 1;
+            }
+        }
+
+        #startOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a472a 0%, #0e2a1a 100%);
+            z-index: 100000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+        }
+
+        #startOverlay h1 {
+            font-size: 2.5rem;
+            text-shadow: 4px 4px 0 #b45309;
+        }
+
+        #startBtn {
+            background: #ffaa33;
+            border: none;
+            padding: 16px 48px;
+            font-size: 1.5rem;
+            border-radius: 60px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #b97f44;
+            font-family: inherit;
+        }
+
+        @media (max-width: 800px) {
+            .card-stack {
+                width: 75px;
+                height: 95px;
+            }
+
+            .stack-card {
+                width: 65px;
+                height: 65px;
+            }
+
+            .stack-card img {
+                width: 52px;
+                height: 52px;
+            }
+
+            .slot {
+                width: 65px;
+                height: 65px;
+            }
+
+            .slot img {
+                width: 52px;
+                height: 52px;
+            }
+
+            .stacks-container {
+                gap: 12px;
+            }
+
+            .slots {
+                gap: 10px;
+            }
+
+            .fairy-egg {
+                font-size: 1.8rem;
+                padding: 15px 20px;
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .card-stack {
+                width: 65px;
+                height: 85px;
+            }
+
+            .stack-card {
+                width: 58px;
+                height: 58px;
+            }
+
+            .stack-card img {
+                width: 45px;
+                height: 45px;
+            }
+
+            .slot {
+                width: 58px;
+                height: 58px;
+            }
+
+            .slot img {
+                width: 45px;
+                height: 45px;
+            }
+
+            .stacks-container {
+                gap: 8px;
+            }
+
+            .slots {
+                gap: 8px;
+            }
+
+            .fairy-egg {
+                font-size: 1.2rem;
+                padding: 10px 15px;
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="startOverlay">
+        <h1>🐏 羊了个羊 · 动物版 🐏</h1>
+        <div style="margin-bottom: 20px;">🐘 点击动物牌，凑齐3张相同消除 🐭</div>
+        <button id="startBtn">🔊 点击开始</button>
+    </div>
+
+    <div class="game-container" id="gameContainer" style="display: none;">
+        <div style="position: relative; text-align: center; margin-bottom: 15px;">
+            <h1 style="color: #FFE484; text-shadow: 3px 3px 0 #B45309; font-size: 1.8rem; margin: 0;">🐏 羊了个羊 · 动物版 🐏
+            </h1>
+            <div id="successCount"
+                style="position: absolute; top: 0; right: 0; background: #ffaa33; color: #31220e; padding: 6px 16px; border-radius: 30px; font-size: 0.85rem; font-weight: bold; border: 1px solid #ffd966; white-space: nowrap;">
+                🏆 成功: 0</div>
+        </div>
+
+        <div class="slot-area">
+            <div class="slot-title">📦 收集槽 (没有空槽则失败)</div>
+            <div class="slots" id="slotsContainer"></div>
+        </div>
+        <div class="cards-area">
+            <div class="cards-title">🎴 点击动物牌 (堆叠排列)</div>
+            <div id="stacksContainer" class="stacks-container"></div>
+        </div>
+        <div class="status-area">
+            <span class="remaining" id="remainingCount">剩余牌数: 0</span>
+        </div>
+        <div class="control-area">
+            <button id="undoBtn" class="control-btn undo-btn" disabled>↩️ 撤回 (3)</button>
+            <button id="backMenuBtn" class="control-btn">🏠 返回主页</button>
+        </div>
+    </div>
+
+    <script src="sheepSheep.js"></script>
+</body>
+
+</html>

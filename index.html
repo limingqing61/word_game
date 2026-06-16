@@ -17,20 +17,40 @@
         </header>
 
         <div class="mode-selection">
-            <div class="mode-card" onclick="window.location.href='speaking.html'">
+            <!-- <div class="mode-card" onclick="window.location.href='speaking.html'">
                 <i class="fas fa-microphone-alt"></i>
                 <h2>Speaking Mode</h2>
                 <p>Look at the picture and say the word!</p>
+            </div> -->
+            <div class="mode-card" onclick="window.location.href='listening.html'">
+                <i class="fas fa-headphones"></i>
+                <h2>Listening Mode</h2>
+                <p>Listen to the word and choose the picture!</p>
+            </div>
+            <div class="mode-card" onclick="window.location.href='matching.html'">
+                <i class="fas fa-handshake"></i>
+                <h2>Matching Mode</h2>
+                <p>Match the word to its picture and Chinese!</p>
             </div>
             <div class="mode-card" onclick="window.location.href='spelling.html'">
                 <i class="fas fa-pencil-alt"></i>
                 <h2>Spelling Mode</h2>
                 <p>Fill in the missing vowels to spell the word!</p>
             </div>
+            <div class="mode-card" onclick="window.location.href='wordRunner.html'">
+                <i class="fas fa-running"></i>
+                <h2>Word Runner</h2>
+                <p>Listen and choose the correct category!</p>
+            </div>
             <div class="mode-card" onclick="window.location.href='wordlist.html'">
                 <i class="fas fa-list"></i>
                 <h2>Word List</h2>
                 <p>Browse all words with images and pronunciation!</p>
+            </div>
+            <div class="mode-card" onclick="window.location.href='minimalPairs.html'">
+                <i class="fas fa-code-branch"></i>
+                <h2>Minimal Pairs</h2>
+                <p>Minimal pairs · Maximum clarity</p>
             </div>
             <div class="mode-card" onclick="window.location.href='opposite.html'">
                 <i class="fas fa-balance-scale"></i>
@@ -42,8 +62,69 @@
                 <h2>Opposite List</h2>
                 <p>Browse opposite words with pictures!</p>
             </div>
+            <div class="mode-card" onclick="window.location.href='crash.html'">
+                <i class="fas fa-memory"></i>
+                <h2>Crash Game</h2>
+                <p>Match the words and beat the clock!</p>
+            </div>
+            <div class="mode-card" onclick="window.location.href='fishing.html'">
+                <i class="fas fa-fish"></i>
+                <h2>Fishing Game</h2>
+                <p>Catch the right fish to score!</p>
+            </div>
+            <div class="mode-card" onclick="window.location.href='beastChess.html'">
+                <i class="fas fa-chess-board"></i>
+                <h2>Beast Chess</h2>
+                <p>Beast Chess · Animal Warfare</p>
+            </div>
+            <div class="mode-card" onclick="window.location.href='sheepSheep.html'">
+                <i class="fas fa-dragon"></i>
+                <h2>Sheep Sheep</h2>
+                <p>Sheep & Sheep · Triple Kill</p>
+            </div>
+            <div class="mode-card" onclick="window.location.href='puzzle.html'">
+                <i class="fas fa-puzzle-piece"></i>
+                <h2>Puzzle Game</h2>
+                <p>Puzzle Game · Number Sliding</p>
+            </div>
+            <div class="mode-card" onclick="window.location.href='flappy.html'">
+                <i class="fas fa-dove"></i>
+                <h2>Flappy Word</h2>
+                <p>Flappy Bird . Catch Dream</p>
+            </div>
+            <div class="mode-card" onclick="window.location.href='focus.html'">
+                <i class="fas fa-eye"></i>
+                <h2>Let's Focus</h2>
+                <p>Focus or Fail . My Friend</p>
+            </div>
         </div>
     </div>
+
+    <script>
+        // 滚动位置记忆
+        function saveScrollPosition() {
+            localStorage.setItem("index_scroll", window.scrollY);
+        }
+
+        function restoreScrollPosition() {
+            const savedScroll = localStorage.getItem("index_scroll");
+            if (savedScroll !== null) {
+                setTimeout(() => {
+                    window.scrollTo(0, parseInt(savedScroll));
+                }, 100);
+            }
+        }
+
+        window.addEventListener("load", restoreScrollPosition);
+
+        let scrollTimer;
+        window.addEventListener("scroll", function () {
+            if (scrollTimer) clearTimeout(scrollTimer);
+            scrollTimer = setTimeout(saveScrollPosition, 200);
+        });
+
+        window.addEventListener("beforeunload", saveScrollPosition);
+    </script>
 </body>
 
 </html>
