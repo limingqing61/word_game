@@ -4,13 +4,19 @@
   let CANVAS_HEIGHT = 600;
   const GRAVITY = 0.2;
   const JUMP_POWER = -4.5;
-  const PIPE_WIDTH = 60;
-  const PIPE_GAP = 130;
-  const BASE_PIPE_SPACING = 200; // 基础间距稍微增大
-  const MAX_PIPE_SPACING = 380; // 最大间距增大
+  const PIPE_WIDTH_RATIO = 0.12; // 柱子宽度
+  const PIPE_GAP_RATIO = 0.25; // 空隙高度（增大，更容易通过）
   const PIPE_SPEED = 2;
-  const BIRD_SIZE = 32;
-  const MAX_HEIGHT_CHANGE = 120; // 最大高度变化增大
+  const BIRD_SIZE_RATIO = 0.04; // 小鸟尺寸（缩小）
+  const MAX_HEIGHT_CHANGE_RATIO = 0.75; // 最大高度变化（减小，避免太极端）
+
+  // 这些值在 resize 时重新计算
+  let PIPE_WIDTH = 60;
+  let PIPE_GAP = 130;
+  let BIRD_SIZE = 32;
+  let BASE_PIPE_SPACING = 190;
+  let MAX_PIPE_SPACING = 320;
+  let MAX_HEIGHT_CHANGE = 80;
 
   // DOM 元素
   const canvas = document.getElementById("gameCanvas");
@@ -27,13 +33,7 @@
   let isGameOver = false;
   let isCountdown = false;
 
-  let bird = {
-    x: 80,
-    y: 300,
-    vy: 0,
-    rotation: 0,
-  };
-
+  let bird = { x: 80, y: 300, vy: 0, rotation: 0 };
   let pipes = [];
   let score = 0;
   let bestScore = 0;
@@ -54,6 +54,31 @@
   // 三击删除相关
   let clickCount = 0;
   let clickTimer = null;
+
+  // ========== 尺寸自适应 ==========
+  function resizeCanvas() {
+    const container = document.querySelector(".game-container");
+    const rect = container.getBoundingClientRect();
+    CANVAS_WIDTH = rect.width;
+    CANVAS_HEIGHT = rect.height;
+    canvas.width = CANVAS_WIDTH;
+    canvas.height = CANVAS_HEIGHT;
+
+    // 根据画布尺寸重新计算所有参数
+    PIPE_WIDTH = Math.max(35, CANVAS_WIDTH * PIPE_WIDTH_RATIO);
+    PIPE_GAP = Math.max(100, CANVAS_HEIGHT * PIPE_GAP_RATIO);
+    BIRD_SIZE = Math.max(18, CANVAS_WIDTH * BIRD_SIZE_RATIO);
+    MAX_HEIGHT_CHANGE = Math.max(30, CANVAS_HEIGHT * MAX_HEIGHT_CHANGE_RATIO);
+
+    // 间距也随画布缩放
+    BASE_PIPE_SPACING = Math.max(150, CANVAS_WIDTH * 0.38);
+    MAX_PIPE_SPACING = Math.max(280, CANVAS_WIDTH * 0.75);
+
+    bird.x = Math.min(80, CANVAS_WIDTH * 0.18);
+    bird.y = CANVAS_HEIGHT / 2;
+    bird.width = BIRD_SIZE;
+    bird.height = BIRD_SIZE;
+  }
 
   // ========== 加载图片 ==========
   function loadImages(callback) {
@@ -141,7 +166,6 @@
         }
       }
     });
-    // iPad 触摸支持
     bestBox.addEventListener("touchstart", (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -169,52 +193,52 @@
 
   // ========== 游戏逻辑 ==========
   function generatePipe(prevPipe) {
-    const minHeight = 60;
+    const minHeight = Math.max(40, CANVAS_HEIGHT * 0.1);
     const maxHeight = CANVAS_HEIGHT - PIPE_GAP - minHeight;
     let topHeight;
     let spacing = BASE_PIPE_SPACING;
 
     if (prevPipe) {
-      // 调整变化概率：增加极端变化的几率
       let change;
       const rand = Math.random();
 
       if (rand < 0.35) {
-        // 35% 几率出现极端变化（大起大落）- 原20%
-        // 变化范围 80-120 像素
-        change = (Math.random() - 0.5) * 200;
+        // 35% 极端变化：大起大落
+        change = (Math.random() - 0.5) * MAX_HEIGHT_CHANGE * 1.8;
       } else if (rand < 0.6) {
-        // 25% 几率中等变化 - 原30%
-        // 变化范围 40-80 像素
-        change = (Math.random() - 0.5) * 120;
+        // 25% 中等变化
+        change = (Math.random() - 0.5) * MAX_HEIGHT_CHANGE * 1.0;
       } else {
-        // 40% 几率小变化（平滑）- 原50%
-        // 变化范围 0-40 像素
-        change = (Math.random() - 0.5) * 60;
+        // 40% 小变化
+        change = (Math.random() - 0.5) * MAX_HEIGHT_CHANGE * 0.4;
       }
 
       let newHeight = prevPipe.topHeight + change;
       newHeight = Math.max(minHeight, Math.min(maxHeight, newHeight));
       topHeight = newHeight;
 
-      // 高度变化越大，间距越大（确保可玩性）
+      // 高度变化越大，间距越大
       const actualChange = Math.abs(topHeight - prevPipe.topHeight);
-      if (actualChange > 70) {
-        // 大落差：间距增加 60-100
-        spacing = BASE_PIPE_SPACING + 60 + Math.floor(Math.random() * 50);
-      } else if (actualChange > 35) {
-        // 中等落差：间距增加 30-60
-        spacing = BASE_PIPE_SPACING + 30 + Math.floor(Math.random() * 35);
+      const changeRatio = actualChange / MAX_HEIGHT_CHANGE;
+
+      if (changeRatio > 0.6) {
+        // 大落差：间距增加 40-70%
+        spacing =
+          BASE_PIPE_SPACING + BASE_PIPE_SPACING * (0.4 + Math.random() * 0.3);
+      } else if (changeRatio > 0.3) {
+        // 中等落差：间距增加 20-40%
+        spacing =
+          BASE_PIPE_SPACING + BASE_PIPE_SPACING * (0.2 + Math.random() * 0.2);
       } else {
-        // 小平滑：间距增加 10-25
-        spacing = BASE_PIPE_SPACING + 10 + Math.floor(Math.random() * 20);
+        // 小平滑：间距增加 5-15%
+        spacing =
+          BASE_PIPE_SPACING + BASE_PIPE_SPACING * (0.05 + Math.random() * 0.1);
       }
       spacing = Math.min(
         MAX_PIPE_SPACING,
         Math.max(BASE_PIPE_SPACING, spacing),
       );
     } else {
-      // 第一根柱子随机
       topHeight = Math.floor(
         Math.random() * (maxHeight - minHeight + 1) + minHeight,
       );
@@ -233,6 +257,8 @@
     bird.y = CANVAS_HEIGHT / 2;
     bird.vy = 0;
     bird.rotation = 0;
+    bird.width = BIRD_SIZE;
+    bird.height = BIRD_SIZE;
     pipes = [];
     let lastPipe = null;
     let lastX = CANVAS_WIDTH;
@@ -269,10 +295,8 @@
       bird.rotation = Math.max(bird.rotation - 2, -30);
     }
 
-    if (
-      bird.y - BIRD_SIZE / 2 <= 0 ||
-      bird.y + BIRD_SIZE / 2 >= CANVAS_HEIGHT - 50
-    ) {
+    const groundY = CANVAS_HEIGHT - 50;
+    if (bird.y - bird.height / 2 <= 0 || bird.y + bird.height / 2 >= groundY) {
       gameOver();
       return;
     }
@@ -289,10 +313,10 @@
       pipes.push(newPipe);
     }
 
-    const birdLeft = bird.x - BIRD_SIZE / 2;
-    const birdRight = bird.x + BIRD_SIZE / 2;
-    const birdTop = bird.y - BIRD_SIZE / 2;
-    const birdBottom = bird.y + BIRD_SIZE / 2;
+    const birdLeft = bird.x - bird.width / 2;
+    const birdRight = bird.x + bird.width / 2;
+    const birdTop = bird.y - bird.height / 2;
+    const birdBottom = bird.y + bird.height / 2;
 
     for (let pipe of pipes) {
       const pipeLeft = pipe.x;
@@ -341,7 +365,6 @@
         `;
     document.querySelector(".game-container").appendChild(overlay);
 
-    // 同时绑定 click 和 touchstart
     const restartBtn = document.getElementById("restartBtn");
     const homeBtnOverlay = document.getElementById("homeBtnOverlay");
 
@@ -466,19 +489,6 @@
     }, 1000);
   }
 
-  // ========== 尺寸自适应 ==========
-  function resizeCanvas() {
-    const container = document.querySelector(".game-container");
-    const rect = container.getBoundingClientRect();
-    CANVAS_WIDTH = rect.width;
-    CANVAS_HEIGHT = rect.height;
-    canvas.width = CANVAS_WIDTH;
-    canvas.height = CANVAS_HEIGHT;
-
-    bird.x = Math.min(80, CANVAS_WIDTH * 0.2);
-    bird.y = CANVAS_HEIGHT / 2;
-  }
-
   // ========== 渲染 ==========
   function render() {
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -489,17 +499,43 @@
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
+    // 云朵（相对位置）
     ctx.fillStyle = "rgba(255,255,255,0.7)";
-    ctx.beginPath();
-    ctx.ellipse(80, 70, 40, 30, 0, 0, Math.PI * 2);
-    ctx.ellipse(110, 60, 35, 28, 0, 0, Math.PI * 2);
-    ctx.ellipse(140, 70, 40, 30, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.ellipse(350, 120, 50, 35, 0, 0, Math.PI * 2);
-    ctx.ellipse(390, 105, 45, 30, 0, 0, Math.PI * 2);
-    ctx.ellipse(430, 120, 50, 35, 0, 0, Math.PI * 2);
-    ctx.fill();
+    const cloudScale = CANVAS_WIDTH / 450;
+    [
+      { x: 80, y: 70, w: 40, h: 30 },
+      { x: 110, y: 60, w: 35, h: 28 },
+      { x: 140, y: 70, w: 40, h: 30 },
+    ].forEach((c) => {
+      ctx.beginPath();
+      ctx.ellipse(
+        c.x * cloudScale,
+        c.y * cloudScale,
+        c.w * cloudScale,
+        c.h * cloudScale,
+        0,
+        0,
+        Math.PI * 2,
+      );
+      ctx.fill();
+    });
+    [
+      { x: 350, y: 120, w: 50, h: 35 },
+      { x: 390, y: 105, w: 45, h: 30 },
+      { x: 430, y: 120, w: 50, h: 35 },
+    ].forEach((c) => {
+      ctx.beginPath();
+      ctx.ellipse(
+        c.x * cloudScale,
+        c.y * cloudScale,
+        c.w * cloudScale,
+        c.h * cloudScale,
+        0,
+        0,
+        Math.PI * 2,
+      );
+      ctx.fill();
+    });
 
     for (let pipe of pipes) {
       if (pipeImg && pipeImg.complete && pipeImg.naturalWidth > 0) {
@@ -526,13 +562,14 @@
       }
     }
 
+    const groundY = CANVAS_HEIGHT - 50;
     if (groundImg && groundImg.complete && groundImg.naturalWidth > 0) {
-      ctx.drawImage(groundImg, 0, CANVAS_HEIGHT - 50, CANVAS_WIDTH, 50);
+      ctx.drawImage(groundImg, 0, groundY, CANVAS_WIDTH, 50);
     } else {
       ctx.fillStyle = "#8B6914";
-      ctx.fillRect(0, CANVAS_HEIGHT - 50, CANVAS_WIDTH, 50);
+      ctx.fillRect(0, groundY, CANVAS_WIDTH, 50);
       ctx.fillStyle = "#C99E3E";
-      ctx.fillRect(0, CANVAS_HEIGHT - 50, CANVAS_WIDTH, 10);
+      ctx.fillRect(0, groundY, CANVAS_WIDTH, 10);
     }
 
     ctx.save();
@@ -541,20 +578,20 @@
     if (birdImg && birdImg.complete && birdImg.naturalWidth > 0) {
       ctx.drawImage(
         birdImg,
-        -BIRD_SIZE / 2,
-        -BIRD_SIZE / 2,
-        BIRD_SIZE,
-        BIRD_SIZE,
+        -bird.width / 2,
+        -bird.height / 2,
+        bird.width,
+        bird.height,
       );
     } else {
       ctx.fillStyle = "#FF6B6B";
-      ctx.fillRect(-BIRD_SIZE / 2, -BIRD_SIZE / 2, BIRD_SIZE, BIRD_SIZE);
+      ctx.fillRect(-bird.width / 2, -bird.height / 2, bird.width, bird.height);
       ctx.fillStyle = "#FFFFFF";
-      ctx.fillRect(-BIRD_SIZE / 2 + 5, -BIRD_SIZE / 2 + 5, 6, 6);
-      ctx.fillRect(BIRD_SIZE / 2 - 11, -BIRD_SIZE / 2 + 5, 6, 6);
+      ctx.fillRect(-bird.width / 2 + 5, -bird.height / 2 + 5, 6, 6);
+      ctx.fillRect(bird.width / 2 - 11, -bird.height / 2 + 5, 6, 6);
       ctx.fillStyle = "#000000";
-      ctx.fillRect(-BIRD_SIZE / 2 + 6, -BIRD_SIZE / 2 + 6, 3, 3);
-      ctx.fillRect(BIRD_SIZE / 2 - 10, -BIRD_SIZE / 2 + 6, 3, 3);
+      ctx.fillRect(-bird.width / 2 + 6, -bird.height / 2 + 6, 3, 3);
+      ctx.fillRect(bird.width / 2 - 10, -bird.height / 2 + 6, 3, 3);
     }
     ctx.restore();
   }
@@ -572,7 +609,6 @@
       jump();
     });
 
-    // 暂停按钮 - 同时绑定 click 和 touchstart
     function onPause(e) {
       e.preventDefault();
       e.stopPropagation();
@@ -585,7 +621,6 @@
     pauseBtn.onclick = onPause;
     pauseBtn.ontouchstart = onPause;
 
-    // 主页按钮
     function onHome(e) {
       e.preventDefault();
       e.stopPropagation();
