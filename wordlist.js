@@ -309,6 +309,7 @@ function renderTypeFilter() {
     place: "📍 地点",
     toy: "🧸 玩具",
     time: "⏰ 时间",
+    country: "🌍 国家",
     other: "📦 其他",
   };
 

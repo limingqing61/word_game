@@ -417,6 +417,7 @@ const MINIMAL_PAIRS_DATA = [
       "save",
       "snail",
       "snake",
+      "Spain",
       "take",
       "tape",
       "train",

@@ -172,6 +172,7 @@ function startRound() {
     place: "地点",
     toy: "玩具",
     time: "时间",
+    country: "国家",
   };
   const typeDisplay = typeNames[currentType] || currentType;
   roundInfoEl.textContent = `Round ${gameState.currentRound + 1}: Match ${numPairs} ${typeDisplay}`;
