@@ -282,10 +282,10 @@ const CULTURE_DATA = [
 
   // ===== 以色列 =====
   {
-    id: "israel_dead_sea",
+    id: "israel_tower_of_david",
     country: "Israel",
-    image: "custom/dead_sea.jpeg",
-    hint: "死海",
+    image: "custom/tower_of_david.jpeg",
+    hint: "大卫塔",
   },
   {
     id: "israel_wailing_wall",
