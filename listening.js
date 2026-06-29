@@ -26,6 +26,128 @@ let gameState = {
 let streakCount = 0;
 let totalScore = 0;
 
+// ========= 连错记录 =========
+const STREAK_KEY = "listening_wrong_streak";
+
+// 获取某个单词的连错次数
+function getWrongStreak(word) {
+  try {
+    const data = JSON.parse(localStorage.getItem(STREAK_KEY) || "{}");
+    return data[word] || 0;
+  } catch {
+    return 0;
+  }
+}
+
+// 更新连错次数：isCorrect=true 清零，false 则 +1
+function updateWrongStreak(word, isCorrect) {
+  try {
+    const data = JSON.parse(localStorage.getItem(STREAK_KEY) || "{}");
+    if (isCorrect) {
+      data[word] = 0;
+    } else {
+      data[word] = (data[word] || 0) + 1;
+    }
+    localStorage.setItem(STREAK_KEY, JSON.stringify(data));
+  } catch (e) {
+    console.warn("更新连错记录失败", e);
+  }
+}
+
+// 获取所有连错 >= 2 的单词（用于遮罩展示）
+function getFocusWords() {
+  try {
+    const data = JSON.parse(localStorage.getItem(STREAK_KEY) || "{}");
+    const result = [];
+    for (const [word, count] of Object.entries(data)) {
+      if (count >= 2) {
+        result.push({ word, count });
+      }
+    }
+    // 按连错次数从高到低排序
+    result.sort((a, b) => b.count - a.count);
+    return result;
+  } catch {
+    return [];
+  }
+}
+
+// ========= 渲染遮罩上的重点单词列表 =========
+function renderFocusWordsOnOverlay() {
+  const container = document.getElementById("focusWordsContainer");
+  if (!container) return;
+
+  const focusWords = getFocusWords();
+
+  if (focusWords.length === 0) {
+    container.innerHTML = `
+      <div style="color: rgba(255,255,255,0.5); text-align: center; padding: 8px 0; font-size: 0.9rem;">
+        ✅ 暂无需要重点复习的单词
+      </div>
+    `;
+    return;
+  }
+
+  let html = `
+    <div style="color: #ffd54f; font-size: 0.85rem; font-weight: bold; margin-bottom: 10px;">
+      ⚠️ 需要重点复习的单词（连错 ≥ 2 次）
+    </div>
+  `;
+
+  focusWords.forEach(({ word, count }) => {
+    // 从 wordData 获取中文
+    let chinese = "";
+    let image = "";
+    if (window.wordData && window.wordData[word]) {
+      chinese = window.wordData[word].chinese || "";
+      image = window.wordData[word].image || "";
+    }
+
+    html += `
+      <div style="
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        font-size: 0.9rem;
+      ">
+        ${image ? `<img src="${image}" style="width:28px;height:28px;object-fit:contain;border-radius:4px;flex-shrink:0;" onerror="this.style.display='none'">` : ""}
+        <span style="color: #fff; font-weight: 500;">${word}</span>
+        ${chinese ? `<span style="color: rgba(255,255,255,0.5); font-size: 0.8rem;">${chinese}</span>` : ""}
+        <span style="margin-left: auto; color: #ff6b6b; font-weight: bold; font-size: 0.85rem;">
+          ❌ 连错 ${count} 次
+        </span>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+// ========= 遮罩按钮切换 =========
+function initFocusToggle() {
+  const toggleBtn = document.getElementById("toggleFocusBtn");
+  const container = document.getElementById("focusWordsContainer");
+  if (!toggleBtn || !container) return;
+
+  let isOpen = false;
+
+  toggleBtn.addEventListener("click", () => {
+    isOpen = !isOpen;
+    if (isOpen) {
+      container.style.display = "block";
+      toggleBtn.textContent = "📌 收起重点复习单词";
+      toggleBtn.style.background = "rgba(255, 193, 7, 0.35)";
+      renderFocusWordsOnOverlay();
+    } else {
+      container.style.display = "none";
+      toggleBtn.textContent = "📌 查看需要重点复习的单词";
+      toggleBtn.style.background = "rgba(255, 193, 7, 0.2)";
+    }
+  });
+}
+
 // ========= DOM 元素 =========
 const correctCountElement = document.getElementById("correctCount");
 const wrongCountElement = document.getElementById("wrongCount");
@@ -48,7 +170,6 @@ function wakeUpAudio() {
   if (audioAllowed) return;
   try {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    // 播放一个极短的无声音频来激活 AudioContext
     const silentOsc = audioContext.createOscillator();
     const silentGain = audioContext.createGain();
     silentGain.gain.value = 0;
@@ -65,14 +186,10 @@ function wakeUpAudio() {
 
 // 初始化游戏（用户点击开始按钮后调用）
 function initAndStart() {
-  // 隐藏遮罩，显示游戏容器
   startOverlay.style.display = "none";
   gameContainer.style.display = "block";
-
-  // 唤醒音频
   wakeUpAudio();
 
-  // 启动游戏
   if (typeof initListeningGame === "function") {
     initListeningGame();
   }
@@ -163,7 +280,6 @@ function generateChoices(correctIndex) {
   const correctWord = wordList[correctIndex];
   const numChoices = gameState.currentQuestionIndex < 20 ? 4 : 6;
 
-  // 1. 找出和正确答案同一 type 的其他单词
   const sameTypeIndices = [];
   for (let i = 0; i < wordList.length; i++) {
     if (i !== correctIndex && wordList[i].type === correctWord.type) {
@@ -171,14 +287,10 @@ function generateChoices(correctIndex) {
     }
   }
 
-  // 2. 随机打乱同类型单词列表
   const shuffledSameType = shuffleArray([...sameTypeIndices]);
-
-  // 3. 优先从同类型中取干扰项
   const neededCount = numChoices - 1;
   const selectedOthers = [];
 
-  // 先从同类型取
   for (
     let i = 0;
     i < shuffledSameType.length && selectedOthers.length < neededCount;
@@ -187,7 +299,6 @@ function generateChoices(correctIndex) {
     selectedOthers.push(shuffledSameType[i]);
   }
 
-  // 4. 如果同类型不够，再从其他类型补充
   if (selectedOthers.length < neededCount) {
     const otherIndices = [];
     for (let i = 0; i < wordList.length; i++) {
@@ -205,7 +316,6 @@ function generateChoices(correctIndex) {
     }
   }
 
-  // 5. 构建选项列表
   const choiceIndices = [correctIndex, ...selectedOthers];
   const shuffledChoices = shuffleArray([...choiceIndices]);
 
@@ -263,6 +373,7 @@ function generateChoices(correctIndex) {
   });
 }
 
+// ========= 核心：处理点击（含连错记录） =========
 function handleChoiceClick(clicked, correctIndex) {
   const wordList = window.__wordGame.wordList;
   const getPhoneticSymbol = window.__wordGame.getPhoneticSymbol;
@@ -275,6 +386,11 @@ function handleChoiceClick(clicked, correctIndex) {
 
   const clickedIndex = parseInt(clicked.dataset.wordIndex);
   const isCorrect = clickedIndex === correctIndex;
+  const correctWord = wordList[correctIndex];
+
+  // ===== 更新连错记录 =====
+  updateWrongStreak(correctWord.word, isCorrect);
+
   const allChoices = document.querySelectorAll(".choice-item");
   allChoices.forEach((c) => c.classList.add("disabled"));
 
@@ -300,7 +416,7 @@ function handleChoiceClick(clicked, correctIndex) {
   } else {
     gameState.wrongCount++;
     streakCount = 0;
-    gameState.wrongWords.push(wordList[correctIndex]);
+    gameState.wrongWords.push(correctWord);
     clicked.classList.add("wrong", "revealed");
     const wrongIcon = document.createElement("div");
     wrongIcon.className = "result-icon wrong";
@@ -368,7 +484,7 @@ function playSoundEffect(type) {
   } catch (e) {}
 }
 
-// ========= 游戏结束 & 彩蛋 =========
+// ========= 游戏结束 & 错题本（含连错次数） =========
 function showGameComplete() {
   const getPhoneticSymbol = window.__wordGame.getPhoneticSymbol;
   updateScoreDisplay();
@@ -376,52 +492,77 @@ function showGameComplete() {
   const actionButtons = document.querySelector(".action-buttons");
   if (actionButtons) actionButtons.style.display = "none";
 
+  // 对错题本去重（同一单词可能多次答错）
+  const uniqueWrongWords = [];
+  const seen = new Set();
+  gameState.wrongWords.forEach((w) => {
+    if (!seen.has(w.word)) {
+      seen.add(w.word);
+      uniqueWrongWords.push(w);
+    }
+  });
+
   let wrongHtml = "";
-  if (gameState.wrongWords.length) {
+  if (uniqueWrongWords.length) {
     wrongHtml = `
-            <div class="wrong-words-section">
-                <h3><i class="fas fa-book"></i> Words to Review (${gameState.wrongWords.length})</h3>
-                <div class="wrong-words-list">
-                    ${gameState.wrongWords
-                      .map(
-                        (w) => `
-                        <div class="wrong-word-item">
-                            <img src="${w.image}" style="width:80px;height:80px;object-fit:contain">
-                            <div class="wrong-word-info">
-                                <div class="wrong-word-text">${w.word}</div>
-                                <div class="wrong-word-phonetic">${getPhoneticSymbol(w.word)}</div>
-                                <div class="wrong-word-chinese">${w.chinese || ""}</div>
-                            </div>
-                            <div class="wrong-word-buttons">
-                                <button class="wrong-word-play-btn" onclick="SpeechHelper.speak('${w.word}',0.7)">
-                                    <i class="fas fa-volume-up"></i>
-                                </button>
-                                <button class="wrong-word-fav-btn" data-word="${w.word}">
-                                    <i class="fa-regular fa-floppy-disk"></i>
-                                </button>
-                            </div>
-                        </div>
-                    `,
-                      )
-                      .join("")}
+      <div class="wrong-words-section">
+        <h3><i class="fas fa-book"></i> Words to Review (${uniqueWrongWords.length})</h3>
+        <div class="wrong-words-list">
+          ${uniqueWrongWords
+            .map((w) => {
+              const streak = getWrongStreak(w.word);
+              let streakDisplay = "";
+              if (streak === 0) {
+                streakDisplay =
+                  '<span style="color: #4caf50; font-size: 0.75rem;">✅ 已掌握</span>';
+              } else if (streak === 1) {
+                streakDisplay = `<span style="color: #ffd54f; font-size: 0.75rem;">❌ 连错 ${streak} 次</span>`;
+              } else {
+                streakDisplay = `<span style="color: #ff6b6b; font-size: 0.75rem; font-weight: bold;">❌ 连错 ${streak} 次</span>`;
+              }
+              return `
+                <div class="wrong-word-item">
+                  <img src="${w.image}" style="width:80px;height:80px;object-fit:contain">
+                  <div class="wrong-word-info">
+                    <div class="wrong-word-text">${w.word}</div>
+                    <div class="wrong-word-phonetic">${getPhoneticSymbol(w.word)}</div>
+                    <div class="wrong-word-chinese">${w.chinese || ""}</div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+                    <div style="font-size:0.8rem;">${streakDisplay}</div>
+                    <div class="wrong-word-buttons">
+                      <button class="wrong-word-play-btn" onclick="SpeechHelper.speak('${w.word}',0.7)">
+                        <i class="fas fa-volume-up"></i>
+                      </button>
+                      <button class="wrong-word-fav-btn" data-word="${w.word}">
+                        <i class="fa-regular fa-floppy-disk"></i>
+                      </button>
+                    </div>
+                  </div>
                 </div>
-            </div>
-        `;
+              `;
+            })
+            .join("")}
+        </div>
+      </div>
+    `;
   }
 
   const completeDiv = document.createElement("div");
   completeDiv.className = "game-complete";
   completeDiv.innerHTML = `
-        <h2><i class="fas fa-trophy"></i> Game Complete!</h2>
-        <div class="final-score">
-            <span class="correct">Correct: ${gameState.correctCount}</span> |
-            <span class="wrong">Wrong: ${gameState.wrongCount}</span> |
-            <span class="score">Score: ${totalScore}</span>
-        </div>
-        ${wrongHtml}
-        <button id="playAgainBtn" class="repeat-btn"><i class="fas fa-redo"></i> Play Again</button>
-        <button id="backToMenuBtn" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Menu</button>
-    `;
+    <h2><i class="fas fa-trophy"></i> Game Complete!</h2>
+    <div class="final-score">
+      <span class="correct">Correct: ${gameState.correctCount}</span> |
+      <span class="wrong">Wrong: ${gameState.wrongCount}</span> |
+      <span class="score">Score: ${totalScore}</span>
+    </div>
+    ${wrongHtml}
+    <div style="margin-top: 20px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+      <button id="playAgainBtn" class="repeat-btn"><i class="fas fa-redo"></i> Play Again</button>
+      <button id="backToMenuBtn" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Menu</button>
+    </div>
+  `;
 
   choicesGrid.appendChild(completeDiv);
 
@@ -430,7 +571,6 @@ function showGameComplete() {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
       const word = btn.dataset.word;
-      // 复用 wordlist 的收藏弹窗函数
       if (typeof showAddToFavoritesDialog === "function") {
         showAddToFavoritesDialog(word);
       } else {
@@ -466,14 +606,14 @@ function showConfetti() {
   for (let i = 0; i < 80; i++) {
     const conf = document.createElement("div");
     conf.style.cssText = `
-            position:fixed; width:8px; height:8px;
-            background:${colors[i % colors.length]};
-            left:${Math.random() * 100}vw;
-            top:-10px;
-            border-radius:50%;
-            pointer-events:none;
-            z-index:9999;
-        `;
+      position:fixed; width:8px; height:8px;
+      background:${colors[i % colors.length]};
+      left:${Math.random() * 100}vw;
+      top:-10px;
+      border-radius:50%;
+      pointer-events:none;
+      z-index:9999;
+    `;
     document.body.appendChild(conf);
     const anim = conf.animate(
       [
@@ -531,5 +671,10 @@ hintBtn?.addEventListener("click", () => {
 
 backBtn?.addEventListener("click", () => (window.location.href = "index.html"));
 
-// 注意：不再自动调用 ensureGameData()，而是等待用户点击开始按钮
-// 但为了兼容旧逻辑，保留 ensureGameData 的定义，启动由点击按钮触发
+// ========= 遮罩初始化 =========
+// DOM 加载完成后初始化遮罩按钮
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initFocusToggle);
+} else {
+  initFocusToggle();
+}

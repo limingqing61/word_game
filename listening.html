@@ -581,10 +581,44 @@
 
 <body>
     <!-- 启动遮罩层 -->
+    <!-- 启动遮罩层 -->
     <div id="startOverlay">
         <h1>🎧 Listening Challenge</h1>
         <div class="subtitle">👂 听音识图 · 挑战你的听力</div>
         <button id="startBtn">🔊 点击开始游戏</button>
+
+        <!-- ===== 新增：重点复习单词按钮 ===== -->
+        <div style="margin-top: 20px; width: 90%; max-width: 400px;">
+            <button id="toggleFocusBtn" style="
+                background: rgba(255, 193, 7, 0.2);
+                border: 1px solid rgba(255, 193, 7, 0.4);
+                color: #ffd54f;
+                padding: 8px 20px;
+                border-radius: 30px;
+                cursor: pointer;
+                font-size: 0.9rem;
+                font-family: inherit;
+                transition: all 0.3s;
+                width: 100%;
+            ">
+                📌 查看需要重点复习的单词
+            </button>
+            <div id="focusWordsContainer" style="
+                display: none;
+                margin-top: 12px;
+                background: rgba(0, 0, 0, 0.4);
+                border-radius: 16px;
+                padding: 14px 18px;
+                text-align: left;
+                max-height: 200px;
+                overflow-y: auto;
+                color: #fff;
+            ">
+                <!-- 由 JS 动态渲染 -->
+            </div>
+        </div>
+        <!-- ===== 新增结束 ===== -->
+
         <div class="tip">💡 需要点击按钮以启用音频和语音</div>
     </div>
 

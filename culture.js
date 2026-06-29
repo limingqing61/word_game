@@ -207,14 +207,13 @@
       feedbackDiv.className = "feedback";
     }
 
-    const chineseName = getChineseName(q.correctCountry);
-
     if (isCorrect) {
       document.querySelectorAll(".option-btn").forEach((b) => {
         if (b.dataset.country === q.correctCountry) {
           b.classList.add("correct");
           const label = document.createElement("div");
           label.className = "country-label correct-label";
+          const chineseName = getChineseName(q.correctCountry);
           label.textContent = `✅ ${chineseName}`;
           b.appendChild(label);
         }
@@ -228,14 +227,15 @@
           b.classList.add("correct");
           const label = document.createElement("div");
           label.className = "country-label correct-label";
-          label.textContent = `✅ ${chineseName}`;
+          const correctChinese = getChineseName(q.correctCountry);
+          label.textContent = `✅ ${correctChinese}`;
           b.appendChild(label);
         }
         if (b === btn) {
           b.classList.add("wrong");
-          const wrongChinese = getChineseName(selectedCountry);
           const label = document.createElement("div");
           label.className = "country-label wrong-label";
+          const wrongChinese = getChineseName(selectedCountry);
           label.textContent = `❌ ${wrongChinese}`;
           b.appendChild(label);
         }
