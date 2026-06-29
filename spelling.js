@@ -1,3 +1,123 @@
+// ========= 连错记录（复用 listening 的 localStorage key） =========
+const STREAK_KEY = "listening_wrong_streak";
+
+// 获取某个单词的连错次数
+function getWrongStreak(word) {
+  try {
+    const data = JSON.parse(localStorage.getItem(STREAK_KEY) || "{}");
+    return data[word] || 0;
+  } catch {
+    return 0;
+  }
+}
+
+// 更新连错次数：isCorrect=true 清零，false 则 +1
+function updateWrongStreak(word, isCorrect) {
+  try {
+    const data = JSON.parse(localStorage.getItem(STREAK_KEY) || "{}");
+    if (isCorrect) {
+      data[word] = 0;
+    } else {
+      data[word] = (data[word] || 0) + 1;
+    }
+    localStorage.setItem(STREAK_KEY, JSON.stringify(data));
+  } catch (e) {
+    console.warn("更新连错记录失败", e);
+  }
+}
+
+// 获取所有连错 >= 2 的单词（用于遮罩展示）
+function getFocusWords() {
+  try {
+    const data = JSON.parse(localStorage.getItem(STREAK_KEY) || "{}");
+    const result = [];
+    for (const [word, count] of Object.entries(data)) {
+      if (count >= 2) {
+        result.push({ word, count });
+      }
+    }
+    result.sort((a, b) => b.count - a.count);
+    return result;
+  } catch {
+    return [];
+  }
+}
+
+// ========= 渲染遮罩上的重点单词列表 =========
+function renderFocusWordsOnOverlay() {
+  const container = document.getElementById("focusWordsContainer");
+  if (!container) return;
+
+  const focusWords = getFocusWords();
+
+  if (focusWords.length === 0) {
+    container.innerHTML = `
+      <div style="color: rgba(255,255,255,0.5); text-align: center; padding: 8px 0; font-size: 0.9rem;">
+        ✅ 暂无需要重点复习的单词
+      </div>
+    `;
+    return;
+  }
+
+  let html = `
+    <div style="color: #ffd54f; font-size: 0.85rem; font-weight: bold; margin-bottom: 10px;">
+      ⚠️ 需要重点复习的单词（连错 ≥ 2 次）
+    </div>
+  `;
+
+  focusWords.forEach(({ word, count }) => {
+    let chinese = "";
+    let image = "";
+    if (window.wordData && window.wordData[word]) {
+      chinese = window.wordData[word].chinese || "";
+      image = window.wordData[word].image || "";
+    }
+
+    html += `
+      <div style="
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        font-size: 0.9rem;
+      ">
+        ${image ? `<img src="${image}" style="width:28px;height:28px;object-fit:contain;border-radius:4px;flex-shrink:0;" onerror="this.style.display='none'">` : ""}
+        <span style="color: #fff; font-weight: 500;">${word}</span>
+        ${chinese ? `<span style="color: rgba(255,255,255,0.5); font-size: 0.8rem;">${chinese}</span>` : ""}
+        <span style="margin-left: auto; color: #ff6b6b; font-weight: bold; font-size: 0.85rem;">
+          ❌ 连错 ${count} 次
+        </span>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+// ========= 遮罩按钮切换 =========
+function initFocusToggle() {
+  const toggleBtn = document.getElementById("toggleFocusBtn");
+  const container = document.getElementById("focusWordsContainer");
+  if (!toggleBtn || !container) return;
+
+  let isOpen = false;
+
+  toggleBtn.addEventListener("click", () => {
+    isOpen = !isOpen;
+    if (isOpen) {
+      container.style.display = "block";
+      toggleBtn.textContent = "📌 收起重点复习单词";
+      toggleBtn.style.background = "rgba(255, 193, 7, 0.35)";
+      renderFocusWordsOnOverlay();
+    } else {
+      container.style.display = "none";
+      toggleBtn.textContent = "📌 查看需要重点复习的单词";
+      toggleBtn.style.background = "rgba(255, 193, 7, 0.2)";
+    }
+  });
+}
+
 // ========= 游戏状态 =========
 let gameState = {
   correctCount: 0,
@@ -21,6 +141,20 @@ const progressFillEl = document.getElementById("progressFill");
 const roundInfoEl = document.getElementById("roundInfo");
 const spellingContainer = document.getElementById("spellingContainer");
 const backBtn = document.getElementById("backBtn");
+const startOverlay = document.getElementById("startOverlay");
+const startBtn = document.getElementById("startBtn");
+const gameContainer = document.getElementById("gameContainer");
+
+// ========= 启动函数 =========
+function initAndStart() {
+  if (startOverlay) startOverlay.style.display = "none";
+  if (gameContainer) gameContainer.style.display = "block";
+  initSpellingGame();
+}
+
+if (startBtn) {
+  startBtn.addEventListener("click", initAndStart);
+}
 
 // ========= 工具函数 =========
 function shuffleArray(array) {
@@ -40,9 +174,6 @@ function hasVowels(word) {
 }
 
 function updateScoreDisplay() {
-  console.log(
-    `📊 更新进度: ${gameState.currentQuestionIndex}/${gameState.totalQuestions}`,
-  );
   correctCountEl.textContent = gameState.correctCount;
   wrongCountEl.textContent = gameState.wrongCount;
   totalScoreEl.textContent = totalScore;
@@ -54,7 +185,6 @@ function updateScoreDisplay() {
 
 // ========= 核心游戏逻辑 =========
 function initSpellingGame() {
-  console.log("🚀 初始化游戏");
   gameState.correctCount = 0;
   gameState.wrongCount = 0;
   gameState.currentQuestionIndex = 0;
@@ -78,7 +208,6 @@ function initSpellingGame() {
 }
 
 function showQuestion() {
-  console.log(`📖 显示题目，当前索引: ${gameState.currentQuestionIndex}`);
   updateScoreDisplay();
 
   if (gameState.currentQuestionIndex >= gameState.totalQuestions) {
@@ -221,6 +350,7 @@ function showQuestion() {
   updateSlots();
 }
 
+// ========= 核心：检查答案（含连错记录） =========
 function checkAnswer(vowelSlots, expectedVowels, originalWord) {
   if (gameState.isAnswered) return;
   gameState.isAnswered = true;
@@ -244,6 +374,9 @@ function checkAnswer(vowelSlots, expectedVowels, originalWord) {
   const wordList = window.wordList;
   const correctWord = wordList[wordIndex];
 
+  // ===== 更新连错记录 =====
+  updateWrongStreak(correctWord.word, allCorrect);
+
   if (allCorrect) {
     gameState.correctCount++;
     totalScore += 4;
@@ -256,19 +389,10 @@ function checkAnswer(vowelSlots, expectedVowels, originalWord) {
     playSoundEffect("wrong");
   }
 
-  console.log(
-    `✅ 答题完成，准备增加索引，当前索引: ${gameState.currentQuestionIndex}`,
-  );
-
   gameState.currentQuestionIndex++;
-
-  console.log(`➡️ 索引已变为: ${gameState.currentQuestionIndex}`);
 
   const advanceDelay = 2000;
   const next = () => {
-    console.log(
-      `⏩ 调用 showQuestion，当前索引: ${gameState.currentQuestionIndex}`,
-    );
     if (gameState.currentQuestionIndex >= gameState.totalQuestions) {
       showGameComplete();
     } else {
@@ -314,57 +438,80 @@ function playSoundEffect(type) {
   } catch (e) {}
 }
 
-// ========= 游戏结束 & 彩蛋 =========
+// ========= 游戏结束 & 错题本（含连错次数） =========
 function showGameComplete() {
   updateScoreDisplay();
   spellingContainer.innerHTML = "";
 
+  // 对错题本去重
+  const uniqueWrongWords = [];
+  const seen = new Set();
+  gameState.wrongWords.forEach((w) => {
+    if (!seen.has(w.word)) {
+      seen.add(w.word);
+      uniqueWrongWords.push(w);
+    }
+  });
+
   let wrongHtml = "";
-  if (gameState.wrongWords.length) {
+  if (uniqueWrongWords.length) {
     wrongHtml = `
-            <div class="wrong-words-section">
-                <h3><i class="fas fa-book"></i> Words to Review (${gameState.wrongWords.length})</h3>
-                <div class="wrong-words-list">
-                    ${gameState.wrongWords
-                      .map(
-                        (w) => `
-                        <div class="wrong-word-item">
-                            <img src="${w.image}" style="width:80px;height:80px;object-fit:contain">
-                            <div class="wrong-word-info">
-                                <div class="wrong-word-text">${w.word}</div>
-                                <div class="wrong-word-phonetic">${window.getPhoneticSymbol(w.word)}</div>
-                                <div class="wrong-word-chinese">${w.chinese || ""}</div>
-                            </div>
-                            <div class="wrong-word-buttons">
-                                <button class="wrong-word-play-btn" onclick="SpeechHelper.speak('${w.word}',0.7)">
-                                    <i class="fas fa-volume-up"></i>
-                                </button>
-                                <button class="wrong-word-fav-btn" data-word="${w.word}">
-                                    <i class="fa-regular fa-floppy-disk"></i>
-                                </button>
-                            </div>
-                        </div>
-                    `,
-                      )
-                      .join("")}
+      <div class="wrong-words-section">
+        <h3><i class="fas fa-book"></i> Words to Review (${uniqueWrongWords.length})</h3>
+        <div class="wrong-words-list">
+          ${uniqueWrongWords
+            .map((w) => {
+              const streak = getWrongStreak(w.word);
+              let streakDisplay = "";
+              if (streak === 0) {
+                streakDisplay =
+                  '<span style="color: #4caf50; font-size: 0.8rem;">✅ 已掌握</span>';
+              } else if (streak === 1) {
+                streakDisplay = `<span style="color: #ffd54f; font-size: 0.8rem;">❌ 连错 ${streak} 次</span>`;
+              } else {
+                streakDisplay = `<span style="color: #ff6b6b; font-size: 0.8rem; font-weight: bold;">❌ 连错 ${streak} 次</span>`;
+              }
+              return `
+                <div class="wrong-word-item">
+                  <img src="${w.image}" style="width:80px;height:80px;object-fit:contain">
+                  <div class="wrong-word-info">
+                    <div class="wrong-word-text">${w.word}</div>
+                    <div class="wrong-word-phonetic">${window.getPhoneticSymbol(w.word)}</div>
+                    <div class="wrong-word-chinese">${w.chinese || ""}</div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+                    <div style="font-size:0.85rem;">${streakDisplay}</div>
+                    <div class="wrong-word-buttons">
+                      <button class="wrong-word-play-btn" onclick="SpeechHelper.speak('${w.word}',0.7)">
+                        <i class="fas fa-volume-up"></i>
+                      </button>
+                      <button class="wrong-word-fav-btn" data-word="${w.word}">
+                        <i class="fa-regular fa-floppy-disk"></i>
+                      </button>
+                    </div>
+                  </div>
                 </div>
-            </div>
-        `;
+              `;
+            })
+            .join("")}
+        </div>
+      </div>
+    `;
   }
 
   const completeDiv = document.createElement("div");
   completeDiv.className = "game-complete";
   completeDiv.innerHTML = `
-        <h2><i class="fas fa-trophy"></i> Game Complete!</h2>
-        <div class="final-score">
-            <span class="correct">Correct: ${gameState.correctCount}</span> |
-            <span class="wrong">Wrong: ${gameState.wrongCount}</span> |
-            <span class="score">Score: ${totalScore}</span>
-        </div>
-        ${wrongHtml}
-        <button id="playAgainBtn" class="repeat-btn"><i class="fas fa-redo"></i> Play Again</button>
-        <button id="backToMenuBtn" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Menu</button>
-    `;
+    <h2><i class="fas fa-trophy"></i> Game Complete!</h2>
+    <div class="final-score">
+      <span class="correct">Correct: ${gameState.correctCount}</span> |
+      <span class="wrong">Wrong: ${gameState.wrongCount}</span> |
+      <span class="score">Score: ${totalScore}</span>
+    </div>
+    ${wrongHtml}
+    <button id="playAgainBtn" class="repeat-btn"><i class="fas fa-redo"></i> Play Again</button>
+    <button id="backToMenuBtn" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Menu</button>
+  `;
 
   spellingContainer.appendChild(completeDiv);
 
@@ -406,14 +553,14 @@ function showConfetti() {
   for (let i = 0; i < 80; i++) {
     const conf = document.createElement("div");
     conf.style.cssText = `
-            position:fixed; width:8px; height:8px;
-            background:${colors[i % colors.length]};
-            left:${Math.random() * 100}vw;
-            top:-10px;
-            border-radius:50%;
-            pointer-events:none;
-            z-index:9999;
-        `;
+      position:fixed; width:8px; height:8px;
+      background:${colors[i % colors.length]};
+      left:${Math.random() * 100}vw;
+      top:-10px;
+      border-radius:50%;
+      pointer-events:none;
+      z-index:9999;
+    `;
     document.body.appendChild(conf);
     const anim = conf.animate(
       [
@@ -432,6 +579,13 @@ function showConfetti() {
 // ========= 事件绑定 =========
 backBtn?.addEventListener("click", () => (window.location.href = "index.html"));
 
+// ========= 遮罩初始化 =========
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initFocusToggle);
+} else {
+  initFocusToggle();
+}
+
 // ========= 启动 =========
 window.addEventListener("load", () => {
   if (window.speechSynthesis) {
@@ -439,5 +593,5 @@ window.addEventListener("load", () => {
     window.speechSynthesis.onvoiceschanged = () =>
       window.speechSynthesis.getVoices();
   }
-  initSpellingGame();
+  // 注意：不再自动调用 initSpellingGame()，由点击开始按钮触发
 });
