@@ -209,6 +209,10 @@
     if (gameArea) gameArea.style.display = "none";
     if (resultArea) resultArea.style.display = "block";
 
+    // ===== 新增：隐藏底部的 Back 按钮 =====
+    const backBtn = document.getElementById("backBtn");
+    if (backBtn) backBtn.style.display = "none";
+
     const maxScore = TOTAL_QUESTIONS * POINTS_PER_CORRECT;
     let wrongHtml = "";
     if (gameState.wrongList.length > 0) {
@@ -305,6 +309,10 @@
   function resetAndStart() {
     if (gameArea) gameArea.style.display = "block";
     if (resultArea) resultArea.style.display = "none";
+
+    // ===== 新增：重新显示底部的 Back 按钮 =====
+    const backBtn = document.getElementById("backBtn");
+    if (backBtn) backBtn.style.display = "inline-block";
 
     gameState = {
       score: 0,

@@ -358,11 +358,7 @@
     const homeBtn = document.getElementById("homeBtn");
     if (restartBtn)
       restartBtn.addEventListener("click", () => location.reload());
-    if (homeBtn)
-      homeBtn.addEventListener(
-        "click",
-        () => (window.location.href = "index.html"),
-      );
+    if (homeBtn) bindGoHome(homeBtn);
   }
 
   function checkRoundComplete() {

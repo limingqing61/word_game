@@ -398,11 +398,6 @@
     questionCard.style.display = "none";
     if (cardMoveInterval) cancelAnimationFrame(cardMoveInterval);
     if (cardTimeout) clearTimeout(cardTimeout);
-    const restartBtn = document.createElement("button");
-    restartBtn.innerText = "🎮 再来一局";
-    restartBtn.style.marginTop = "15px";
-    restartBtn.addEventListener("click", () => location.reload());
-    messageDiv.appendChild(restartBtn);
   }
 
   repeatBtn.addEventListener("click", (e) => {

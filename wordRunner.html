@@ -277,6 +277,41 @@
             opacity: 0.7;
         }
 
+        /* 底部按钮同一行 */
+        .bottom-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .bottom-actions button {
+            margin-top: 0;
+        }
+
+        .btn-play-again {
+            background: #4CAF50;
+            color: white;
+            box-shadow: 0 4px 0 #2e7d32;
+        }
+
+        .btn-play-again:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #2e7d32;
+        }
+
+        .btn-back-home {
+            background: #607d8b;
+            color: white;
+            box-shadow: 0 4px 0 #455a64;
+        }
+
+        .btn-back-home:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #455a64;
+        }
+
         @media (max-width: 700px) {
             .option-card {
                 width: 70px;
@@ -350,8 +385,11 @@
         </div>
         <div id="optionsArea" class="options-area"></div>
         <div id="messageArea" class="message-area"></div>
-        <div style="text-align: center; margin-top: 15px;">
-            <button id="backMenuBtn"><i class="fas fa-arrow-left"></i> 返回主页</button>
+
+        <!-- ===== 底部按钮：同一行 ===== -->
+        <div class="bottom-actions">
+            <button id="playAgainBtn" class="btn-play-again"><i class="fas fa-redo"></i> 再来一局</button>
+            <button id="backMenuBtn" class="btn-back-home"><i class="fas fa-arrow-left"></i> 返回首页</button>
         </div>
     </div>
 

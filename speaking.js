@@ -466,9 +466,7 @@ skipBtn?.addEventListener("click", () => {
   handleWrong();
 });
 
-backBtn?.addEventListener("click", () => {
-  window.location.href = "index.html";
-});
+bindGoHome(backBtn);
 
 // 启动
 window.addEventListener("load", () => {

@@ -185,6 +185,10 @@ function updateScoreDisplay() {
 
 // ========= 核心游戏逻辑 =========
 function initSpellingGame() {
+  // ===== 恢复显示底部的 Back 按钮 =====
+  const backBtn = document.getElementById("backBtn");
+  if (backBtn) backBtn.style.display = "";
+
   gameState.correctCount = 0;
   gameState.wrongCount = 0;
   gameState.currentQuestionIndex = 0;
@@ -442,6 +446,10 @@ function playSoundEffect(type) {
 function showGameComplete() {
   updateScoreDisplay();
   spellingContainer.innerHTML = "";
+
+  // ===== 新增：隐藏底部的 Back 按钮 =====
+  const backBtn = document.getElementById("backBtn");
+  if (backBtn) backBtn.style.display = "none";
 
   // 对错题本去重
   const uniqueWrongWords = [];

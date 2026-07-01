@@ -284,6 +284,10 @@ function showGameComplete() {
   updateScoreDisplay();
   matchingContainer.innerHTML = "";
 
+  // ===== 隐藏底部的 Back 按钮 =====
+  const backBtn = document.getElementById("backBtn");
+  if (backBtn) backBtn.style.display = "none";
+
   let wrongHtml = "";
   if (gameState.wrongWords.length) {
     wrongHtml = `
@@ -426,6 +430,10 @@ function showConfetti() {
 
 // 启动
 function initMatchingGame() {
+  // ===== 恢复显示底部的 Back 按钮 =====
+  const backBtn = document.getElementById("backBtn");
+  if (backBtn) backBtn.style.display = "";
+
   gameState.correctCount = 0;
   gameState.wrongCount = 0;
   gameState.currentRound = 0;
