@@ -658,9 +658,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initSearch();
 
   const backBtn = document.getElementById("backToMenuBtn");
-  if (backBtn)
-    backBtn.addEventListener(
-      "click",
-      () => (window.location.href = "index.html"),
-    );
+  if (backBtn) bindGoHome(backBtn);
 });

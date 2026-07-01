@@ -422,9 +422,7 @@ function bindBackButton() {
     // 移除旧事件避免重复绑定
     const newBackBtn = backBtn.cloneNode(true);
     backBtn.parentNode.replaceChild(newBackBtn, backBtn);
-    newBackBtn.addEventListener("click", function () {
-      window.location.href = "index.html";
-    });
+    bindGoHome(newBackBtn);
   }
 }
 

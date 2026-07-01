@@ -272,9 +272,7 @@
 
     const homeBtn = document.getElementById("homeBtn");
     if (homeBtn) {
-      homeBtn.addEventListener("click", () => {
-        window.location.href = "index.html";
-      });
+      bindGoHome(homeBtn);
     }
 
     document.querySelectorAll(".speakWordBtn").forEach((btn) => {
@@ -353,11 +351,7 @@
   slowBtn.addEventListener("click", () => playCurrentQuestion(0.5));
   leftArea.addEventListener("click", () => handleAnswer("left"));
   rightArea.addEventListener("click", () => handleAnswer("right"));
-  if (backBtn)
-    backBtn.addEventListener(
-      "click",
-      () => (window.location.href = "index.html"),
-    );
+  if (backBtn) bindGoHome(backBtn);
 
   // ✅ 保存滚动位置（防抖）
   let scrollTimer;

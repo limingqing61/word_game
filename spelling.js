@@ -531,7 +531,7 @@ function showGameComplete() {
     .getElementById("playAgainBtn")
     ?.addEventListener("click", () => initSpellingGame());
   document.getElementById("backToMenuBtn")?.addEventListener("click", () => {
-    window.location.href = "index.html";
+    goHome();
   });
   showConfetti();
 }
@@ -577,7 +577,7 @@ function showConfetti() {
 }
 
 // ========= 事件绑定 =========
-backBtn?.addEventListener("click", () => (window.location.href = "index.html"));
+bindGoHome(backBtn);
 
 // ========= 遮罩初始化 =========
 if (document.readyState === "loading") {

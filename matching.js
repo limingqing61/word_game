@@ -351,7 +351,7 @@ function showGameComplete() {
     .getElementById("playAgainBtn")
     ?.addEventListener("click", () => initMatchingGame());
   document.getElementById("backToMenuBtn")?.addEventListener("click", () => {
-    window.location.href = "index.html";
+    goHome();
   });
   showConfetti();
 }
@@ -436,9 +436,7 @@ function initMatchingGame() {
 }
 
 // 返回按钮
-backBtn?.addEventListener("click", () => {
-  window.location.href = "index.html";
-});
+bindGoHome(backBtn);
 
 // 页面启动
 window.addEventListener("load", () => {
