@@ -302,9 +302,7 @@
 
   // ========== 事件绑定 ==========
   if (backBtn) {
-    backBtn.addEventListener("click", () => {
-      window.location.href = "index.html";
-    });
+    bindGoHome(backBtn);
   }
 
   if (restartBtn) {
@@ -312,9 +310,7 @@
   }
 
   if (backHomeBtn) {
-    backHomeBtn.addEventListener("click", () => {
-      window.location.href = "index.html";
-    });
+    bindGoHome(backHomeBtn);
   }
 
   // ========== 启动遮罩 ==========

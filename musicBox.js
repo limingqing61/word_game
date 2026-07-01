@@ -451,9 +451,7 @@
       }
     });
 
-    backBtn.addEventListener("click", () => {
-      window.location.href = "index.html";
-    });
+    bindGoHome(backBtn);
 
     // 启动遮罩
     const startOverlay = document.getElementById("startOverlay");

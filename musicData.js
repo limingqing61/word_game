@@ -278,8 +278,8 @@ const MUSIC_DATA = {
           lyric: "一只没有尾巴",
           notes: [5, 6, 5, 4, 3, 1],
         },
-        { lyric: "真奇怪", notes: [2, 5, 1] },
-        { lyric: "真奇怪", notes: [2, 5, 1] },
+        { lyric: "真奇怪", notes: [2, -5, 1] },
+        { lyric: "真奇怪", notes: [2, -5, 1] },
       ],
     },
     {

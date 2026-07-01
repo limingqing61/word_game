@@ -652,17 +652,13 @@
 
   // ========== 事件绑定 ==========
   if (backBtn) {
-    backBtn.addEventListener("click", () => {
-      window.location.href = "index.html";
-    });
+    bindGoHome(backBtn);
   }
   if (restartBtn) {
     restartBtn.addEventListener("click", restartGame);
   }
   if (backHomeBtn) {
-    backHomeBtn.addEventListener("click", () => {
-      window.location.href = "index.html";
-    });
+    bindGoHome(backHomeBtn);
   }
 
   // ========== 启动遮罩 ==========
