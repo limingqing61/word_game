@@ -430,8 +430,5 @@
       startGameWithDifficulty();
     });
   });
-  backBtn.addEventListener(
-    "click",
-    () => (window.location.href = "index.html"),
-  );
+  bindGoHome(backBtn);
 })();

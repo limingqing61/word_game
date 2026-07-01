@@ -377,7 +377,7 @@
     function onHome(e) {
       e.preventDefault();
       e.stopPropagation();
-      window.location.href = "index.html";
+      goHome();
     }
 
     if (restartBtn) {
@@ -428,7 +428,7 @@
     function onHome(e) {
       e.preventDefault();
       e.stopPropagation();
-      window.location.href = "index.html";
+      goHome();
     }
 
     if (resumeBtn) {
@@ -625,7 +625,7 @@
       e.preventDefault();
       e.stopPropagation();
       if (gameActive && !isGameOver && !isPaused) saveScore();
-      window.location.href = "index.html";
+      goHome();
     }
     homeBtn.onclick = onHome;
     homeBtn.ontouchstart = onHome;

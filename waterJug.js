@@ -694,7 +694,7 @@
       startNewGame();
     });
     document.getElementById("homeBtn")?.addEventListener("click", () => {
-      window.location.href = "index.html";
+      goHome();
     });
   }
 
@@ -895,9 +895,7 @@
     });
 
     hintBtn.addEventListener("click", showHint);
-    backBtn.addEventListener("click", () => {
-      window.location.href = "index.html";
-    });
+    bindGoHome(backBtn);
 
     window.addEventListener("resize", () => {
       render();

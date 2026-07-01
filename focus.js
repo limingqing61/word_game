@@ -695,8 +695,5 @@
 
   startBtn?.addEventListener("click", initAndStart);
   restartGameBtn?.addEventListener("click", restartGame);
-  backMenuBtn?.addEventListener(
-    "click",
-    () => (window.location.href = "index.html"),
-  );
+  bindGoHome(backMenuBtn);
 })();

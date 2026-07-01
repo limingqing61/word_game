@@ -393,7 +393,7 @@
         resetGame();
       });
     overlay.querySelector(".home-btn")?.addEventListener("click", () => {
-      window.location.href = "index.html";
+      goHome();
     });
   }
 
@@ -430,7 +430,7 @@
 
   document.getElementById("startBtn")?.addEventListener("click", initAndStart);
   document.getElementById("backMenuBtn")?.addEventListener("click", () => {
-    window.location.href = "index.html";
+    goHome();
   });
   document.getElementById("undoBtn")?.addEventListener("click", () => undo());
 })();

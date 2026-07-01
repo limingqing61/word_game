@@ -339,9 +339,7 @@
   });
 
   // 返回菜单
-  backBtn.addEventListener("click", () => {
-    window.location.href = "index.html";
-  });
+  bindGoHome(backBtn);
 
   // 再玩一次按钮
   if (playAgainBtn) {
