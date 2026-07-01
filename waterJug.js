@@ -15,7 +15,6 @@
   const messageEl = document.getElementById("message");
   const resetBtn = document.getElementById("resetBtn");
   const hintBtn = document.getElementById("hintBtn");
-  const newGameBtn = document.getElementById("newGameBtn");
   const backBtn = document.getElementById("backBtn");
   const gameContainer = document.getElementById("gameContainer");
   const startOverlay = document.getElementById("startOverlay");
@@ -896,12 +895,6 @@
     });
 
     hintBtn.addEventListener("click", showHint);
-
-    newGameBtn.addEventListener("click", () => {
-      window._tankTotal = 0;
-      startNewGame();
-    });
-
     backBtn.addEventListener("click", () => {
       window.location.href = "index.html";
     });

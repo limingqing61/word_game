@@ -8,13 +8,13 @@
   ];
 
   let currentLevel = 0;
-  let puzzleData = []; // 二维数组，存储每个格子的数字（null 表示空格）
+  let puzzleData = [];
   let emptyRow = -1,
-    emptyCol = -1; // 空格位置（左下角）
+    emptyCol = -1;
   let timerSeconds = 0;
   let timerInterval = null;
-  let gameActive = true; // 游戏是否进行中（未完成）
-  let gameStarted = false; // 是否开始移动过（计时开始）
+  let gameActive = true;
+  let gameStarted = false;
   let bestRecords = {};
 
   const gridContainer = document.getElementById("puzzleGrid");
@@ -23,7 +23,7 @@
   const gameMessageDiv = document.getElementById("gameMessage");
   const levelBtns = document.querySelectorAll(".level-btn");
   const backBtn = document.getElementById("backToMenuBtn");
-  const resetBtn = document.getElementById("resetGameBtn");
+  const playAgainBtn = document.getElementById("playAgainBtn");
 
   // ========== 工具函数 ==========
   function formatTime(seconds) {
@@ -113,7 +113,6 @@
     }, 1000);
   }
 
-  // 检查是否胜利
   function checkWin() {
     const rows = LEVELS[currentLevel].rows;
     const cols = LEVELS[currentLevel].cols;
@@ -122,7 +121,6 @@
       for (let c = 0; c < cols; c++) {
         const val = puzzleData[r][c];
         if (r === rows - 1 && c === cols - 1) {
-          // 最后一个位置必须是空格
           if (val !== null) return false;
         } else {
           if (val !== expected) return false;
@@ -133,7 +131,6 @@
     return true;
   }
 
-  // 游戏胜利
   function gameWin() {
     if (!gameActive) return;
     gameActive = false;
@@ -141,64 +138,52 @@
     stopTimer();
     const isNewRecord = saveBestRecord(currentLevel, timerSeconds);
     gameMessageDiv.innerHTML = `🎉 恭喜通关！ 🎉<br>用时 ${formatTime(timerSeconds)}${isNewRecord ? "<br>✨ 新纪录！ ✨" : ""}`;
-    // 显示「再玩一次」按钮（用重置按钮代替）
-    resetBtn.textContent = "🎮 再来一局";
+    playAgainBtn.style.display = "inline-block";
   }
 
-  // 交换两个格子
   function swap(r1, c1, r2, c2) {
     const temp = puzzleData[r1][c1];
     puzzleData[r1][c1] = puzzleData[r2][c2];
     puzzleData[r2][c2] = temp;
   }
 
-  // 点击处理
   function onCellClick(row, col) {
     if (!gameActive) return;
-    if (row === emptyRow && col === emptyCol) return; // 点击空格无效
+    if (row === emptyRow && col === emptyCol) return;
 
-    // 检查是否相邻（上下左右）
     const isAdjacent =
       Math.abs(row - emptyRow) + Math.abs(col - emptyCol) === 1;
     if (!isAdjacent) return;
 
-    // 开始计时
     if (!gameStarted) {
       gameStarted = true;
       startTimer();
     }
 
-    // 交换
     swap(row, col, emptyRow, emptyCol);
-    // 更新空格位置
     emptyRow = row;
     emptyCol = col;
 
-    // 重新渲染
     renderGrid();
 
-    // 检查胜利
     if (checkWin()) {
       gameWin();
     }
   }
 
-  // 生成初始拼图（随机打乱，但保证有解）
   function generatePuzzle(rows, cols) {
     const total = rows * cols;
     const numbers = [];
     for (let i = 1; i < total; i++) {
       numbers.push(i);
     }
-    numbers.push(null); // 空格
+    numbers.push(null);
 
-    // 随机打乱
     for (let i = numbers.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
     }
 
-    // 转为二维数组
     const puzzle = [];
     let idx = 0;
     for (let r = 0; r < rows; r++) {
@@ -208,11 +193,9 @@
       }
       puzzle.push(row);
     }
-
     return puzzle;
   }
 
-  // 检查拼图是否有解（通过逆序数 + 空行奇偶性判断）
   function isSolvable(puzzle, rows, cols) {
     const flat = [];
     let emptyRowPos = -1;
@@ -227,7 +210,6 @@
       }
     }
 
-    // 计算逆序数
     let inversions = 0;
     for (let i = 0; i < flat.length; i++) {
       for (let j = i + 1; j < flat.length; j++) {
@@ -236,16 +218,13 @@
     }
 
     if (cols % 2 === 1) {
-      // 奇数列：逆序数为偶数即可解
       return inversions % 2 === 0;
     } else {
-      // 偶数列：逆序数 + 空行距离（从下往上）的奇偶性
       const emptyRowDist = rows - 1 - emptyRowPos;
       return (inversions + emptyRowDist) % 2 === 0;
     }
   }
 
-  // 生成可解的拼图
   function generateSolvablePuzzle(rows, cols) {
     let puzzle;
     let attempts = 0;
@@ -276,7 +255,6 @@
           img.src = `images/${val}.jpeg`;
           img.alt = val;
           cell.appendChild(img);
-          // 图片加载失败时的处理
           img.onerror = () => {
             img.style.display = "none";
             const fallback = document.createElement("span");
@@ -299,7 +277,6 @@
     }
   }
 
-  // 渲染样板区（正确顺序）
   function renderTemplate() {
     const rows = LEVELS[currentLevel].rows;
     const cols = LEVELS[currentLevel].cols;
@@ -334,11 +311,9 @@
     const rows = level.rows;
     const cols = level.cols;
 
-    // 生成可解的拼图
     const puzzle = generateSolvablePuzzle(rows, cols);
     puzzleData = puzzle;
 
-    // 找到空格位置
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
         if (puzzleData[r][c] === null) {
@@ -353,8 +328,7 @@
     renderTemplate();
     gameMessageDiv.innerHTML = "";
     timerDisplaySpan.textContent = "0";
-    // 重置按钮文字恢复
-    resetBtn.textContent = "🔄 重置拼图";
+    playAgainBtn.style.display = "none";
   }
 
   function loadLevel(levelIdx) {
@@ -364,7 +338,6 @@
       else btn.classList.remove("active");
     });
 
-    // 读取最佳记录
     const stored = localStorage.getItem("puzzle_best_records");
     if (stored) {
       try {
@@ -392,16 +365,11 @@
     window.location.href = "index.html";
   });
 
-  resetBtn.addEventListener("click", () => {
-    if (!gameActive && gameMessageDiv.innerHTML.includes("通关")) {
-      // 通关后点重置，直接重设本关
-      resetGame(currentLevel);
-    } else {
-      resetGame(currentLevel);
-    }
+  playAgainBtn.addEventListener("click", () => {
+    resetGame(currentLevel);
   });
 
-  // 音效（复用 crash 的效果）
+  // ========== 音效 ==========
   let sharedAudioCtx = null;
   function getAudioContext() {
     if (!sharedAudioCtx) {
@@ -415,7 +383,6 @@
     if (ctx.state === "suspended") ctx.resume();
   }
 
-  // 播放音效（正确配对时用，但拼图没有配对，留作扩展）
   function playSoundEffect(type) {
     try {
       const ctx = getAudioContext();

@@ -584,7 +584,7 @@ function showGameComplete() {
     initListeningGame();
   });
   document.getElementById("backToMenuBtn")?.addEventListener("click", () => {
-    window.location.href = "index.html";
+    goHome();
   });
   showConfetti();
 }
@@ -669,7 +669,7 @@ hintBtn?.addEventListener("click", () => {
   }
 });
 
-backBtn?.addEventListener("click", () => (window.location.href = "index.html"));
+bindGoHome(backBtn);
 
 // ========= 遮罩初始化 =========
 // DOM 加载完成后初始化遮罩按钮

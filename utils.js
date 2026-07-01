@@ -38,3 +38,27 @@ const SpeechHelper = {
 window.playWordPronunciation = function (word, rate) {
   SpeechHelper.speak(word, rate);
 };
+
+// ========== 公共导航工具 ==========
+
+/**
+ * 返回首页
+ * 所有模块统一调用此函数，便于后续扩展（如：保存状态、弹出确认等）
+ */
+function goHome() {
+  window.location.href = "index.html";
+}
+
+/**
+ * 绑定返回首页按钮
+ * @param {string|Element} selector - 按钮的选择器或DOM元素
+ */
+function bindGoHome(selector) {
+  const btn =
+    typeof selector === "string"
+      ? document.getElementById(selector) || document.querySelector(selector)
+      : selector;
+  if (btn) {
+    btn.addEventListener("click", goHome);
+  }
+}
