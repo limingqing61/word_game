@@ -201,6 +201,7 @@
             display: none;
             text-align: center;
             padding: 30px 20px;
+            margin-top: 15px;
         }
 
         .result-area h2 {
@@ -285,6 +286,33 @@
             font-family: inherit;
         }
 
+        /* ===== 底部返回首页按钮 ===== */
+        .back-home-btn {
+            background: #607d8b;
+            color: white;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: inherit;
+            box-shadow: 0 4px 0 #455a64;
+            transition: 0.05s linear;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-home-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #455a64;
+        }
+
+        .bottom-bar {
+            text-align: center;
+            margin-top: 15px;
+        }
+
         @media (max-width: 550px) {
             .options-container {
                 grid-template-columns: repeat(2, 1fr);
@@ -335,6 +363,13 @@
             <div class="question-hint" id="questionHint">?</div>
             <div class="options-container" id="optionsContainer"></div>
             <div class="feedback" id="feedback"></div>
+        </div>
+
+        <!-- ===== 游戏进行中的返回首页按钮 ===== -->
+        <div class="bottom-bar">
+            <button id="backBtn" class="back-home-btn">
+                <i class="fas fa-home"></i> 返回首页
+            </button>
         </div>
 
         <div class="result-area" id="resultArea">

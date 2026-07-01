@@ -44,9 +44,9 @@
   const rodArea = document.getElementById("rodArea");
   const totalScoreSpan = document.getElementById("totalScore");
   const diffBtns = document.querySelectorAll(".difficulty-btn");
-  const backBtn = document.getElementById("backMenuBtn");
+  const backBtn = document.getElementById("backBtn");
 
-  // ========== 替换后的优质音效（移植自 listening.js）==========
+  // ========== 音效 ==========
   function playSoundEffect(type) {
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -56,30 +56,27 @@
       gain.connect(ctx.destination);
 
       if (type === "correct") {
-        // 正确音效：三连上升音（C5 → E5 → G5），悦耳有成就感
-        osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
-        osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.15); // E5
-        osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.3); // G5
-        osc.type = "sine"; // 正弦波，圆润不刺耳
+        osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+        osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.15);
+        osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.3);
+        osc.type = "sine";
         gain.gain.setValueAtTime(0.3, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
         osc.start();
         osc.stop(ctx.currentTime + 0.5);
       } else {
-        // 错误音效：下滑音（A4 → D4），锯齿波带一点"警示感"但不刺耳
-        osc.frequency.setValueAtTime(440, ctx.currentTime); // A4
+        osc.frequency.setValueAtTime(440, ctx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(
           293.66,
           ctx.currentTime + 0.3,
-        ); // D4
-        osc.type = "sawtooth"; // 锯齿波，比正弦稍微突出但比方波柔和
+        );
+        osc.type = "sawtooth";
         gain.gain.setValueAtTime(0.2, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
         osc.start();
         osc.stop(ctx.currentTime + 0.4);
       }
     } catch (e) {
-      // 降级：静默失败，不影响游戏
       console.warn("Web Audio API not supported", e);
     }
   }
@@ -93,7 +90,6 @@
   }
 
   function getRandomRodImages(count) {
-    // 过滤掉 type 为 time 的单词（月份、星期、四季等图片太相似）
     const allWords = Object.keys(window.wordData).filter((word) => {
       const wordData = window.wordData[word];
       return wordData && wordData.type !== "time";
@@ -426,5 +422,9 @@
       startGameWithDifficulty();
     });
   });
-  bindGoHome(backBtn);
+
+  // ===== 返回首页按钮 =====
+  if (backBtn) {
+    bindGoHome(backBtn);
+  }
 })();

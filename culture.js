@@ -253,6 +253,8 @@
     if (gameArea) gameArea.style.display = "none";
     if (resultArea) resultArea.style.display = "block";
     if (finalScoreSpan) finalScoreSpan.textContent = score;
+
+    if (backBtn) backBtn.style.display = "none";
     if (score === 100) {
       showConfetti();
     }
@@ -297,6 +299,8 @@
   function restartGame() {
     if (resultArea) resultArea.style.display = "none";
     if (gameArea) gameArea.style.display = "block";
+
+    if (backBtn) backBtn.style.display = "";
     startGame();
   }
 

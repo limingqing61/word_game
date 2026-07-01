@@ -600,6 +600,7 @@
     gameArea.style.display = "none";
     resultArea.style.display = "block";
     finalScoreSpan.textContent = score;
+    if (backBtn) backBtn.style.display = "none";
     if (score === MAX_SCORE) {
       showConfetti();
     }
@@ -647,6 +648,7 @@
     if (timerInterval) clearInterval(timerInterval);
     resultArea.style.display = "none";
     gameArea.style.display = "flex";
+    if (backBtn) backBtn.style.display = "";
     startGame();
   }
 

@@ -707,4 +707,8 @@
 
   updateBadgesDisplay();
   document.getElementById("startBtn")?.addEventListener("click", initAndStart);
+  const backBtn = document.getElementById("backBtn");
+  if (backBtn) {
+    bindGoHome(backBtn);
+  }
 })();

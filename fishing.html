@@ -185,14 +185,31 @@
             margin-top: 20px;
         }
 
-        .back-btn {
-            background: #ffaa33;
+        /* ===== 底部返回首页按钮 ===== */
+        .back-home-btn {
+            background: #607d8b;
+            color: white;
             border: none;
             padding: 8px 24px;
             border-radius: 40px;
             font-weight: bold;
-            margin-top: 15px;
             cursor: pointer;
+            font-family: inherit;
+            box-shadow: 0 4px 0 #455a64;
+            transition: 0.05s linear;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-home-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #455a64;
+        }
+
+        .bottom-bar {
+            text-align: center;
+            margin-top: 15px;
         }
 
         @media (max-width: 800px) {
@@ -233,6 +250,13 @@
         <div class="game-grid">
             <div id="rodArea" class="rod-area"></div>
             <div id="pondArea" class="pond-area"></div>
+        </div>
+
+        <!-- ===== 游戏进行中的返回首页按钮 ===== -->
+        <div class="bottom-bar">
+            <button id="backBtn" class="back-home-btn">
+                <i class="fas fa-home"></i> 返回首页
+            </button>
         </div>
 
         <div id="endScreen" style="display: none;"></div>
