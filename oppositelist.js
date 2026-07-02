@@ -1,4 +1,27 @@
 (function () {
+  // ===== 悬浮按钮 =====
+  const floatingBtn = document.getElementById("floatingHomeBtn");
+
+  // ========== 滚动记忆 ==========
+  function restoreScroll() {
+    const saved = localStorage.getItem("oppositelist_scroll");
+    if (saved !== null) {
+      setTimeout(() => {
+        window.scrollTo(0, parseInt(saved));
+      }, 100);
+    }
+  }
+
+  function saveScroll() {
+    let timer;
+    return function () {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        localStorage.setItem("oppositelist_scroll", window.scrollY);
+      }, 200);
+    };
+  }
+
   function buildOppositeList() {
     const container = document.getElementById("oppositeListContainer");
     if (!window.oppositePairs || !window.oppositePairs.length) {
@@ -89,11 +112,23 @@
         if (word) SpeechHelper.speak(word);
       });
     });
+
+    // ===== 恢复滚动位置 =====
+    restoreScroll();
   }
 
-  document.getElementById("backBtn").addEventListener("click", () => {
-    goHome();
-  });
+  // ===== 悬浮按钮返回首页 =====
+  if (floatingBtn) {
+    floatingBtn.addEventListener("click", goHome);
+  }
 
-  buildOppositeList();
+  // ===== 滚动监听 =====
+  window.addEventListener("scroll", saveScroll());
+
+  // ===== 启动 =====
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", buildOppositeList);
+  } else {
+    buildOppositeList();
+  }
 })();

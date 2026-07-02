@@ -36,6 +36,12 @@
             background: #f0e5d2;
             border-radius: 20px;
             flex-shrink: 0;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .opposite-img:hover {
+            transform: scale(1.02);
         }
 
         .word-card-left,
@@ -85,6 +91,48 @@
             transform: translateY(2px);
         }
 
+        /* ===== 悬浮返回首页按钮 ===== */
+        .floating-home-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #607d8b;
+            color: white;
+            border: none;
+            padding: 14px 22px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .floating-home-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .floating-home-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 600px) {
+            .floating-home-btn {
+                bottom: 20px;
+                right: 20px;
+                padding: 12px 18px;
+                font-size: 0.85rem;
+                border-radius: 40px;
+            }
+        }
+
         @media (max-width: 700px) {
             .opposite-img {
                 width: 150px;
@@ -114,11 +162,12 @@
         <div class="opposite-list-container" id="oppositeListContainer">
             <div style="text-align:center; padding:30px;">加载中...</div>
         </div>
-
-        <div style="text-align:center; margin-top:20px;">
-            <button id="backBtn" class="back-btn"><i class="fas fa-arrow-left"></i> Back</button>
-        </div>
     </div>
+
+    <!-- ===== 悬浮返回首页按钮 ===== -->
+    <button class="floating-home-btn" id="floatingHomeBtn">
+        <i class="fas fa-home"></i> 返回首页
+    </button>
 
     <script src="utils.js"></script>
     <script src="oppositeData.js"></script>

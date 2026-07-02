@@ -14,6 +14,29 @@
   const modalCountry = document.getElementById("modalCountry");
   const modalContentText = document.getElementById("modalContentText");
 
+  // ===== 悬浮按钮 =====
+  const floatingBtn = document.getElementById("floatingHomeBtn");
+
+  // ========== 滚动记忆 ==========
+  function restoreScroll() {
+    const saved = localStorage.getItem("cultureList_scroll");
+    if (saved !== null) {
+      setTimeout(() => {
+        window.scrollTo(0, parseInt(saved));
+      }, 100);
+    }
+  }
+
+  function saveScroll() {
+    let timer;
+    return function () {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        localStorage.setItem("cultureList_scroll", window.scrollY);
+      }, 200);
+    };
+  }
+
   // ========== 工具：从 wordData 获取国家中文名 ==========
   function getCountryChinese(englishKey) {
     if (!window.wordData) {
@@ -85,7 +108,6 @@
     return map[countryKey] || "🌍";
   }
 
-  // ========== 渲染列表 ==========
   // ========== 渲染列表 ==========
   function renderList() {
     // ===== 兜底：兼容两种变量写法 =====
@@ -231,6 +253,9 @@
         }
       });
     });
+
+    // ===== 恢复滚动位置 =====
+    restoreScroll();
   }
 
   // ========== 弹窗逻辑 ==========
@@ -278,6 +303,14 @@
       closeModal();
     }
   });
+
+  // ===== 悬浮按钮返回首页 =====
+  if (floatingBtn) {
+    floatingBtn.addEventListener("click", goHome);
+  }
+
+  // ===== 滚动监听 =====
+  window.addEventListener("scroll", saveScroll());
 
   // ========== 启动 ==========
   // 等待 DOM 完全加载后再渲染
