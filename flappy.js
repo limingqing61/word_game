@@ -50,6 +50,7 @@
   // 存储 key
   const SCORE_KEY = "flappy_score";
   const BEST_KEY = "flappy_best";
+  const SAVED_SCORE_KEY = "flappy_saved_score"; // 新增：存档分数
 
   // 三击删除相关
   let clickCount = 0;
@@ -113,11 +114,18 @@
 
   // ========== 分数存储 ==========
   function loadScore() {
-    const savedScore = localStorage.getItem(SCORE_KEY);
+    // 读取存档分数（优先于历史最高）
+    const savedScore = localStorage.getItem(SAVED_SCORE_KEY);
     if (savedScore && !isNaN(parseInt(savedScore))) {
       score = parseInt(savedScore);
     } else {
-      score = 0;
+      // 没有存档时，从历史最高恢复（旧逻辑兼容）
+      const saved = localStorage.getItem(SCORE_KEY);
+      if (saved && !isNaN(parseInt(saved))) {
+        score = parseInt(saved);
+      } else {
+        score = 0;
+      }
     }
     const savedBest = localStorage.getItem(BEST_KEY);
     if (savedBest && !isNaN(parseInt(savedBest))) {
@@ -135,6 +143,8 @@
       localStorage.setItem(BEST_KEY, bestScore);
       updateScoreUI();
     }
+    // 保存存档分数（覆盖，保持最新）
+    localStorage.setItem(SAVED_SCORE_KEY, score);
   }
 
   function updateScoreUI() {
@@ -270,7 +280,13 @@
       lastPipe = pipe;
       pipes.push(pipe);
     }
-    score = 0;
+    // ===== 从存档读取分数，而不是重置为 0 =====
+    const savedScore = localStorage.getItem(SAVED_SCORE_KEY);
+    if (savedScore && !isNaN(parseInt(savedScore))) {
+      score = parseInt(savedScore);
+    } else {
+      score = 0;
+    }
     updateScoreUI();
     gameActive = true;
     isGameOver = false;
@@ -345,6 +361,13 @@
     gameActive = false;
     isGameOver = true;
     if (frameId) cancelAnimationFrame(frameId);
+
+    // ===== 撞柱死亡：如果当前分数 > 存档分，更新存档 =====
+    const savedScore = parseInt(localStorage.getItem(SAVED_SCORE_KEY)) || 0;
+    if (score > savedScore) {
+      localStorage.setItem(SAVED_SCORE_KEY, score);
+    }
+
     saveScore();
     showGameOverOverlay();
   }
@@ -372,6 +395,8 @@
       e.preventDefault();
       e.stopPropagation();
       overlay.remove();
+      // ===== 再飞一次：清除存档，从 0 开始 =====
+      localStorage.removeItem(SAVED_SCORE_KEY);
       startCountdown();
     }
     function onHome(e) {
@@ -402,13 +427,11 @@
     overlay.innerHTML = `
             <h2 style="font-size:2rem; margin-bottom:20px;">⏸️ 暂停中</h2>
             <button id="resumeBtn" style="background:#ffaa33; border:none; padding:12px 30px; font-size:1.2rem; border-radius:40px; font-weight:bold; margin:10px; cursor:pointer; pointer-events:auto;">▶️ 继续</button>
-            <button id="restartBtnPause" style="background:#ffaa33; border:none; padding:12px 30px; font-size:1.2rem; border-radius:40px; font-weight:bold; margin:10px; cursor:pointer; pointer-events:auto;">🔄 重新开始</button>
             <button id="homeBtnPause" style="background:#ffaa33; border:none; padding:12px 30px; font-size:1.2rem; border-radius:40px; font-weight:bold; margin:10px; cursor:pointer; pointer-events:auto;">🏠 返回主页</button>
         `;
     document.querySelector(".game-container").appendChild(overlay);
 
     const resumeBtn = document.getElementById("resumeBtn");
-    const restartBtnPause = document.getElementById("restartBtnPause");
     const homeBtnPause = document.getElementById("homeBtnPause");
 
     function onResume(e) {
@@ -419,25 +442,19 @@
       gameActive = true;
       frameId = requestAnimationFrame(update);
     }
-    function onRestart(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      overlay.remove();
-      startCountdown();
-    }
     function onHome(e) {
       e.preventDefault();
       e.stopPropagation();
+      // ===== 退出前保存存档 =====
+      if (gameActive && !isGameOver && !isPaused) {
+        localStorage.setItem(SAVED_SCORE_KEY, score);
+      }
       goHome();
     }
 
     if (resumeBtn) {
       resumeBtn.onclick = onResume;
       resumeBtn.ontouchstart = onResume;
-    }
-    if (restartBtnPause) {
-      restartBtnPause.onclick = onRestart;
-      restartBtnPause.ontouchstart = onRestart;
     }
     if (homeBtnPause) {
       homeBtnPause.onclick = onHome;
@@ -459,7 +476,7 @@
     isGameOver = false;
     countdownValue = 3;
 
-    resetGame();
+    resetGame(); // 从存档读取分数
 
     removeOverlay("countdownOverlay");
 
@@ -624,14 +641,19 @@
     function onHome(e) {
       e.preventDefault();
       e.stopPropagation();
-      if (gameActive && !isGameOver && !isPaused) saveScore();
+      // ===== 退出前保存存档 =====
+      if (gameActive && !isGameOver && !isPaused) {
+        localStorage.setItem(SAVED_SCORE_KEY, score);
+      }
       goHome();
     }
     homeBtn.onclick = onHome;
     homeBtn.ontouchstart = onHome;
 
     window.addEventListener("beforeunload", () => {
-      if (gameActive && !isGameOver && !isPaused) saveScore();
+      if (gameActive && !isGameOver && !isPaused) {
+        localStorage.setItem(SAVED_SCORE_KEY, score);
+      }
     });
     window.addEventListener("resize", () => {
       resizeCanvas();
