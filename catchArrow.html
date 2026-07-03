@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Catch My Arrow · 一箭穿心</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+
+        body {
+            background: linear-gradient(145deg, #1a472a 0%, #0e2a1a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .game-container {
+            max-width: 900px;
+            width: 100%;
+            max-height: 100vh;
+            background: rgba(30, 50, 30, 0.7);
+            backdrop-filter: blur(5px);
+            border-radius: 60px;
+            padding: 16px 20px 20px;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            text-align: center;
+            color: #FFE484;
+            text-shadow: 4px 4px 0 #B45309;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+        }
+
+        header h1 {
+            font-size: 1.6rem;
+            margin: 0;
+        }
+
+        header p {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            margin: 2px 0 0;
+        }
+
+        .top-panel {
+            display: flex;
+            justify-content: space-between;
+            background: #31220e;
+            padding: 4px 14px;
+            border-radius: 50px;
+            margin-bottom: 10px;
+            color: #ffecb3;
+            font-weight: bold;
+            flex-wrap: wrap;
+            gap: 2px;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .top-panel span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .canvas-wrapper {
+            position: relative;
+            background: #2c4a2e;
+            border-radius: 30px;
+            border: 3px solid #ffaa33;
+            overflow: visible;
+            touch-action: none;
+            flex-shrink: 1;
+            flex-grow: 1;
+            min-height: 0;
+        }
+
+        #gameCanvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-height: 60vh;
+            background: linear-gradient(to bottom, #87CEEB, #E0F6FF);
+            cursor: crosshair;
+            touch-action: none;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            border-radius: 28px;
+        }
+
+        /* ===== 发射按钮：悬浮在 Canvas 右下角 ===== */
+        #fireBtn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            font-size: 2.2rem;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #c62828, 0 8px 25px rgba(0, 0, 0, 0.4);
+            transition: 0.05s linear;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-touch-callout: none !important;
+            -webkit-user-select: none !important;
+            user-select: none !important;
+            touch-action: manipulation !important;
+            -webkit-tap-highlight-color: transparent !important;
+            z-index: 10;
+        }
+
+        #fireBtn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #c62828, 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        #fireBtn:disabled {
+            opacity: 0.4;
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #c62828;
+        }
+
+        #fireBtn i {
+            pointer-events: none;
+        }
+
+        /* 箭数显示 */
+        .arrow-count {
+            color: #ffecb3;
+            font-size: 1rem;
+            font-weight: bold;
+            min-width: 70px;
+            text-align: center;
+        }
+
+        /* 悬浮返回首页按钮 */
+        .floating-home-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #607d8b;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            -webkit-touch-callout: none !important;
+            -webkit-user-select: none !important;
+            user-select: none !important;
+            touch-action: manipulation !important;
+            -webkit-tap-highlight-color: transparent !important;
+        }
+
+        .floating-home-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .floating-home-btn i {
+            pointer-events: none;
+        }
+
+        @media (max-width: 700px) {
+            .game-container {
+                padding: 12px 14px 16px;
+            }
+
+            header h1 {
+                font-size: 1.3rem;
+            }
+
+            .top-panel {
+                font-size: 0.7rem;
+                padding: 3px 10px;
+            }
+
+            #gameCanvas {
+                max-height: 50vh;
+            }
+
+            #fireBtn {
+                width: 65px;
+                height: 65px;
+                font-size: 1.8rem;
+                bottom: 15px;
+                right: 15px;
+            }
+
+            .floating-home-btn {
+                bottom: 15px;
+                left: 15px;
+                padding: 8px 14px;
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 500px) {
+            #gameCanvas {
+                max-height: 40vh;
+            }
+
+            #fireBtn {
+                width: 55px;
+                height: 55px;
+                font-size: 1.5rem;
+                bottom: 12px;
+                right: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="game-container" id="gameContainer">
+        <header>
+            <h1>🏹 一箭穿心</h1>
+            <p>One Arrow, One Flag</p>
+        </header>
+
+        <div class="top-panel">
+            <span>🎯 第 <span id="roundDisplay">1</span>/8 局</span>
+            <span>⭐ 得分: <span id="scoreDisplay">0</span></span>
+            <span id="arrowsDisplay">🏹 箭数: ∞</span>
+        </div>
+
+        <div class="canvas-wrapper">
+            <canvas id="gameCanvas" touch-action="none"></canvas>
+            <button id="fireBtn"><i class="fas fa-bullseye"></i></button>
+        </div>
+    </div>
+
+    <!-- ===== 悬浮返回首页按钮 ===== -->
+    <button class="floating-home-btn" id="floatingHomeBtn">
+        <i class="fas fa-home"></i> 返回首页
+    </button>
+
+    <script src="utils.js"></script>
+    <script src="catchArrow.js"></script>
+</body>
+
+</html>

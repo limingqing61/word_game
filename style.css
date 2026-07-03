@@ -1,4 +1,11 @@
 * {
+    touch-action: manipulation !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+}
+
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
