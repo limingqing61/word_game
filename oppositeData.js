@@ -468,6 +468,42 @@ const oppositePairs = [
     leftPhonetic: "/jʌŋ/",
     rightPhonetic: "/oʊld/",
   },
+  {
+    name: "positive_negative",
+    left: "positive",
+    right: "negative",
+    leftChinese: "赞成的",
+    rightChinese: "反对的",
+    leftPhonetic: "/ˈpɑːzətɪv/",
+    rightPhonetic: "/ˈneɡətɪv/",
+  },
+  {
+    name: "optimistic_pessimistic",
+    left: "optimistic",
+    right: "pessimistic",
+    leftChinese: "乐观的",
+    rightChinese: "悲观的",
+    leftPhonetic: "/ˌɑːptɪˈmɪstɪk/",
+    rightPhonetic: "/ˌpesɪˈmɪstɪk/",
+  },
+  {
+    name: "near_far",
+    left: "near",
+    right: "far",
+    leftChinese: "近的",
+    rightChinese: "远的",
+    leftPhonetic: "/nɪr/",
+    rightPhonetic: "/fɑːr/",
+  },
+  {
+    name: "delicious_disgusting",
+    left: "delicious",
+    right: "disgusting",
+    leftChinese: "美味的",
+    rightChinese: "难吃的",
+    leftPhonetic: "/dɪˈlɪʃəs/",
+    rightPhonetic: "/dɪsˈɡʌstɪŋ/",
+  },
 ];
 
 window.oppositePairs = oppositePairs;
