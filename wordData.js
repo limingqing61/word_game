@@ -5716,7 +5716,7 @@ const wordData = {
     image: "images/pothook.jpeg",
     chinese: "挂钩",
     color: "#8D6E63",
-    phonetic: "/ˈpɒthʊk/",
+    phonetic: "/pɑːtˈhʊk/",
     guide: "POT-hook",
     type: "household",
   },

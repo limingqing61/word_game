@@ -56,34 +56,6 @@
     wrongList: [],
   };
 
-  function playSoundEffect(type) {
-    try {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      if (type === "correct") {
-        osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-        osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.15);
-        osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.3);
-        osc.type = "sine";
-        gain.gain.setValueAtTime(0.3, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.5);
-      } else {
-        osc.frequency.setValueAtTime(400, ctx.currentTime);
-        osc.frequency.setValueAtTime(300, ctx.currentTime + 0.2);
-        osc.type = "sawtooth";
-        gain.gain.setValueAtTime(0.2, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.4);
-      }
-    } catch (e) {}
-  }
-
   function getOppositePairs() {
     if (window.oppositePairs && window.oppositePairs.length) {
       return window.oppositePairs;
@@ -182,7 +154,7 @@
       gameState.streak++;
       feedback.textContent = `✅ 正确！ +${POINTS_PER_CORRECT} 分`;
       feedback.className = "feedback correct";
-      playSoundEffect("correct");
+      playSound("correct");
 
       if (gameState.streak % STREAK_CELEBRATION === 0) {
         showCelebration();
@@ -192,7 +164,7 @@
       gameState.streak = 0;
       feedback.textContent = `❌ 错误！正确答案是 ${q.targetSide.toUpperCase()} 侧`;
       feedback.className = "feedback wrong";
-      playSoundEffect("wrong");
+      playSound("wrong");
       gameState.wrongList.push(q);
     }
 

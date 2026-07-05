@@ -412,7 +412,7 @@ function handleChoiceClick(clicked, correctIndex) {
     clicked.appendChild(icon);
     const details = clicked.querySelector(".word-details");
     if (details) details.style.display = "flex";
-    playSoundEffect("correct");
+    playSound("correct");
   } else {
     gameState.wrongCount++;
     streakCount = 0;
@@ -431,7 +431,7 @@ function handleChoiceClick(clicked, correctIndex) {
       const correctDetails = correctEl.querySelector(".word-details");
       if (correctDetails) correctDetails.style.display = "flex";
     }
-    playSoundEffect("wrong");
+    playSound("wrong");
   }
 
   if (correctEl) {
@@ -454,34 +454,6 @@ function handleChoiceClick(clicked, correctIndex) {
       showQuestion();
     }, advanceDelay);
   }
-}
-
-function playSoundEffect(type) {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    if (type === "correct") {
-      osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-      osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.15);
-      osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.3);
-      osc.type = "sine";
-      gain.gain.setValueAtTime(0.3, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.5);
-    } else {
-      osc.frequency.setValueAtTime(400, ctx.currentTime);
-      osc.frequency.setValueAtTime(300, ctx.currentTime + 0.2);
-      osc.type = "sawtooth";
-      gain.gain.setValueAtTime(0.2, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.4);
-    }
-  } catch (e) {}
 }
 
 // ========= 游戏结束 & 错题本（含连错次数） =========

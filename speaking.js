@@ -110,7 +110,7 @@ function handleCorrect() {
   statusEl.innerHTML = `✅ 正确！ +${POINTS_PER_CORRECT} 分`;
 
   // 播放正确音效
-  playSoundEffect("correct");
+  playSound("correct");
 
   setTimeout(() => {
     gameState.currentQuestionIndex++;
@@ -134,7 +134,7 @@ function handleCorrect() {
 function handleWrong() {
   gameState.wrong++;
   updateUI();
-  playSoundEffect("wrong");
+  playSound("wrong");
 
   statusEl.className = "status idle";
   statusEl.innerHTML = `⏩ 已跳过，进入下一题`;
@@ -181,37 +181,6 @@ function getAudioContext() {
 function resumeAudioContext() {
   const ctx = getAudioContext();
   if (ctx.state === "suspended") ctx.resume();
-}
-
-function playSoundEffect(type) {
-  try {
-    const ctx = getAudioContext();
-    resumeAudioContext();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    if (type === "correct") {
-      osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-      osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.15);
-      osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.3);
-      osc.type = "sine";
-      gain.gain.setValueAtTime(0.3, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.5);
-    } else if (type === "wrong") {
-      osc.frequency.setValueAtTime(400, ctx.currentTime);
-      osc.frequency.setValueAtTime(300, ctx.currentTime + 0.2);
-      osc.type = "sawtooth";
-      gain.gain.setValueAtTime(0.2, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.4);
-    }
-  } catch (e) {
-    console.warn("Audio error", e);
-  }
 }
 
 // 游戏结束

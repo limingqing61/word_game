@@ -97,7 +97,7 @@
     updateSlotsUI();
     updateStacksUI();
 
-    playSoundEffect("undo");
+    playSound("action");
   }
 
   function getAudioContext() {
@@ -110,45 +110,6 @@
   function resumeAudioContext() {
     const ctx = getAudioContext();
     if (ctx.state === "suspended") ctx.resume();
-  }
-
-  function playSoundEffect(type) {
-    try {
-      const ctx = getAudioContext();
-      resumeAudioContext();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      if (type === "correct") {
-        osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-        osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.15);
-        osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.3);
-        osc.type = "sine";
-        gain.gain.setValueAtTime(0.3, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.5);
-      } else if (type === "wrong") {
-        osc.frequency.setValueAtTime(400, ctx.currentTime);
-        osc.frequency.setValueAtTime(300, ctx.currentTime + 0.2);
-        osc.type = "sawtooth";
-        gain.gain.setValueAtTime(0.2, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.4);
-      } else if (type === "undo") {
-        osc.frequency.setValueAtTime(600, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.15);
-        osc.type = "sine";
-        gain.gain.setValueAtTime(0.2, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.2);
-      }
-    } catch (e) {
-      console.warn("Audio error", e);
-    }
   }
 
   function shuffleArray(arr) {
@@ -231,7 +192,7 @@
         }
         gameState.slots = newSlots;
         eliminated = true;
-        playSoundEffect("correct");
+        playSound("correct");
         break;
       }
     }
@@ -245,7 +206,7 @@
     if (!gameState.gameActive || gameState.gameWin) return false;
     if (gameState.slots.length >= gameState.slotMax) {
       gameState.gameActive = false;
-      playSoundEffect("wrong");
+      playSound("wrong");
       showGameResult(false);
       return false;
     }
@@ -254,7 +215,7 @@
     checkAndEliminate();
     if (gameState.slots.length >= gameState.slotMax && !gameState.gameWin) {
       gameState.gameActive = false;
-      playSoundEffect("wrong");
+      playSound("wrong");
       showGameResult(false);
       return false;
     }
@@ -283,7 +244,7 @@
     if (remaining === 0 && gameState.gameActive && !gameState.gameWin) {
       gameState.gameActive = false;
       gameState.gameWin = true;
-      playSoundEffect("correct");
+      playSound("correct");
       incrementSuccessCount();
       showGameResult(true);
       showFairyDance();

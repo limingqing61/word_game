@@ -46,41 +46,6 @@
   const diffBtns = document.querySelectorAll(".difficulty-btn");
   const backBtn = document.getElementById("backBtn");
 
-  // ========== 音效 ==========
-  function playSoundEffect(type) {
-    try {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      if (type === "correct") {
-        osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-        osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.15);
-        osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.3);
-        osc.type = "sine";
-        gain.gain.setValueAtTime(0.3, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.5);
-      } else {
-        osc.frequency.setValueAtTime(440, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(
-          293.66,
-          ctx.currentTime + 0.3,
-        );
-        osc.type = "sawtooth";
-        gain.gain.setValueAtTime(0.2, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.4);
-      }
-    } catch (e) {
-      console.warn("Web Audio API not supported", e);
-    }
-  }
-
   function shuffleArray(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -177,7 +142,7 @@
     if (!roundActive || isGameEnded) return;
     const matchedFish = fishList.find((f) => f.wordKey === wordKey);
     if (matchedFish) {
-      playSoundEffect("correct");
+      playSound("correct");
       const points = ROUNDS[currentRound].points;
       totalScore += points;
       totalScoreSpan.innerText = totalScore;
@@ -192,7 +157,7 @@
       activeFishCount--;
       checkRoundComplete();
     } else {
-      playSoundEffect("wrong");
+      playSound("wrong");
       totalScore -= 1;
       totalScoreSpan.innerText = totalScore;
       const rect = event.target.closest(".rod-card")?.getBoundingClientRect();

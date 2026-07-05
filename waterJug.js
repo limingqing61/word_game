@@ -46,56 +46,6 @@
     if (ctx.state === "suspended") ctx.resume();
   }
 
-  function playSoundEffect(type) {
-    try {
-      const ctx = getAudioContext();
-      resumeAudioContext();
-      if (type === "pour") {
-        const bufferSize = ctx.sampleRate * 0.15;
-        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-          data[i] = (Math.random() * 2 - 1) * 0.12;
-        }
-        const noise = ctx.createBufferSource();
-        noise.buffer = buffer;
-        const gainNode = ctx.createGain();
-        gainNode.gain.setValueAtTime(0.2, ctx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(
-          0.001,
-          ctx.currentTime + 0.3,
-        );
-        noise.connect(gainNode);
-        gainNode.connect(ctx.destination);
-        noise.start();
-        noise.stop(ctx.currentTime + 0.3);
-        return;
-      }
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      if (type === "correct") {
-        osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-        osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.15);
-        osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.3);
-        osc.type = "sine";
-        gain.gain.setValueAtTime(0.3, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.5);
-      } else if (type === "wrong") {
-        osc.frequency.setValueAtTime(400, ctx.currentTime);
-        osc.frequency.setValueAtTime(300, ctx.currentTime + 0.2);
-        osc.type = "sawtooth";
-        gain.gain.setValueAtTime(0.2, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.4);
-      }
-    } catch (e) {}
-  }
-
   // ========== 工具 ==========
   function gcd(a, b) {
     a = Math.abs(a);
@@ -159,7 +109,6 @@
       T > 20
     );
 
-    // 兜底方案
     if (T === undefined || attempts > 300) {
       A = 3;
       B = 5;
@@ -177,6 +126,7 @@
     isAnimating = false;
     animData = null;
     gameActive = true;
+    window._tankTotal = 0;
     updateUI();
     render();
     messageEl.textContent = "💡 点击水源（河流或桶），再点击目的（桶或大缸）";
@@ -187,8 +137,8 @@
     jugA.max = puzzle.A;
     jugB.max = puzzle.B;
     target = puzzle.T;
-    window._tankTotal = 0; // 先重置大缸水量
-    resetGame(); // 重置桶和界面
+    window._tankTotal = 0;
+    resetGame();
     jugASizeEl.textContent = jugA.max;
     jugBSizeEl.textContent = jugB.max;
     targetDisplay.textContent = target;
@@ -224,7 +174,7 @@
         const amount = jugA.current;
         jugA.current = 0;
         steps++;
-        playSoundEffect("pour");
+        playSound("action");
         updateUI();
         render();
         messageEl.textContent = `✅ 倒掉桶A中的 ${amount}L 水`;
@@ -237,7 +187,7 @@
         const amount = jugB.current;
         jugB.current = 0;
         steps++;
-        playSoundEffect("pour");
+        playSound("action");
         updateUI();
         render();
         messageEl.textContent = `✅ 倒掉桶B中的 ${amount}L 水`;
@@ -261,29 +211,49 @@
     } else if (targetJug === "jugB") {
       targetObj = jugB;
     } else if (targetJug === "tank") {
+      // ===== 桶 → 大缸：全倒，有多少倒多少 =====
       if (sourceObj.current === 0 || sourceObj.current === Infinity) {
         messageEl.textContent = "⚠️ 水源是空的！";
         return false;
       }
+
       const amount = sourceObj.current;
+      const newTotal = (window._tankTotal || 0) + amount;
+
+      // 无论结果如何，桶都清空
       sourceObj.current = 0;
+      window._tankTotal = newTotal;
       steps++;
-      playSoundEffect("pour");
+      playSound("action");
       updateUI();
-      window._tankTotal = (window._tankTotal || 0) + amount;
       render();
-      if (window._tankTotal >= target) {
+
+      if (newTotal === target) {
+        // 正好！胜利！
         gameActive = false;
-        playSoundEffect("correct");
+        playSound("correct");
         setTimeout(showVictory, 400);
-      } else {
-        messageEl.textContent = `✅ 倒入大缸 ${amount}L，还需 ${target - window._tankTotal}L`;
+        messageEl.textContent = `🎉 完美！刚好 ${target}L！`;
+        return true;
       }
+
+      if (newTotal > target) {
+        // 超过目标！失败！
+        gameActive = false;
+        playSound("wrong");
+        setTimeout(showGameOver, 400);
+        messageEl.textContent = `❌ 大缸水量 ${newTotal}L，超过目标 ${target}L！`;
+        return true;
+      }
+
+      // 不足，继续
+      messageEl.textContent = `✅ 倒入大缸 ${amount}L，当前 ${window._tankTotal}L，还需 ${target - window._tankTotal}L`;
       return true;
     } else {
       return false;
     }
 
+    // 桶对桶的逻辑（原有）
     if (sourceObj.current === 0) {
       messageEl.textContent = "⚠️ 水源是空的！";
       return false;
@@ -301,10 +271,10 @@
     return true;
   }
 
-  // ========== 倒水动画 ==========
+  // ========== 倒水动画（桶对桶 / 桶对河流） ==========
   function startPourAnimation(source, target, amount) {
     isAnimating = true;
-    playSoundEffect("pour");
+    playSound("action");
 
     let sourceObj = source === "river" ? null : source === "jugA" ? jugA : jugB;
     let targetObj = target === "jugA" ? jugA : target === "jugB" ? jugB : null;
@@ -366,8 +336,8 @@
       tgtX = jugBX + jugW / 2;
       tgtY = jugBY - h * 0.15;
     } else {
-      tgtX = tankX + tankW / 2;
-      tgtY = tankY + tankH * 0.15;
+      tgtX = riverX + riverW / 2;
+      tgtY = riverY + riverH / 2;
     }
 
     animData = {
@@ -418,27 +388,12 @@
         animData.sourceObj.current = animData.sourceStart - animData.amount;
       if (animData.targetObj)
         animData.targetObj.current = animData.targetStart + animData.amount;
-      const wasTankPour = animData.target === "tank";
-      const tankAmount = wasTankPour ? animData.amount : 0;
       animData = null;
       isAnimating = false;
       steps++;
       updateUI();
-
-      if (wasTankPour) {
-        window._tankTotal = (window._tankTotal || 0) + tankAmount;
-        if (window._tankTotal >= target) {
-          gameActive = false;
-          playSoundEffect("correct");
-          setTimeout(showVictory, 300);
-          render();
-          return;
-        }
-        messageEl.textContent = `✅ 已倒入大缸 ${window._tankTotal}L，还需 ${target - window._tankTotal}L`;
-      } else {
-        messageEl.textContent = `✅ 已倒水 ${tankAmount || animData?.amount || 0}L`;
-      }
       render();
+      messageEl.textContent = `✅ 已倒水 ${animData?.amount || 0}L`;
     }
   }
 
@@ -465,7 +420,7 @@
     ctx.fillStyle = "#6B8E23";
     ctx.fillRect(0, H - 20, W, 20);
 
-    // 河流（左侧）
+    // 河流
     const riverX = 30,
       riverY = 60,
       riverW = 80,
@@ -488,7 +443,7 @@
     ctx.textAlign = "center";
     ctx.fillText("🏞️ 河流", riverX + riverW / 2, riverY + riverH + 30);
 
-    // 大缸（右侧）
+    // 大缸
     const tankX = 660,
       tankY = 40,
       tankW = 80,
@@ -497,19 +452,35 @@
     ctx.fillRect(tankX - 4, tankY - 4, tankW + 8, tankH + 8);
     ctx.fillStyle = "#D2B48C";
     ctx.fillRect(tankX, tankY, tankW, tankH);
-    const tankWaterH = Math.min(
-      tankH,
-      ((window._tankTotal || 0) / target) * tankH * 0.8,
-    );
+    const tankCurrent = Math.min(window._tankTotal || 0, target);
+    const tankWaterH = (tankCurrent / target) * tankH * 0.8;
     ctx.fillStyle = "rgba(33,150,243,0.4)";
     ctx.fillRect(tankX + 5, tankY + tankH - tankWaterH, tankW - 10, tankWaterH);
+    // 目标线
+    const targetWaterH = tankH * 0.8;
+    ctx.strokeStyle = "#FFD700";
+    ctx.lineWidth = 2;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(tankX + 2, tankY + tankH - targetWaterH);
+    ctx.lineTo(tankX + tankW - 2, tankY + tankH - targetWaterH);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = "#FFD700";
+    ctx.font = "10px Arial";
+    ctx.textAlign = "left";
+    ctx.fillText(
+      "🎯 目标线",
+      tankX + tankW + 4,
+      tankY + tankH - targetWaterH + 3,
+    );
+
     ctx.fillStyle = "#fff";
     ctx.font = "bold 15px Arial";
     ctx.textAlign = "center";
     ctx.fillText("🏺 大缸", tankX + tankW / 2, tankY + tankH + 30);
     ctx.font = "13px Arial";
     ctx.fillText(`目标 ${target}L`, tankX + tankW / 2, tankY + tankH + 50);
-    // 新增：显示已收集水量
     ctx.font = "bold 14px Arial";
     ctx.fillStyle = "#4fc3f7";
     ctx.fillText(
@@ -550,7 +521,6 @@
       selectedSource === "jugB",
     );
 
-    // 选中河流高亮
     if (selectedSource === "river") {
       ctx.fillStyle = "rgba(255,215,0,0.15)";
       ctx.fillRect(riverX, riverY, riverW, riverH);
@@ -563,7 +533,6 @@
       ctx.fillText("⬆️ 水源 (点击桶取水)", riverX + riverW / 2, riverY - 15);
     }
 
-    // 水流粒子
     if (flowProgress >= 0 && flowProgress <= 1 && animData) {
       const srcX = animData.srcX;
       const srcY = animData.srcY;
@@ -683,8 +652,10 @@
             <div class="result-card">
                 <h2>🎉 成功！ 🎉</h2>
                 <p style="font-size:1.2rem;">用 ${steps} 步量出了 ${target}L</p>
-                <button id="nextLevelBtn">🎮 下一关</button>
-                <button id="homeBtn">🏠 返回主页</button>
+                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
+                    <button id="nextLevelBtn" style="background: #4CAF50; border: none; padding: 12px 30px; border-radius: 40px; font-size: 1.1rem; font-weight: bold; cursor: pointer; color: white;">🎮 下一关</button>
+                    <button id="homeBtn" style="background: #607d8b; border: none; padding: 12px 30px; border-radius: 40px; font-size: 1.1rem; font-weight: bold; cursor: pointer; color: white;">🏠 返回主页</button>
+                </div>
             </div>
         `;
     document.body.appendChild(overlay);
@@ -694,6 +665,33 @@
       startNewGame();
     });
     document.getElementById("homeBtn")?.addEventListener("click", () => {
+      overlay.remove();
+      goHome();
+    });
+  }
+
+  // ========== 失败 ==========
+  function showGameOver() {
+    const overlay = document.createElement("div");
+    overlay.className = "result-overlay";
+    overlay.innerHTML = `
+            <div class="result-card" style="border-color: #f44336;">
+                <h2 style="color: #f44336;">💔 水量超了！</h2>
+                <p style="font-size:1.2rem;">大缸已有 ${window._tankTotal}L，目标 ${target}L</p>
+                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
+                    <button id="retryBtn" style="background: #4CAF50; border: none; padding: 12px 30px; border-radius: 40px; font-size: 1.1rem; font-weight: bold; cursor: pointer; color: white;">🎮 再来一局</button>
+                    <button id="homeBtn" style="background: #607d8b; border: none; padding: 12px 30px; border-radius: 40px; font-size: 1.1rem; font-weight: bold; cursor: pointer; color: white;">🏠 返回主页</button>
+                </div>
+            </div>
+        `;
+    document.body.appendChild(overlay);
+
+    document.getElementById("retryBtn")?.addEventListener("click", () => {
+      overlay.remove();
+      startNewGame();
+    });
+    document.getElementById("homeBtn")?.addEventListener("click", () => {
+      overlay.remove();
       goHome();
     });
   }
@@ -809,7 +807,6 @@
         return;
       }
       if (selectedSource === "jugA" || selectedSource === "jugB") {
-        // 把桶里的水倒回河流
         const jug = selectedSource === "jugA" ? jugA : jugB;
         const label = selectedSource === "jugA" ? "A" : "B";
         if (jug.current === 0) {
@@ -819,14 +816,13 @@
         const amount = jug.current;
         jug.current = 0;
         steps++;
-        playSoundEffect("pour");
+        playSound("action");
         updateUI();
         render();
         messageEl.textContent = `✅ 桶${label}已倒空 (${amount}L 水倒回河流)`;
         selectedSource = null;
         return;
       }
-      // 选中河流作为水源
       selectedSource = "river";
       render();
       messageEl.textContent = "💡 河流已选中，点击一个空桶装满水！";
@@ -852,7 +848,7 @@
         }
         jug.current = jug.max;
         steps++;
-        playSoundEffect("pour");
+        playSound("action");
         updateUI();
         render();
         messageEl.textContent = `✅ 桶${label}已装满 (${jug.max}L)`;

@@ -119,39 +119,6 @@
     return animal ? animal.score : 0;
   }
 
-  function playSoundEffect(type) {
-    try {
-      const ctx = getAudioContext();
-      resumeAudioContext();
-
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      if (type === "correct") {
-        osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-        osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.15);
-        osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.3);
-        osc.type = "sine";
-        gain.gain.setValueAtTime(0.3, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.5);
-      } else if (type === "wrong") {
-        osc.frequency.setValueAtTime(400, ctx.currentTime);
-        osc.frequency.setValueAtTime(300, ctx.currentTime + 0.2);
-        osc.type = "sawtooth";
-        gain.gain.setValueAtTime(0.2, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.4);
-      }
-    } catch (e) {
-      console.warn("Audio error:", e);
-    }
-  }
-
   function showFloatScore(x, y, score, isPlayer) {
     const div = document.createElement("div");
     div.className = "float-score";
@@ -529,7 +496,7 @@
           `+${gainedScore}`,
           true,
         );
-        playSoundEffect("correct");
+        playSound("correct");
         const computerCardRect = computerClone.getBoundingClientRect();
         await new Promise((resolve) => {
           showExplosion(
@@ -552,7 +519,7 @@
           `+${gainedScore}`,
           false,
         );
-        playSoundEffect("wrong");
+        playSound("wrong");
         const playerCardRect = playerClone.getBoundingClientRect();
         await new Promise((resolve) => {
           showExplosion(
@@ -633,11 +600,11 @@
       if (this.playerScore > this.computerScore) {
         resultText = "Victory!";
         resultEmoji = "🏆";
-        playSoundEffect("correct");
+        playSound("correct");
       } else if (this.playerScore < this.computerScore) {
         resultText = "Defeat...";
         resultEmoji = "😭";
-        playSoundEffect("wrong");
+        playSound("wrong");
       } else {
         resultText = "Draw!";
         resultEmoji = "🤝";

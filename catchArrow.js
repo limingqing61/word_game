@@ -82,67 +82,6 @@
     if (ctx.state === "suspended") ctx.resume();
   }
 
-  function playSoundEffect(type) {
-    try {
-      const ctx = getAudioContext();
-      resumeAudioContext();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      if (type === "correct") {
-        osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-        osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.15);
-        osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.3);
-        osc.type = "sine";
-        gain.gain.setValueAtTime(0.3, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.5);
-      } else if (type === "wrong") {
-        osc.frequency.setValueAtTime(400, ctx.currentTime);
-        osc.frequency.setValueAtTime(300, ctx.currentTime + 0.2);
-        osc.type = "sawtooth";
-        gain.gain.setValueAtTime(0.2, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.4);
-      } else if (type === "countdown") {
-        osc.frequency.setValueAtTime(800, ctx.currentTime);
-        osc.type = "sine";
-        gain.gain.setValueAtTime(0.2, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.15);
-      } else if (type === "go") {
-        osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-        osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1);
-        osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2);
-        osc.type = "sine";
-        gain.gain.setValueAtTime(0.3, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.35);
-      } else if (type === "explosion") {
-        const bufferSize = ctx.sampleRate * 0.3;
-        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-        const data = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-          data[i] = (Math.random() * 2 - 1) * Math.exp((-i / bufferSize) * 3);
-        }
-        const noise = ctx.createBufferSource();
-        noise.buffer = buffer;
-        const gainNode = ctx.createGain();
-        gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-        noise.connect(gainNode);
-        gainNode.connect(ctx.destination);
-        noise.start();
-        noise.stop(ctx.currentTime + 0.3);
-      }
-    } catch (e) {}
-  }
-
   // ========== Canvas 初始化 ==========
   function resizeCanvas() {
     const wrapper = canvas.parentElement;
@@ -485,7 +424,7 @@
         if (dist < hitRadius) {
           arrow.hit = true;
           if (!game.roundFinished) {
-            playSoundEffect("explosion");
+            playSound("action");
             triggerExplosion(enemyCenterX, enemyCenterY);
             endRound(true);
           }
@@ -524,17 +463,12 @@
     }
 
     setButtonsEnabled(false);
-    playSoundEffect("countdown");
 
     game.countdownTimer = setInterval(() => {
       game.countdown--;
-      if (game.countdown > 0) {
-        playSoundEffect("countdown");
-      }
       if (game.countdown <= 0) {
         clearInterval(game.countdownTimer);
         game.countdownTimer = null;
-        playSoundEffect("go");
         game.status = "playing";
         setButtonsEnabled(true);
         game.enemyY = 1.0;
@@ -560,9 +494,9 @@
       const config = ROUND_CONFIGS[game.round];
       game.score += config.score;
       scoreDisplay.textContent = game.score;
-      playSoundEffect("correct");
+      playSound("correct");
     } else {
-      playSoundEffect("wrong");
+      playSound("wrong");
     }
 
     render();
@@ -755,8 +689,6 @@
       hit: false,
     };
     game.arrows.push(arrow);
-
-    playSoundEffect("countdown");
   }
 
   // ========== 玩家移动（拖拽） ==========

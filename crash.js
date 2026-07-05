@@ -162,7 +162,7 @@
       (rectB.left + rectB.right) / 2,
       (rectB.top + rectB.bottom) / 2,
     );
-    playSoundEffect("correct");
+    playSound("correct");
     // 关键：检查是否全部匹配
     checkAllMatched();
   }
@@ -348,44 +348,6 @@
     });
     // 初始状态隐藏
     playAgainBtn.style.display = "none";
-  }
-
-  // ========== 替换后的优质音效（移植自 listening.js）==========
-  function playSoundEffect(type) {
-    try {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      if (type === "correct") {
-        // 正确音效：三连上升音（C5 → E5 → G5），悦耳有成就感
-        osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
-        osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.15); // E5
-        osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.3); // G5
-        osc.type = "sine"; // 正弦波，圆润不刺耳
-        gain.gain.setValueAtTime(0.3, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.5);
-      } else {
-        // 错误音效：下滑音（A4 → D4），锯齿波带一点"警示感"但不刺耳
-        osc.frequency.setValueAtTime(440, ctx.currentTime); // A4
-        osc.frequency.exponentialRampToValueAtTime(
-          293.66,
-          ctx.currentTime + 0.3,
-        ); // D4
-        osc.type = "sawtooth"; // 锯齿波，比正弦稍微突出但比方波柔和
-        gain.gain.setValueAtTime(0.2, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.4);
-      }
-    } catch (e) {
-      // 降级：静默失败，不影响游戏
-      console.warn("Web Audio API not supported", e);
-    }
   }
 
   bindTripleClickReset();

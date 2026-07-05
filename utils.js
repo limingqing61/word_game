@@ -62,3 +62,74 @@ function bindGoHome(selector) {
     btn.addEventListener("click", goHome);
   }
 }
+
+// ========== 公共音效 ==========
+let _audioCtx = null;
+
+function _getAudioCtx() {
+  if (!_audioCtx) {
+    _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  return _audioCtx;
+}
+
+function _resumeAudio() {
+  const ctx = _getAudioCtx();
+  if (ctx.state === "suspended") ctx.resume();
+}
+
+/**
+ * 播放音效
+ * @param {string} type - 'correct' | 'wrong'
+ * @param {number} volume - 音量 0-1，默认 0.3
+ */
+function playSound(type, volume = 0.3) {
+  try {
+    const ctx = _getAudioCtx();
+    _resumeAudio();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    gain.gain.setValueAtTime(volume, ctx.currentTime);
+
+    switch (type) {
+      case "correct":
+        osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+        osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.15);
+        osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.3);
+        osc.type = "sine";
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.5);
+        break;
+
+      case "wrong":
+        osc.frequency.setValueAtTime(400, ctx.currentTime);
+        osc.frequency.setValueAtTime(300, ctx.currentTime + 0.2);
+        osc.type = "sawtooth";
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.4);
+        break;
+
+      case "action":
+        // 短促清脆的"滴"声，代表操作反馈
+        osc.frequency.setValueAtTime(600, ctx.currentTime);
+        osc.type = "sine";
+        gain.gain.setValueAtTime(volume * 0.6, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.12);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.12);
+        break;
+
+      default:
+        break;
+    }
+  } catch (e) {
+    // 静默失败，不影响游戏
+  }
+}
+
+// 挂载到 window 供全局使用
+window.playSound = playSound;

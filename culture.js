@@ -42,37 +42,6 @@
     if (ctx.state === "suspended") ctx.resume();
   }
 
-  function playSoundEffect(type) {
-    try {
-      const ctx = getAudioContext();
-      resumeAudioContext();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      if (type === "correct") {
-        osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-        osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.15);
-        osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.3);
-        osc.type = "sine";
-        gain.gain.setValueAtTime(0.3, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.5);
-      } else {
-        osc.frequency.setValueAtTime(400, ctx.currentTime);
-        osc.frequency.setValueAtTime(300, ctx.currentTime + 0.2);
-        osc.type = "sawtooth";
-        gain.gain.setValueAtTime(0.2, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.4);
-      }
-    } catch (e) {
-      console.warn("Audio error", e);
-    }
-  }
-
   // ========== 工具函数 ==========
   function shuffleArray(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
@@ -220,7 +189,7 @@
       });
       score += POINTS_PER_CORRECT;
       updateScore();
-      playSoundEffect("correct");
+      playSound("correct");
     } else {
       document.querySelectorAll(".option-btn").forEach((b) => {
         if (b.dataset.country === q.correctCountry) {
@@ -240,7 +209,7 @@
           b.appendChild(label);
         }
       });
-      playSoundEffect("wrong");
+      playSound("wrong");
     }
 
     setTimeout(() => {
@@ -285,7 +254,7 @@
       );
       anim.onfinish = () => conf.remove();
     }
-    playSoundEffect("correct");
+    playSound("correct");
   }
 
   function startGame() {
