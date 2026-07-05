@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>打地鼠 · Don't Appear</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #1a472a 0%, #0e2a1a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .game-container {
+            max-width: 820px;
+            width: 100%;
+            background: rgba(30, 50, 30, 0.7);
+            backdrop-filter: blur(5px);
+            border-radius: 60px;
+            padding: 20px;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        header {
+            text-align: center;
+            color: #FFE484;
+            text-shadow: 4px 4px 0 #B45309;
+            margin-bottom: 8px;
+        }
+
+        header h1 {
+            font-size: 1.6rem;
+            margin: 0;
+        }
+
+        header p {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            margin: 2px 0 0;
+        }
+
+        .score-panel {
+            display: flex;
+            justify-content: space-between;
+            background: #31220e;
+            padding: 6px 16px;
+            border-radius: 50px;
+            margin-bottom: 12px;
+            color: #ffecb3;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        .grid-wrapper {
+            background: #2c4a2e;
+            border-radius: 30px;
+            padding: 12px;
+            border: 3px solid #ffaa33;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 8px;
+            aspect-ratio: 8 / 7;
+        }
+
+        .cell {
+            background: #5a3a1a;
+            border-radius: 16px;
+            border: 3px solid #c99e3e;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3), 0 4px 0 #3a2510;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.05s linear;
+            aspect-ratio: 1 / 1;
+            min-height: 0;
+        }
+
+        .cell:active {
+            transform: translateY(2px);
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3), 0 2px 0 #3a2510;
+        }
+
+        .cell .back {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffd966;
+            opacity: 0.6;
+        }
+
+        .cell img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+            pointer-events: none;
+        }
+
+        /* 启动遮罩 */
+        #startOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a472a 0%, #0e2a1a 100%);
+            z-index: 100000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+        }
+
+        #startOverlay h1 {
+            font-size: 2.5rem;
+            text-shadow: 4px 4px 0 #b45309;
+            margin-bottom: 10px;
+        }
+
+        #startOverlay .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            margin-bottom: 25px;
+        }
+
+        .rule-box {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 30px;
+            padding: 16px 24px;
+            margin-bottom: 25px;
+            max-width: 340px;
+            width: 90%;
+        }
+
+        .rule-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            padding: 4px 0;
+            font-size: 1.1rem;
+        }
+
+        .rule-row .animal-icon {
+            font-size: 1.8rem;
+            width: 40px;
+            text-align: center;
+        }
+
+        .rule-row .score-badge {
+            background: #ffaa33;
+            color: #31220e;
+            padding: 0 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .rule-divider {
+            border: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 6px 0;
+        }
+
+        .rule-total {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-top: 6px;
+        }
+
+        #startBtn {
+            background: #ffaa33;
+            border: none;
+            padding: 14px 44px;
+            font-size: 1.4rem;
+            border-radius: 60px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #b97f44;
+            font-family: inherit;
+            transition: 0.05s linear;
+        }
+
+        #startBtn:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #b97f44;
+        }
+
+        /* 爆炸效果 */
+        .explosion-effect {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            pointer-events: none;
+            z-index: 1000;
+            animation: boom 0.4s ease-out forwards;
+        }
+
+        @keyframes boom {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(0.3);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(2.2);
+            }
+        }
+
+        /* 游戏结束浮层 */
+        .result-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 20000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #fff9ef, #ffe0b3);
+            border-radius: 60px;
+            padding: 35px 45px;
+            text-align: center;
+            max-width: 380px;
+            width: 85%;
+            border: 4px solid #ffaa33;
+        }
+
+        .result-card h2 {
+            font-size: 2.2rem;
+            margin: 0 0 10px;
+            color: #31220e;
+        }
+
+        .result-card .final-score {
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin: 10px 0;
+        }
+
+        .result-card .final-label {
+            font-size: 1.1rem;
+            color: #5a4a2e;
+        }
+
+        .result-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .result-buttons button {
+            border: none;
+            padding: 10px 28px;
+            font-size: 1rem;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: inherit;
+            box-shadow: 0 4px 0 #b97f44;
+            transition: 0.05s linear;
+        }
+
+        .result-buttons button:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #b97f44;
+        }
+
+        .result-buttons .btn-restart {
+            background: #4caf50;
+            color: white;
+            box-shadow: 0 4px 0 #2e7d32;
+        }
+
+        .result-buttons .btn-home {
+            background: #607d8b;
+            color: white;
+            box-shadow: 0 4px 0 #455a64;
+        }
+
+        /* 悬浮返回首页按钮 */
+        .floating-home-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #607d8b;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .floating-home-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 600px) {
+            .game-container {
+                padding: 12px;
+            }
+
+            header h1 {
+                font-size: 1.2rem;
+            }
+
+            .grid {
+                gap: 5px;
+            }
+
+            .cell .back {
+                font-size: 1.2rem;
+            }
+
+            .score-panel {
+                font-size: 0.75rem;
+                padding: 4px 10px;
+            }
+
+            #startOverlay h1 {
+                font-size: 1.8rem;
+            }
+
+            #startBtn {
+                font-size: 1.1rem;
+                padding: 12px 32px;
+            }
+
+            .rule-row {
+                font-size: 0.9rem;
+            }
+
+            .floating-home-btn {
+                bottom: 20px;
+                right: 20px;
+                padding: 10px 16px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== 启动遮罩 ===== -->
+    <div id="startOverlay">
+        <h1>🔨 打地鼠</h1>
+        <div class="subtitle">Don't Appear</div>
+
+        <div class="rule-box">
+            <div class="rule-row">
+                <span class="animal-icon">🐀</span>
+                <span>老鼠</span>
+                <span class="score-badge">+1分</span>
+            </div>
+            <div class="rule-row">
+                <span class="animal-icon">🐹</span>
+                <span>仓鼠</span>
+                <span class="score-badge">+2分</span>
+            </div>
+            <div class="rule-row">
+                <span class="animal-icon">🐿️</span>
+                <span>松鼠</span>
+                <span class="score-badge">+3分</span>
+            </div>
+            <hr class="rule-divider">
+            <div class="rule-total">🎯 满分 100 分 · 共 50 次机会</div>
+        </div>
+
+        <button id="startBtn">🔊 开始挑战</button>
+    </div>
+
+    <!-- ===== 游戏容器 ===== -->
+    <div class="game-container" id="gameContainer" style="display: none;">
+        <header>
+            <h1>🔨 打地鼠</h1>
+            <p>Don't Appear</p>
+        </header>
+
+        <div class="score-panel">
+            <span>🎯 得分: <span id="scoreDisplay">0</span></span>
+            <span>📊 剩余: <span id="remainingDisplay">50</span> 次</span>
+        </div>
+
+        <div class="grid-wrapper">
+            <div class="grid" id="gridContainer"></div>
+        </div>
+    </div>
+
+    <!-- ===== 悬浮返回首页按钮 ===== -->
+    <button class="floating-home-btn" id="floatingHomeBtn">
+        <i class="fas fa-home"></i> 返回首页
+    </button>
+
+    <script src="utils.js"></script>
+    <script src="wordData.js"></script>
+    <script src="wordlistConfig.js"></script>
+    <script src="whackMole.js"></script>
+
+</body>
+
+</html>
