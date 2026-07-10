@@ -4,7 +4,16 @@
   // ========== 配置 ==========
   const ROWS = 7;
   const COLS = 8;
-  const TOTAL_CELLS = ROWS * COLS;
+
+  // ===== 难度配置（和 fishing 的 SPEED_MAP 类似） =====
+  const DIFFICULTY_MAP = {
+    low: { factor: 1.0, label: "低" },
+    medium: { factor: 0.85, label: "中" },
+    high: { factor: 0.7, label: "高" },
+  };
+
+  // 当前选中的难度
+  let currentDifficulty = "medium";
 
   const THREADS = [
     {
@@ -45,22 +54,23 @@
   // ========== DOM ==========
   const gridContainer = document.getElementById("gridContainer");
   const scoreDisplay = document.getElementById("scoreDisplay");
-  const remainingDisplay = document.getElementById("remainingDisplay");
+  const maxScoreDisplay = document.getElementById("maxScoreDisplay");
   const startOverlay = document.getElementById("startOverlay");
   const startBtn = document.getElementById("startBtn");
   const gameContainer = document.getElementById("gameContainer");
   const floatingBtn = document.getElementById("floatingHomeBtn");
+  const diffBtns = document.querySelectorAll(".difficulty-btn");
 
   // ========== 游戏状态 ==========
   let score = 0;
-  let remaining = TOTAL_HITS;
   let cells = [];
   let activeMoles = {};
   let threadTimers = [];
   let gameActive = false;
   let isGameOver = false;
-  let started = false;
   let completedThreads = 0;
+  let isGameRunning = false;
+  let hitCount = 0;
 
   // ========== 音效 ==========
   function playHitSound() {
@@ -105,6 +115,7 @@
         };
       }
     }
+    if (maxScoreDisplay) maxScoreDisplay.textContent = TOTAL_SCORE;
   }
 
   // ========== 地鼠 ==========
@@ -173,13 +184,11 @@
   // ========== 线程 ==========
   function runThread(threadConfig) {
     let count = 0;
-    const {
-      id,
-      animal,
-      interval,
-      stayDuration,
-      count: maxCount,
-    } = threadConfig;
+    const difficulty = DIFFICULTY_MAP[currentDifficulty];
+    const factor = difficulty.factor;
+    const interval = threadConfig.interval * factor;
+    const stayDuration = threadConfig.stayDuration * factor;
+    const { id, animal, count: maxCount } = threadConfig;
 
     function scheduleNext() {
       if (!gameActive || isGameOver || count >= maxCount) {
@@ -261,7 +270,7 @@
     delete activeMoles[key];
 
     score += points;
-    remaining--;
+    hitCount++;
     updateUI();
 
     playHitSound();
@@ -271,7 +280,7 @@
     const cy = rect.top + rect.height / 2;
     showExplosion(cx, cy);
 
-    if (remaining <= 0) {
+    if (hitCount >= TOTAL_HITS) {
       endGame();
     }
   }
@@ -291,7 +300,6 @@
   // ========== UI ==========
   function updateUI() {
     scoreDisplay.textContent = score;
-    remainingDisplay.textContent = remaining;
   }
 
   // ========== 结束 ==========
@@ -299,6 +307,7 @@
     if (isGameOver) return;
     isGameOver = true;
     gameActive = false;
+    isGameRunning = false;
 
     for (const timer of threadTimers) {
       clearTimeout(timer);
@@ -360,12 +369,41 @@
 
   // ========== 重置 ==========
   function resetGame() {
+    for (const timer of threadTimers) {
+      clearTimeout(timer);
+    }
+    threadTimers = [];
+
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        hideMole(r, c);
+      }
+    }
+    activeMoles = {};
+
     score = 0;
-    remaining = TOTAL_HITS;
+    hitCount = 0;
     completedThreads = 0;
     isGameOver = false;
     gameActive = false;
-    started = false;
+    isGameRunning = false;
+
+    initGrid();
+    updateUI();
+
+    // 恢复难度按钮可用
+    diffBtns.forEach((btn) => (btn.disabled = false));
+
+    startOverlay.style.display = "flex";
+    gameContainer.style.display = "none";
+  }
+
+  // ========== 启动游戏 ==========
+  function startGame() {
+    if (isGameRunning) return;
+
+    // 禁用难度按钮（游戏中不可切换）
+    diffBtns.forEach((btn) => (btn.disabled = true));
 
     for (const timer of threadTimers) {
       clearTimeout(timer);
@@ -379,19 +417,19 @@
     }
     activeMoles = {};
 
+    score = 0;
+    hitCount = 0;
+    completedThreads = 0;
+    isGameOver = false;
+    gameActive = false;
+    isGameRunning = true;
+
     initGrid();
     updateUI();
 
-    startOverlay.style.display = "flex";
-    gameContainer.style.display = "none";
-  }
-
-  // ========== 启动 ==========
-  function startGame() {
     startOverlay.style.display = "none";
     gameContainer.style.display = "block";
 
-    // 滚动到网格区域
     const gridWrapper = document.querySelector(".grid-wrapper");
     if (gridWrapper) {
       setTimeout(() => {
@@ -399,7 +437,6 @@
       }, 100);
     }
 
-    // 倒计时
     let countdown = 3;
     const cdOverlay = document.createElement("div");
     cdOverlay.style.cssText = `
@@ -426,17 +463,6 @@
         }, 500);
       }
     }, 1000);
-
-    // 重置状态
-    score = 0;
-    remaining = TOTAL_HITS;
-    completedThreads = 0;
-    isGameOver = false;
-    gameActive = false;
-    started = true;
-
-    initGrid();
-    updateUI();
   }
 
   function startGameplay() {
@@ -447,7 +473,6 @@
     activeMoles = {};
     completedThreads = 0;
 
-    // 按分值排序，从低到高启动
     const sortedThreads = [...THREADS].sort((a, b) => a.score - b.score);
     const staggeredDelays = [0, 800, 1600];
 
@@ -469,7 +494,22 @@
     floatingBtn.addEventListener("click", goHome);
   }
 
+  // ===== 难度按钮（和 fishing 一致） =====
+  diffBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      // 游戏进行中或已结束不能切换
+      if (gameActive || isGameOver || isGameRunning) {
+        return;
+      }
+      diffBtns.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentDifficulty = btn.dataset.diff;
+    });
+  });
+
   // ========== 初始化 ==========
   initGrid();
   updateUI();
+  startOverlay.style.display = "flex";
+  gameContainer.style.display = "none";
 })();
