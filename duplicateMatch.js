@@ -441,6 +441,15 @@
   function startGame() {
     startOverlay.style.display = "none";
     gameContainer.style.display = "block";
+
+    // ===== 滚动到 candidate-wrapper 区域 =====
+    setTimeout(() => {
+      const candidate = document.querySelector(".candidate-wrapper");
+      if (candidate) {
+        candidate.scrollIntoView({ behavior: "smooth", block: "end" });
+      }
+    }, 100);
+
     loadBestRecord();
     bindTripleClick();
     resetGame();

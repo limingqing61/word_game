@@ -42,15 +42,6 @@ function addToFavorite(word, favoriteName) {
   return false;
 }
 
-// 检查单词是否在任何收藏夹中
-function isWordInAnyFavorite(word) {
-  const favorites = getAllFavorites();
-  for (let key in favorites) {
-    if (favorites[key].includes(word)) return true;
-  }
-  return false;
-}
-
 // 显示添加收藏夹弹窗
 function showAddToFavoritesDialog(word) {
   const existingDialog = document.querySelector(".favorites-dialog-overlay");
@@ -128,7 +119,6 @@ function showAddToFavoritesDialog(word) {
         addToFavorite(word, name);
         overlay.remove();
         showToast(`✓ 已添加到「${name}」`);
-        refreshAllFavoriteIcons();
       }
     };
   });
@@ -143,18 +133,6 @@ function showToast(message) {
     "position:fixed; bottom:100px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.7); color:white; padding:8px 20px; border-radius:30px; z-index:10001; font-size:0.9rem;";
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 1500);
-}
-
-// 刷新所有收藏按钮的样式
-function refreshAllFavoriteIcons() {
-  document.querySelectorAll(".fav-btn").forEach((btn) => {
-    const word = btn.getAttribute("data-word");
-    if (word && isWordInAnyFavorite(word)) {
-      btn.classList.add("active");
-    } else {
-      btn.classList.remove("active");
-    }
-  });
 }
 
 // 获取单词详情（从 wordList 中查找）
@@ -231,8 +209,6 @@ function renderMinimalPairs() {
       const image = w.image;
       const chinese = w.chinese;
       const phonetic = getPhonetic(word);
-      const inFav = isWordInAnyFavorite(word);
-      const favActiveClass = inFav ? "active" : "";
 
       wordsHtml += `
                 <div class="word-row" data-word="${escapeHtml(word)}">
@@ -246,7 +222,7 @@ function renderMinimalPairs() {
                     </div>
                     <div class="action-buttons">
                         <button class="action-btn speak" data-word="${escapeHtml(word)}" title="发音"><i class="fas fa-volume-up"></i></button>
-                        <button class="action-btn fav ${favActiveClass}" data-word="${escapeHtml(word)}" title="收藏"><i class="fa-regular fa-star"></i></button>
+                        <button class="action-btn fav" data-word="${escapeHtml(word)}" title="收藏"><i class="fa-regular fa-star"></i></button>
                     </div>
                 </div>
             `;
