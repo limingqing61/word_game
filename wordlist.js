@@ -5,26 +5,7 @@ function getWordType(word) {
   return window.wordData?.[word]?.type || "other";
 }
 
-// ========= 收藏夹功能 =========
-const FAVORITES_STORAGE_KEY = "wordlist_favorites";
-
-// 获取所有收藏夹
-function getAllFavorites() {
-  const stored = localStorage.getItem(FAVORITES_STORAGE_KEY);
-  if (stored) {
-    try {
-      return JSON.parse(stored);
-    } catch (e) {
-      return { 默认: [] };
-    }
-  }
-  return { 默认: [] };
-}
-
-// 保存收藏夹
-function saveAllFavorites(favorites) {
-  localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favorites));
-}
+// ========= 收藏夹功能（使用 utils.js 中的工具） =========
 
 // 获取当前选中的收藏夹筛选
 let currentFavoriteFilter = null;
@@ -34,47 +15,20 @@ function getCurrentFavoriteFilter() {
   return select ? select.value : null;
 }
 
-// 添加单词到收藏夹
-function addToFavorite(word, favoriteName) {
-  const favorites = getAllFavorites();
-  if (!favorites[favoriteName]) {
-    favorites[favoriteName] = [];
-  }
-  if (!favorites[favoriteName].includes(word)) {
-    favorites[favoriteName].push(word);
-    saveAllFavorites(favorites);
-    return true;
-  }
-  return false;
+// 获取当前选中的收藏夹筛选值
+function getCurrentFavoriteFilterValue() {
+  const select = document.getElementById("favoriteSelect");
+  if (!select) return null;
+  const value = select.value;
+  return value && value !== "" ? value : null;
 }
 
-// 从收藏夹删除单词
-function removeFromFavorite(word, favoriteName) {
-  const favorites = getAllFavorites();
-  if (favorites[favoriteName]) {
-    const index = favorites[favoriteName].indexOf(word);
-    if (index !== -1) {
-      favorites[favoriteName].splice(index, 1);
-      saveAllFavorites(favorites);
-      return true;
-    }
-  }
-  return false;
-}
-
-// 检查单词是否在指定收藏夹中
-function isWordInFavorite(word, favoriteName) {
-  const favorites = getAllFavorites();
-  return favorites[favoriteName]?.includes(word) || false;
-}
-
-// 显示添加收藏夹弹窗
+// 显示添加收藏夹弹窗（UI 逻辑保留在模块中）
 function showAddToFavoritesDialog(word) {
-  // 移除已存在的弹窗
   const existingDialog = document.querySelector(".favorites-dialog-overlay");
   if (existingDialog) existingDialog.remove();
 
-  const favorites = getAllFavorites();
+  const favorites = window.getAllFavorites();
   const favoriteNames = Object.keys(favorites);
 
   const overlay = document.createElement("div");
@@ -132,48 +86,40 @@ function showAddToFavoritesDialog(word) {
   overlay.appendChild(dialog);
   document.body.appendChild(overlay);
 
-  // 关闭弹窗
-  const closeBtn = document.getElementById("closeFavoritesDialog");
-  closeBtn.onclick = () => overlay.remove();
-
-  // 点击遮罩关闭
+  document.getElementById("closeFavoritesDialog").onclick = () =>
+    overlay.remove();
   overlay.onclick = (e) => {
     if (e.target === overlay) overlay.remove();
   };
 
-  // 新建收藏夹
-  const createBtn = document.getElementById("createFavoriteBtn");
-  const newNameInput = document.getElementById("newFavoriteName");
-  createBtn.onclick = () => {
-    const newName = newNameInput.value.trim();
+  document.getElementById("createFavoriteBtn").onclick = () => {
+    const newName = document.getElementById("newFavoriteName").value.trim();
     if (!newName) {
       alert("请输入收藏夹名称");
       return;
     }
-    const favorites = getAllFavorites();
+    const favorites = window.getAllFavorites();
     if (favorites[newName]) {
       alert("收藏夹已存在");
       return;
     }
     favorites[newName] = [];
-    saveAllFavorites(favorites);
+    window.saveAllFavorites(favorites);
     overlay.remove();
-    showAddToFavoritesDialog(word); // 重新打开弹窗刷新列表
+    showAddToFavoritesDialog(word);
   };
 
-  // 收藏夹项点击事件
   document.querySelectorAll(".favorite-item").forEach((item) => {
     item.onclick = (e) => {
       e.stopPropagation();
       const name = item.dataset.name;
-      const favorites = getAllFavorites();
+      const favorites = window.getAllFavorites();
       const isAdded = favorites[name]?.includes(word);
       if (isAdded) {
         alert(`"${word}" 已经在「${name}」中`);
       } else {
-        addToFavorite(word, name);
+        window.addToFavorite(word, name);
         overlay.remove();
-        // 显示短暂提示
         const toast = document.createElement("div");
         toast.textContent = `✓ 已添加到「${name}」`;
         toast.style.cssText =
@@ -190,7 +136,6 @@ function renderFavoriteFilter() {
   const container = document.getElementById("typeFilterContainer");
   if (!container) return;
 
-  // 检查是否已存在收藏夹筛选容器
   let favContainer = document.getElementById("favoriteFilterContainer");
   if (!favContainer) {
     favContainer = document.createElement("div");
@@ -202,7 +147,7 @@ function renderFavoriteFilter() {
     container.parentNode.insertBefore(favContainer, container.nextSibling);
   }
 
-  const favorites = getAllFavorites();
+  const favorites = window.getAllFavorites();
   const favoriteNames = Object.keys(favorites);
 
   let html =
@@ -215,28 +160,69 @@ function renderFavoriteFilter() {
   });
   html += "</select>";
 
+  // ===== 删除按钮（每个收藏夹旁边） =====
+  if (favoriteNames.length > 0) {
+    html +=
+      '<div style="display: inline-flex; gap: 6px; flex-wrap: wrap; margin-top: 8px;">';
+    favoriteNames.forEach((name) => {
+      html += `
+        <span style="display: inline-flex; align-items: center; gap: 4px; background: rgba(0,0,0,0.05); padding: 2px 8px 2px 12px; border-radius: 20px; font-size: 0.8rem; color: #555;">
+          📁 ${name} (${favorites[name].length})
+          <button class="delete-fav-btn" data-name="${name}" style="background: none; border: none; color: #dc3545; cursor: pointer; font-size: 0.8rem; padding: 0 2px;" title="删除收藏夹">✕</button>
+        </span>
+      `;
+    });
+    html += "</div>";
+  }
+
   favContainer.innerHTML = html;
 
-  // 恢复保存的收藏夹筛选值
   const savedFavoriteFilter = localStorage.getItem("wordlist_favoriteFilter");
   if (savedFavoriteFilter) {
     document.getElementById("favoriteSelect").value = savedFavoriteFilter;
   }
 
-  // 绑定筛选事件
   document.getElementById("favoriteSelect").addEventListener("change", (e) => {
     const value = e.target.value;
     if (value) {
       localStorage.setItem("wordlist_favoriteFilter", value);
-      // 清除分类筛选
       const typeSelect = document.getElementById("typeSelect");
       if (typeSelect) typeSelect.value = "all";
       localStorage.setItem("wordlist_typeFilter", "all");
     } else {
       localStorage.removeItem("wordlist_favoriteFilter");
     }
-    generateWordList(); // 重新渲染列表
+    generateWordList();
     if (window.resetPagination) window.resetPagination();
+  });
+
+  // ===== 删除收藏夹事件 =====
+  document.querySelectorAll(".delete-fav-btn").forEach((btn) => {
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      const name = this.dataset.name;
+      if (
+        confirm(
+          `确定要删除收藏夹「${name}」吗？\n其中的单词不会被删除，只是这个收藏夹被移除。`,
+        )
+      ) {
+        window.deleteFavorite(name);
+        const select = document.getElementById("favoriteSelect");
+        if (select && select.value === name) {
+          select.value = "";
+          localStorage.removeItem("wordlist_favoriteFilter");
+        }
+        renderFavoriteFilter();
+        generateWordList();
+        if (window.resetPagination) window.resetPagination();
+        const toast = document.createElement("div");
+        toast.textContent = `🗑️ 已删除收藏夹「${name}」`;
+        toast.style.cssText =
+          "position:fixed; bottom:100px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.7); color:white; padding:8px 20px; border-radius:30px; z-index:10001; font-size:0.9rem;";
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 1500);
+      }
+    });
   });
 }
 
@@ -258,20 +244,17 @@ function getCurrentFavoriteFilterValue() {
 function getFilteredWords() {
   const favoriteFilter = getCurrentFavoriteFilterValue();
 
-  // 优先按收藏夹筛选
   if (favoriteFilter) {
-    const favorites = getAllFavorites();
+    const favorites = window.getAllFavorites();
     const favoriteWords = favorites[favoriteFilter] || [];
-    // 从 wordList 中获取完整单词信息
     return favoriteWords
       .map((word) => {
         const found = wordList.find((w) => w.word === word);
         return found || { word: word, image: "", chinese: "", color: "#333" };
       })
-      .filter((w) => w.word); // 过滤掉不存在的单词
+      .filter((w) => w.word);
   }
 
-  // 否则按分类筛选
   const typeFilter = getCurrentTypeFilter();
   if (typeFilter !== "all") {
     return wordList.filter((w) => getWordType(w.word) === typeFilter);
@@ -285,7 +268,6 @@ function renderTypeFilter() {
   const container = document.getElementById("typeFilterContainer");
   if (!container) return;
 
-  // 收集所有分类
   const types = new Set();
   wordList.forEach((w) => {
     const type = getWordType(w.word);
@@ -327,20 +309,17 @@ function renderTypeFilter() {
 
   container.innerHTML = html;
 
-  // 恢复保存的分类筛选值
   const savedType = localStorage.getItem("wordlist_typeFilter");
   if (savedType && savedType !== "all") {
     document.getElementById("typeSelect").value = savedType;
   }
 
-  // 绑定筛选事件
   document.getElementById("typeSelect").addEventListener("change", (e) => {
     localStorage.setItem("wordlist_typeFilter", e.target.value);
-    // 清除收藏夹筛选
     const favSelect = document.getElementById("favoriteSelect");
     if (favSelect) favSelect.value = "";
     localStorage.removeItem("wordlist_favoriteFilter");
-    generateWordList(); // 重新渲染列表
+    generateWordList();
     if (window.resetPagination) window.resetPagination();
   });
 }
@@ -353,19 +332,15 @@ function generateWordList() {
     return;
   }
 
-  // 获取当前模式（是否在收藏夹筛选模式下）
   const favoriteFilter = getCurrentFavoriteFilterValue();
   const isFavoriteMode = favoriteFilter !== null;
 
-  // 获取过滤后的单词
   let filteredWords = getFilteredWords();
 
-  // 分页相关
   const pageSize = 20;
   let currentPage = parseInt(localStorage.getItem("wordlist_currentPage")) || 1;
   const totalPages = Math.ceil(filteredWords.length / pageSize);
 
-  // 确保页码有效
   if (currentPage > totalPages) currentPage = 1;
   if (currentPage < 1) currentPage = 1;
 
@@ -424,24 +399,20 @@ function generateWordList() {
     info.appendChild(phoneticSpan);
     info.appendChild(chineseSpan);
 
-    // 发音按钮
     const playBtn = document.createElement("button");
     playBtn.className = "word-list-play-btn";
     playBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
     playBtn.addEventListener("click", () => SpeechHelper.speak(w.word));
 
-    // 第二按钮（保存或删除）
     const actionBtn = document.createElement("button");
     actionBtn.className = "word-list-play-btn";
 
     if (isFavoriteMode) {
-      // 收藏夹模式：显示删除按钮
       actionBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
       actionBtn.style.background = "#dc3545";
       actionBtn.addEventListener("click", () => {
-        removeFromFavorite(w.word, favoriteFilter);
-        generateWordList(); // 刷新列表
-        // 显示提示
+        window.removeFromFavorite(w.word, favoriteFilter);
+        generateWordList();
         const toast = document.createElement("div");
         toast.textContent = `✓ 已从「${favoriteFilter}」删除`;
         toast.style.cssText =
@@ -450,7 +421,6 @@ function generateWordList() {
         setTimeout(() => toast.remove(), 1500);
       });
     } else {
-      // 普通模式：显示保存按钮
       actionBtn.innerHTML = '<i class="fa-regular fa-floppy-disk"></i>';
       actionBtn.style.background = "#28a745";
       actionBtn.addEventListener("click", () => {
@@ -470,14 +440,10 @@ function generateWordList() {
     table.appendChild(row);
   });
 
-  // 渲染分页
   renderPagination(currentPage, filteredWords.length, totalPages);
-
-  // 保存当前页码
   localStorage.setItem("wordlist_currentPage", currentPage);
 }
 
-// 分页渲染函数
 function renderPagination(currentPage, totalItems, totalPages) {
   const container = document.getElementById("paginationContainer");
   if (!container) return;
@@ -490,7 +456,6 @@ function renderPagination(currentPage, totalItems, totalPages) {
   let html = '<div class="pagination">';
   html += `<button class="page-btn" data-page="${currentPage - 1}" ${currentPage === 1 ? "disabled" : ""}>◀ 上一页</button>`;
 
-  // 显示页码范围
   let startPage = Math.max(1, currentPage - 2);
   let endPage = Math.min(totalPages, currentPage + 2);
 
@@ -514,7 +479,6 @@ function renderPagination(currentPage, totalItems, totalPages) {
 
   container.innerHTML = html;
 
-  // 绑定分页按钮事件
   document.querySelectorAll(".page-btn[data-page]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const page = parseInt(btn.dataset.page);
@@ -527,13 +491,11 @@ function renderPagination(currentPage, totalItems, totalPages) {
   });
 }
 
-// 重置分页（当筛选条件变化时调用）
 window.resetPagination = function () {
   localStorage.setItem("wordlist_currentPage", 1);
   generateWordList();
 };
 
-// 滚动记忆
 function restoreScroll() {
   const savedScroll = localStorage.getItem("wordlist_scroll");
   if (savedScroll !== null) {
@@ -551,7 +513,6 @@ function saveScroll() {
   };
 }
 
-// 搜索定位（支持分类筛选后的列表）
 function initSearch() {
   const searchInput = document.getElementById("searchWordInput");
   const searchBtn = document.getElementById("searchWordBtn");
@@ -564,10 +525,9 @@ function initSearch() {
   }
 
   function getCurrentFilteredWords() {
-    // 优先按收藏夹筛选
     const favoriteFilter = getCurrentFavoriteFilterValue();
     if (favoriteFilter) {
-      const favorites = getAllFavorites();
+      const favorites = window.getAllFavorites();
       const favoriteWords = favorites[favoriteFilter] || [];
       return favoriteWords
         .map((word) => {
@@ -605,7 +565,6 @@ function initSearch() {
       return;
     }
 
-    // 计算在分页中的位置
     const pageSize = 20;
     const targetPage = Math.floor(index / pageSize) + 1;
     const currentPage =
@@ -614,7 +573,6 @@ function initSearch() {
     if (targetPage !== currentPage) {
       localStorage.setItem("wordlist_currentPage", targetPage);
       generateWordList();
-      // 延迟滚动，等待 DOM 更新
       setTimeout(() => {
         const rows = document.querySelectorAll(".word-list-row");
         const rowIndex = index % pageSize;
@@ -644,15 +602,14 @@ function initSearch() {
   });
 }
 
-// 初始化分类筛选器和收藏夹筛选器
 function initTypeFilter() {
   renderTypeFilter();
   renderFavoriteFilter();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  initTypeFilter(); // 先渲染分类下拉框和收藏夹下拉框
-  generateWordList(); // 生成列表
+  initTypeFilter();
+  generateWordList();
   restoreScroll();
   window.addEventListener("scroll", saveScroll());
   initSearch();
