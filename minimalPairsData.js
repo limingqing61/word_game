@@ -372,6 +372,7 @@ const MINIMAL_PAIRS_DATA = [
       "ice",
       "kite",
       "knife",
+      "lime",
       "nine",
       "rice",
       "sky",
