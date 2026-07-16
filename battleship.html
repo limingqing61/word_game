@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>炸飞机 · Battleship Strike</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #1a472a 0%, #0e2a1a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .game-container {
+            max-width: 780px;
+            width: 100%;
+            background: rgba(30, 50, 30, 0.7);
+            backdrop-filter: blur(5px);
+            border-radius: 60px;
+            padding: 20px;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        header {
+            text-align: center;
+            color: #FFE484;
+            text-shadow: 4px 4px 0 #B45309;
+            margin-bottom: 8px;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        header p {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            margin: 2px 0 0;
+        }
+
+        .top-panel {
+            display: flex;
+            justify-content: space-between;
+            background: #31220e;
+            padding: 6px 16px;
+            border-radius: 50px;
+            margin-bottom: 12px;
+            color: #ffecb3;
+            font-weight: bold;
+            flex-wrap: wrap;
+            gap: 4px;
+            font-size: 0.9rem;
+        }
+
+        .top-panel .best-box {
+            cursor: pointer;
+            color: #ffd966;
+        }
+
+        .grid-wrapper {
+            background: #2c4a2e;
+            border-radius: 30px;
+            padding: 12px;
+            border: 3px solid #ffaa33;
+            touch-action: none;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 4px;
+            aspect-ratio: 1 / 1;
+        }
+
+        .cell {
+            background: #5a3a1a;
+            border-radius: 6px;
+            border: 2px solid #c99e3e;
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: 0.05s linear;
+            aspect-ratio: 1 / 1;
+            min-height: 0;
+            color: #fff;
+        }
+
+        .cell:active:not(.revealed) {
+            transform: scale(0.92);
+        }
+
+        .cell.revealed {
+            cursor: default;
+            background: #1a2a1a;
+            border-color: #7a5a2a;
+        }
+
+        .cell.revealed.miss {
+            background: #1a2a1a;
+            border-color: #4a5a6a;
+            color: #4a6a8a;
+            font-size: 1rem;
+        }
+
+        .cell.revealed.hit {
+            background: #4a2a1a;
+            border-color: #ff8a3a;
+            color: #ff8a3a;
+        }
+
+        .cell.revealed.head {
+            background: #4a1a1a;
+            border-color: #ff3333;
+            color: #ff3333;
+            font-size: 1.4rem;
+            animation: headPulse 0.5s ease;
+        }
+
+        /* 胜利后显示飞机颜色（亮色，显眼） */
+        .cell.plane-color-0 {
+            background: #FF6B6B !important;
+            border-color: #FF6B6B !important;
+            opacity: 0.9;
+            box-shadow: 0 0 12px rgba(255, 107, 107, 0.4);
+        }
+
+        .cell.plane-color-1 {
+            background: #4ECDC4 !important;
+            border-color: #4ECDC4 !important;
+            opacity: 0.9;
+            box-shadow: 0 0 12px rgba(78, 205, 196, 0.4);
+        }
+
+        .cell.plane-color-2 {
+            background: #FFD93D !important;
+            border-color: #FFD93D !important;
+            opacity: 0.9;
+            box-shadow: 0 0 12px rgba(255, 217, 61, 0.4);
+        }
+
+        /* 机头用白色边框 + 更大光晕 */
+        .cell.plane-color-0.head,
+        .cell.plane-color-1.head,
+        .cell.plane-color-2.head {
+            border-color: #FFFFFF !important;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.6) !important;
+        }
+
+        @keyframes headPulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.3);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* 行/列标签 */
+        .grid-header {
+            display: grid;
+            grid-template-columns: 30px repeat(10, 1fr);
+            gap: 4px;
+            margin-bottom: 4px;
+        }
+
+        .grid-header .label {
+            color: rgba(255, 236, 179, 0.5);
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .grid-with-labels {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .grid-row {
+            display: grid;
+            grid-template-columns: 30px repeat(10, 1fr);
+            gap: 4px;
+            margin-bottom: 4px;
+        }
+
+        .grid-row .row-label {
+            color: rgba(255, 236, 179, 0.5);
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .message {
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #ffeaac;
+            min-height: 1.8rem;
+        }
+
+        /* 游戏结束浮层 */
+        .result-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 20000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #fff9ef, #ffe0b3);
+            border-radius: 60px;
+            padding: 35px 45px;
+            text-align: center;
+            max-width: 380px;
+            width: 85%;
+            border: 4px solid #ffaa33;
+        }
+
+        .result-card h2 {
+            font-size: 2.2rem;
+            margin: 0 0 10px;
+            color: #31220e;
+        }
+
+        .result-card .final-score {
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin: 5px 0;
+        }
+
+        .result-card .final-label {
+            font-size: 1.1rem;
+            color: #5a4a2e;
+        }
+
+        .result-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .result-buttons button {
+            border: none;
+            padding: 10px 28px;
+            font-size: 1rem;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: inherit;
+            box-shadow: 0 4px 0 #b97f44;
+            transition: 0.05s linear;
+        }
+
+        .result-buttons button:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #b97f44;
+        }
+
+        .result-buttons .btn-restart {
+            background: #4caf50;
+            color: white;
+            box-shadow: 0 4px 0 #2e7d32;
+        }
+
+        .result-buttons .btn-home {
+            background: #607d8b;
+            color: white;
+            box-shadow: 0 4px 0 #455a64;
+        }
+
+        .floating-home-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #607d8b;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .floating-home-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .floating-home-btn i {
+            pointer-events: none;
+        }
+
+        /* ===== 启动遮罩 ===== */
+        #startOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a472a 0%, #0e2a1a 100%);
+            z-index: 100000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #startOverlay h1 {
+            font-size: 2.5rem;
+            text-shadow: 4px 4px 0 #b45309;
+            margin-bottom: 6px;
+        }
+
+        #startOverlay .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+
+        .rule-box {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 30px;
+            padding: 16px 24px;
+            margin-bottom: 25px;
+            max-width: 380px;
+            width: 90%;
+        }
+
+        .rule-box .rule-title {
+            text-align: center;
+            font-weight: bold;
+            color: #ffd966;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .plane-preview {
+            display: flex;
+            justify-content: center;
+            gap: 2px;
+            margin-bottom: 8px;
+        }
+
+        .plane-preview .cell-preview {
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            background: #4a8aca;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .plane-preview .cell-preview.head-preview {
+            background: #ff3333;
+            border-color: #ff3333;
+            box-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
+        }
+
+        .rule-legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 0.8rem;
+            color: #ffecb3;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .rule-legend span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .rule-legend .dot {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+        }
+
+        .rule-legend .dot.head-dot {
+            background: #ff3333;
+        }
+
+        .rule-legend .dot.body-dot {
+            background: #4a8aca;
+        }
+
+        .rule-legend .dot.miss-dot {
+            background: #1a2a1a;
+            border: 1px solid #4a5a6a;
+        }
+
+        .rule-legend .dot.hit-dot {
+            background: #4a2a1a;
+            border: 1px solid #ff8a3a;
+        }
+
+        .rule-divider {
+            border: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 8px 0;
+        }
+
+        .rule-total {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 4px;
+            color: #ffd966;
+        }
+
+        #startBtn {
+            background: #ffaa33;
+            border: none;
+            padding: 14px 44px;
+            font-size: 1.4rem;
+            border-radius: 60px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #b97f44;
+            font-family: inherit;
+            transition: 0.05s linear;
+            color: #31220e;
+        }
+
+        #startBtn:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #b97f44;
+        }
+
+        @media (max-width: 600px) {
+            .game-container {
+                padding: 12px;
+            }
+
+            header h1 {
+                font-size: 1.3rem;
+            }
+
+            .cell {
+                font-size: 0.9rem;
+                border-radius: 4px;
+                border-width: 1.5px;
+            }
+
+            .top-panel {
+                font-size: 0.7rem;
+                padding: 4px 10px;
+            }
+
+            .grid-wrapper {
+                padding: 8px;
+            }
+
+            .grid {
+                gap: 2px;
+            }
+
+            .grid-header .label,
+            .grid-row .row-label {
+                font-size: 0.55rem;
+            }
+
+            .grid-header {
+                grid-template-columns: 20px repeat(10, 1fr);
+                gap: 2px;
+            }
+
+            .grid-row {
+                grid-template-columns: 20px repeat(10, 1fr);
+                gap: 2px;
+            }
+
+            .floating-home-btn {
+                bottom: 20px;
+                right: 20px;
+                padding: 10px 16px;
+                font-size: 0.8rem;
+            }
+
+            #startOverlay h1 {
+                font-size: 1.8rem;
+            }
+
+            #startBtn {
+                font-size: 1.1rem;
+                padding: 12px 32px;
+            }
+
+            .rule-legend {
+                font-size: 0.65rem;
+                gap: 10px;
+            }
+
+            .plane-preview .cell-preview {
+                width: 20px;
+                height: 20px;
+            }
+
+            .rule-box {
+                padding: 12px 16px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .cell {
+                font-size: 0.6rem;
+                border-radius: 3px;
+            }
+
+            .cell.revealed.head {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== 启动遮罩 ===== -->
+    <div id="startOverlay">
+        <h1>💣 炸飞机</h1>
+        <div class="subtitle">Battleship Strike</div>
+
+        <div class="rule-box">
+            <div class="rule-title">✈️ 飞机形状（士字形）</div>
+            <div
+                style="display:grid; grid-template-columns:repeat(5, 28px); gap:2px; justify-content:center; margin-bottom:8px; background:rgba(0,0,0,0.2); padding:8px; border-radius:10px;">
+                <!-- 第1行：机头 -->
+                <div
+                    style="aspect-ratio:1; background:#ff3333; border-radius:3px; grid-column:3/4; box-shadow:0 0 10px rgba(255,51,51,0.6);">
+                </div>
+                <!-- 第2行：机翼 -->
+                <div style="aspect-ratio:1; background:#4a8aca; border-radius:3px; grid-column:1/2;"></div>
+                <div style="aspect-ratio:1; background:#4a8aca; border-radius:3px; grid-column:2/3;"></div>
+                <div style="aspect-ratio:1; background:#4a8aca; border-radius:3px; grid-column:3/4;"></div>
+                <div style="aspect-ratio:1; background:#4a8aca; border-radius:3px; grid-column:4/5;"></div>
+                <div style="aspect-ratio:1; background:#4a8aca; border-radius:3px; grid-column:5/6;"></div>
+                <!-- 第3行：机身 -->
+                <div style="aspect-ratio:1; background:#4a8aca; border-radius:3px; grid-column:3/4;"></div>
+                <!-- 第4行：机尾 -->
+                <div style="aspect-ratio:1; background:#4a8aca; border-radius:3px; grid-column:2/3;"></div>
+                <div style="aspect-ratio:1; background:#4a8aca; border-radius:3px; grid-column:3/4;"></div>
+                <div style="aspect-ratio:1; background:#4a8aca; border-radius:3px; grid-column:4/5;"></div>
+            </div>
+            <div class="rule-legend">
+                <span><span class="dot head-dot"></span> 机头</span>
+                <span><span class="dot body-dot"></span> 机身/机翼/机尾</span>
+            </div>
+            <hr class="rule-divider">
+            <div class="rule-legend">
+                <span><span class="dot miss-dot"></span> 空 (O)</span>
+                <span><span class="dot hit-dot"></span> 机身 (X)</span>
+                <span><span class="dot head-dot"></span> 机头 (💀)</span>
+            </div>
+            <hr class="rule-divider">
+            <div class="rule-total">🎯 炸毁 3 架飞机的机头即可获胜！</div>
+        </div>
+
+        <button id="startBtn">🔊 开始战斗</button>
+    </div>
+
+    <!-- ===== 游戏容器 ===== -->
+    <div class="game-container" id="gameContainer" style="display: none;">
+        <header>
+            <h1>💣 炸飞机</h1>
+            <p>Battleship Strike · Find the Fleet, Sink the Planes</p>
+        </header>
+
+        <div class="top-panel">
+            <span>💥 炮数: <span id="shotsDisplay">0</span></span>
+            <span class="best-box" id="bestBox">🏆 最佳: <span id="bestDisplay">—</span></span>
+        </div>
+
+        <div class="grid-wrapper">
+            <div class="grid-with-labels" id="gridContainer"></div>
+        </div>
+
+        <div id="message" class="message">💣 点击格子，炸毁三架飞机！</div>
+    </div>
+
+    <!-- ===== 悬浮返回首页 ===== -->
+    <button class="floating-home-btn" id="floatingHomeBtn">
+        <i class="fas fa-home"></i> 返回首页
+    </button>
+
+    <script src="utils.js"></script>
+    <script src="wordData.js"></script>
+    <script src="wordlistConfig.js"></script>
+    <script src="battleship.js"></script>
+
+</body>
+
+</html>
