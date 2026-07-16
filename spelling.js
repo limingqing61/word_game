@@ -150,6 +150,8 @@ function initAndStart() {
   if (startOverlay) startOverlay.style.display = "none";
   if (gameContainer) gameContainer.style.display = "block";
   initSpellingGame();
+
+  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
 }
 
 if (startBtn) {
@@ -209,6 +211,11 @@ function initSpellingGame() {
 
   updateScoreDisplay();
   showQuestion();
+
+  // ===== 新增：滚动到底部 =====
+  setTimeout(() => {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+  }, 200);
 }
 
 function showQuestion() {

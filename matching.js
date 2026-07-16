@@ -413,6 +413,12 @@ function initMatchingGame() {
   gameState.wrongWords = [];
   updateScoreDisplay();
   startRound();
+
+  // ===== 滚动到底部 =====
+
+  setTimeout(() => {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+  }, 200);
 }
 
 // 返回按钮

@@ -297,6 +297,23 @@
     }
 
     renderGrid();
+
+    // ===== 滚动到网格底部（双 requestAnimationFrame 确保 DOM 完全渲染） =====
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const gridWrapper = document.querySelector(".grid-wrapper");
+        if (gridWrapper) {
+          gridWrapper.scrollIntoView({ behavior: "smooth", block: "end" });
+        }
+        // 兜底方案
+        setTimeout(() => {
+          window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: "smooth",
+          });
+        }, 300);
+      });
+    });
   }
 
   // ========== 渲染 ==========

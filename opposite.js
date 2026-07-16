@@ -282,7 +282,6 @@
     if (gameArea) gameArea.style.display = "block";
     if (resultArea) resultArea.style.display = "none";
 
-    // ===== 新增：重新显示底部的 Back 按钮 =====
     const backBtn = document.getElementById("backBtn");
     if (backBtn) backBtn.style.display = "inline-block";
 
@@ -300,13 +299,17 @@
     updateUI();
     showQuestion();
 
-    // ✅ 恢复上次滚动位置
     const savedScroll = localStorage.getItem("opposite_scroll");
     if (savedScroll !== null) {
       setTimeout(() => {
         window.scrollTo(0, parseInt(savedScroll));
       }, 100);
     }
+
+    // ===== 延迟滚动到底部（200ms 确保渲染完成） =====
+    setTimeout(() => {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    }, 200);
   }
 
   // 初始化游戏（用户点击开始按钮后调用）
@@ -320,6 +323,9 @@
 
     // 启动游戏
     resetAndStart();
+
+    // 拉到最下
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
   }
 
   // 绑定开始按钮

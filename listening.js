@@ -193,6 +193,8 @@ function initAndStart() {
   if (typeof initListeningGame === "function") {
     initListeningGame();
   }
+
+  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
 }
 
 // 绑定开始按钮
@@ -249,6 +251,11 @@ function initListeningGame() {
   updateScoreDisplay();
   updateHintButton();
   showQuestion();
+
+  // ===== 新增：滚动到底部 =====
+  setTimeout(() => {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+  }, 200);
 }
 
 function showQuestion() {
