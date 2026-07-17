@@ -25,6 +25,32 @@
   const backBtn = document.getElementById("backToMenuBtn");
   const playAgainBtn = document.getElementById("playAgainBtn");
 
+  // ========== 数字到单词映射（复用 images 下的图片） ==========
+  function getNumberWord(num) {
+    const words = {
+      1: "one",
+      2: "two",
+      3: "three",
+      4: "four",
+      5: "five",
+      6: "six",
+      7: "seven",
+      8: "eight",
+      9: "nine",
+      10: "ten",
+      11: "eleven",
+      12: "twelve",
+      13: "thirteen",
+      14: "fourteen",
+      15: "fifteen",
+      16: "sixteen",
+      17: "seventeen",
+      18: "eighteen",
+      19: "nineteen",
+    };
+    return words[num] || String(num);
+  }
+
   // ========== 工具函数 ==========
   function formatTime(seconds) {
     const mins = Math.floor(seconds / 60);
@@ -70,6 +96,7 @@
   // 三击重置
   let clickCount = 0;
   let clickTimer = null;
+
   function bindTripleClickReset() {
     const bestBox = document.querySelector(".best-box");
     if (!bestBox) return;
@@ -252,8 +279,10 @@
         if (val === null) {
           cell.classList.add("empty");
         } else {
+          // ===== 使用 images 下的图片显示数字 =====
           const img = document.createElement("img");
-          img.src = `images/${val}.jpeg`;
+          const word = getNumberWord(val);
+          img.src = `images/${word}.jpeg`;
           img.alt = val;
           cell.appendChild(img);
           img.onerror = () => {
@@ -296,7 +325,20 @@
           cell.classList.add("empty");
           cell.textContent = "";
         } else {
-          cell.textContent = num++;
+          // 展示区用图片
+          const img = document.createElement("img");
+          const word = getNumberWord(num);
+          img.src = `images/${word}.jpeg`;
+          img.alt = num;
+          img.style.width = "70%";
+          img.style.height = "70%";
+          img.style.objectFit = "contain";
+          img.onerror = () => {
+            img.style.display = "none";
+            cell.textContent = num;
+          };
+          cell.appendChild(img);
+          num++;
         }
         templateContainer.appendChild(cell);
       }
@@ -370,6 +412,7 @@
 
   // ========== 音效 ==========
   let sharedAudioCtx = null;
+
   function getAudioContext() {
     if (!sharedAudioCtx) {
       sharedAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
