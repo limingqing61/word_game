@@ -131,7 +131,7 @@ function renderFavoriteFilter() {
   });
   html += "</select>";
 
-  // 删除按钮（每个收藏夹旁边）
+  // 删除按钮 + 重命名按钮
   if (favoriteNames.length > 0) {
     html +=
       '<div style="display: inline-flex; gap: 6px; flex-wrap: wrap; margin-top: 8px;">';
@@ -139,7 +139,8 @@ function renderFavoriteFilter() {
       html += `
         <span style="display: inline-flex; align-items: center; gap: 4px; background: rgba(0,0,0,0.05); padding: 2px 8px 2px 12px; border-radius: 20px; font-size: 0.8rem; color: #555;">
           📁 ${name} (${favorites[name].length})
-          <button class="delete-fav-btn" data-name="${escapeHtml(name)}" style="background: none; border: none; color: #dc3545; cursor: pointer; font-size: 0.8rem; padding: 0 2px;" title="删除收藏夹">✕</button>
+          <button class="rename-fav-btn" data-name="${name}" style="background: none; border: none; color: #2196F3; cursor: pointer; font-size: 0.8rem; padding: 0 2px;" title="重命名">✏️</button>
+          <button class="delete-fav-btn" data-name="${name}" style="background: none; border: none; color: #dc3545; cursor: pointer; font-size: 0.8rem; padding: 0 2px;" title="删除收藏夹">✕</button>
         </span>
       `;
     });
@@ -148,24 +149,23 @@ function renderFavoriteFilter() {
 
   favContainer.innerHTML = html;
 
-  // 恢复保存的收藏夹筛选值
   const savedFavoriteFilter = localStorage.getItem("wordlist_favoriteFilter");
   if (savedFavoriteFilter) {
     document.getElementById("favoriteSelect").value = savedFavoriteFilter;
   }
 
-  // 绑定筛选事件
   document.getElementById("favoriteSelect").addEventListener("change", (e) => {
     const value = e.target.value;
     if (value) {
       localStorage.setItem("wordlist_favoriteFilter", value);
+      const typeSelect = document.getElementById("typeSelect");
+      if (typeSelect) typeSelect.value = "all";
+      localStorage.setItem("wordlist_typeFilter", "all");
     } else {
       localStorage.removeItem("wordlist_favoriteFilter");
     }
-    // 如果有刷新函数则调用（minimalPairs 中暂无，预留）
-    if (window.refreshMinimalPairs) {
-      window.refreshMinimalPairs();
-    }
+    generateWordList();
+    if (window.resetPagination) window.resetPagination();
   });
 
   // 删除收藏夹事件
@@ -185,11 +185,32 @@ function renderFavoriteFilter() {
           localStorage.removeItem("wordlist_favoriteFilter");
         }
         renderFavoriteFilter();
-        // minimalPairs 中刷新分组视图（如果有）
-        if (window.refreshMinimalPairs) {
-          window.refreshMinimalPairs();
-        }
+        generateWordList();
+        if (window.resetPagination) window.resetPagination();
         showToast(`🗑️ 已删除收藏夹「${name}」`);
+      }
+    });
+  });
+
+  // ===== 重命名收藏夹事件 =====
+  document.querySelectorAll(".rename-fav-btn").forEach((btn) => {
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      const oldName = this.dataset.name;
+      const newName = prompt(`将「${oldName}」重命名为：`, oldName);
+      if (newName && newName.trim() !== "" && newName.trim() !== oldName) {
+        const result = window.renameFavorite(oldName, newName.trim());
+        if (result) {
+          renderFavoriteFilter();
+          const select = document.getElementById("favoriteSelect");
+          if (select && select.value === oldName) {
+            select.value = newName.trim();
+            localStorage.setItem("wordlist_favoriteFilter", newName.trim());
+          }
+          showToast(`✅ 已重命名为「${newName.trim()}」`);
+        } else {
+          alert("重命名失败，可能新名称已存在或原收藏夹不存在");
+        }
       }
     });
   });

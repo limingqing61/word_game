@@ -160,7 +160,7 @@ function renderFavoriteFilter() {
   });
   html += "</select>";
 
-  // ===== 删除按钮（每个收藏夹旁边） =====
+  // 删除按钮 + 重命名按钮
   if (favoriteNames.length > 0) {
     html +=
       '<div style="display: inline-flex; gap: 6px; flex-wrap: wrap; margin-top: 8px;">';
@@ -168,6 +168,7 @@ function renderFavoriteFilter() {
       html += `
         <span style="display: inline-flex; align-items: center; gap: 4px; background: rgba(0,0,0,0.05); padding: 2px 8px 2px 12px; border-radius: 20px; font-size: 0.8rem; color: #555;">
           📁 ${name} (${favorites[name].length})
+          <button class="rename-fav-btn" data-name="${name}" style="background: none; border: none; color: #2196F3; cursor: pointer; font-size: 0.8rem; padding: 0 2px;" title="重命名">✏️</button>
           <button class="delete-fav-btn" data-name="${name}" style="background: none; border: none; color: #dc3545; cursor: pointer; font-size: 0.8rem; padding: 0 2px;" title="删除收藏夹">✕</button>
         </span>
       `;
@@ -196,7 +197,7 @@ function renderFavoriteFilter() {
     if (window.resetPagination) window.resetPagination();
   });
 
-  // ===== 删除收藏夹事件 =====
+  // 删除收藏夹事件
   document.querySelectorAll(".delete-fav-btn").forEach((btn) => {
     btn.addEventListener("click", function (e) {
       e.stopPropagation();
@@ -215,12 +216,30 @@ function renderFavoriteFilter() {
         renderFavoriteFilter();
         generateWordList();
         if (window.resetPagination) window.resetPagination();
-        const toast = document.createElement("div");
-        toast.textContent = `🗑️ 已删除收藏夹「${name}」`;
-        toast.style.cssText =
-          "position:fixed; bottom:100px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.7); color:white; padding:8px 20px; border-radius:30px; z-index:10001; font-size:0.9rem;";
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 1500);
+        showToast(`🗑️ 已删除收藏夹「${name}」`);
+      }
+    });
+  });
+
+  // ===== 重命名收藏夹事件 =====
+  document.querySelectorAll(".rename-fav-btn").forEach((btn) => {
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      const oldName = this.dataset.name;
+      const newName = prompt(`将「${oldName}」重命名为：`, oldName);
+      if (newName && newName.trim() !== "" && newName.trim() !== oldName) {
+        const result = window.renameFavorite(oldName, newName.trim());
+        if (result) {
+          renderFavoriteFilter();
+          const select = document.getElementById("favoriteSelect");
+          if (select && select.value === oldName) {
+            select.value = newName.trim();
+            localStorage.setItem("wordlist_favoriteFilter", newName.trim());
+          }
+          showToast(`✅ 已重命名为「${newName.trim()}」`);
+        } else {
+          alert("重命名失败，可能新名称已存在或原收藏夹不存在");
+        }
       }
     });
   });
