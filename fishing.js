@@ -376,6 +376,22 @@
 
     initPond();
     startRound(0);
+
+    // ===== 滚动到网格区域（确保按钮可见） =====
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const gridWrapper = document.querySelector(".grid-wrapper");
+        if (gridWrapper) {
+          gridWrapper.scrollIntoView({ behavior: "smooth", block: "end" });
+        }
+        setTimeout(() => {
+          window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: "smooth",
+          });
+        }, 300);
+      });
+    });
   }
 
   diffBtns.forEach((btn) => {
