@@ -638,6 +638,22 @@
     resetGame() {
       if (this.battleTimeout) clearTimeout(this.battleTimeout);
       this.init();
+
+      // ===== 滚动到网格区域（确保按钮可见） =====
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const gridWrapper = document.querySelector(".grid-wrapper");
+          if (gridWrapper) {
+            gridWrapper.scrollIntoView({ behavior: "smooth", block: "end" });
+          }
+          setTimeout(() => {
+            window.scrollTo({
+              top: document.body.scrollHeight,
+              behavior: "smooth",
+            });
+          }, 300);
+        });
+      });
     }
   }
 
@@ -669,6 +685,23 @@
 
     document.getElementById("startBattleBtn").addEventListener("click", () => {
       if (game) game.startBattle();
+    });
+
+    // ===== 滚动到网格区域（双层 requestAnimationFrame 确保 DOM 渲染完成） =====
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const gridWrapper = document.querySelector(".grid-wrapper");
+        if (gridWrapper) {
+          gridWrapper.scrollIntoView({ behavior: "smooth", block: "end" });
+        }
+        // 兜底：如果 grid-wrapper 不存在，滚动到页面底部
+        setTimeout(() => {
+          window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: "smooth",
+          });
+        }, 300);
+      });
     });
   }
 

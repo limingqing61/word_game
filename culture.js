@@ -263,6 +263,14 @@
     score = 0;
     updateScore();
     showQuestion();
+
+    // ===== 滚动到游戏区域底部 =====
+    setTimeout(() => {
+      const gameAreaEl = document.querySelector(".game-area");
+      if (gameAreaEl) {
+        gameAreaEl.scrollIntoView({ behavior: "smooth", block: "end" });
+      }
+    }, 300);
   }
 
   function restartGame() {
@@ -271,6 +279,14 @@
 
     if (backBtn) backBtn.style.display = "";
     startGame();
+
+    // ===== 再次确保滚动到底部 =====
+    setTimeout(() => {
+      const gameAreaEl = document.querySelector(".game-area");
+      if (gameAreaEl) {
+        gameAreaEl.scrollIntoView({ behavior: "smooth", block: "end" });
+      }
+    }, 400);
   }
 
   // ========== 事件绑定 ==========
