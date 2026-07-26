@@ -894,7 +894,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈwɔː.tər/",
     guide: "WAW-tur",
-    type: "food",
+    type: "nature",
   },
   tea: {
     image: "images/tea.jpeg",
@@ -4838,6 +4838,14 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈdræɡ.ən/",
     guide: "DRAG-un",
+    type: "animal",
+  },
+  phoenix: {
+    image: "images/phoenix.jpeg",
+    chinese: "凤凰",
+    color: "#FF6B35",
+    phonetic: "/ˈfiːnɪks/",
+    guide: "FEE-niks",
     type: "animal",
   },
   orangutan: {

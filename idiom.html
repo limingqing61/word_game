@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>成语小博士 · Idiom Master</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #1a472a 0%, #0e2a1a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .game-container {
+            max-width: 700px;
+            width: 100%;
+            background: rgba(30, 50, 30, 0.7);
+            backdrop-filter: blur(5px);
+            border-radius: 60px;
+            padding: 20px;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        header {
+            text-align: center;
+            color: #FFE484;
+            text-shadow: 4px 4px 0 #B45309;
+            margin-bottom: 8px;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        header p {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            margin: 2px 0 0;
+        }
+
+        .top-panel {
+            display: flex;
+            justify-content: space-between;
+            background: #31220e;
+            padding: 6px 16px;
+            border-radius: 50px;
+            margin-bottom: 12px;
+            color: #ffecb3;
+            font-weight: bold;
+            flex-wrap: wrap;
+            gap: 4px;
+            font-size: 0.95rem;
+        }
+
+        .top-panel .best-box {
+            cursor: pointer;
+            color: #ffd966;
+        }
+
+        .question-area {
+            background: #2c4a2e;
+            border-radius: 30px;
+            padding: 25px 20px 20px;
+            border: 3px solid #ffaa33;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .idiom-display {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #fff;
+            letter-spacing: 8px;
+            text-align: center;
+            line-height: 1.4;
+            font-family: 'Noto Serif SC', 'KaiTi', '楷体', serif;
+            text-decoration: none;
+        }
+
+        .idiom-display .blank {
+            display: inline-block;
+            min-width: 1.8rem;
+            /* border-bottom: 4px solid #ffaa33; */
+            color: #ffd966;
+            padding: 0 4px;
+            line-height: 1.4;
+            background: transparent !important;
+            /* ===== 关键：强制清除文字装饰 ===== */
+            text-decoration: none !important;
+            -webkit-text-decoration: none !important;
+        }
+
+        .idiom-display .hint-char {
+            display: inline-block;
+            min-width: 1.8rem;
+            color: #ffd966;
+            font-size: 1.2rem;
+            vertical-align: middle;
+        }
+
+        .idiom-meaning {
+            font-size: 0.95rem;
+            color: #ffeaac;
+            margin-top: 12px;
+            text-align: center;
+            padding: 6px 16px;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 20px;
+            min-height: 2.2rem;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .option-btn {
+            background: #fef7e0;
+            border: none;
+            border-radius: 16px;
+            padding: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #b97f44;
+            transition: 0.05s linear;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1 / 1;
+            font-family: inherit;
+        }
+
+        .option-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #b97f44;
+        }
+
+        .option-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .option-btn img {
+            width: 55%;
+            height: 55%;
+            object-fit: contain;
+        }
+
+        .option-btn .option-label {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #31220e;
+            margin-top: 4px;
+        }
+
+        .option-btn.correct {
+            background: #4CAF50;
+            box-shadow: 0 4px 0 #2e7d32;
+        }
+
+        .option-btn.correct .option-label {
+            color: #fff;
+        }
+
+        .option-btn.wrong {
+            background: #F44336;
+            box-shadow: 0 4px 0 #b71c1c;
+        }
+
+        .option-btn.wrong .option-label {
+            color: #fff;
+        }
+
+        .feedback {
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 12px;
+            min-height: 1.8rem;
+            color: #ffeaac;
+        }
+
+        .feedback.correct {
+            color: #a5ffa5;
+        }
+
+        .feedback.wrong {
+            color: #ffaaaa;
+        }
+
+        /* 游戏结束浮层 */
+        .result-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 20000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #fff9ef, #ffe0b3);
+            border-radius: 60px;
+            padding: 35px 45px;
+            text-align: center;
+            max-width: 380px;
+            width: 85%;
+            border: 4px solid #ffaa33;
+        }
+
+        .result-card h2 {
+            font-size: 2.2rem;
+            margin: 0 0 10px;
+            color: #31220e;
+        }
+
+        .result-card .final-score {
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin: 5px 0;
+        }
+
+        .result-card .final-label {
+            font-size: 1.1rem;
+            color: #5a4a2e;
+        }
+
+        .result-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .result-buttons button {
+            border: none;
+            padding: 10px 28px;
+            font-size: 1rem;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: inherit;
+            box-shadow: 0 4px 0 #b97f44;
+            transition: 0.05s linear;
+        }
+
+        .result-buttons button:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #b97f44;
+        }
+
+        .result-buttons .btn-restart {
+            background: #4caf50;
+            color: white;
+            box-shadow: 0 4px 0 #2e7d32;
+        }
+
+        .result-buttons .btn-home {
+            background: #607d8b;
+            color: white;
+            box-shadow: 0 4px 0 #455a64;
+        }
+
+        .bottom-bar {
+            text-align: center;
+            margin-top: 14px;
+        }
+
+        .bottom-bar .back-home-btn {
+            background: #607d8b;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: inherit;
+            box-shadow: 0 4px 0 #455a64;
+            transition: 0.05s linear;
+        }
+
+        .bottom-bar .back-home-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #455a64;
+        }
+
+        /* 启动遮罩 */
+        #startOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a472a 0%, #0e2a1a 100%);
+            z-index: 100000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+        }
+
+        #startOverlay h1 {
+            font-size: 2.5rem;
+            text-shadow: 4px 4px 0 #b45309;
+            margin-bottom: 6px;
+        }
+
+        #startOverlay .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+
+        .rule-box {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 30px;
+            padding: 16px 24px;
+            margin-bottom: 25px;
+            max-width: 380px;
+            width: 90%;
+        }
+
+        .rule-box p {
+            margin: 6px 0;
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .rule-box .highlight {
+            color: #ffd54f;
+            font-weight: bold;
+        }
+
+        .rule-box .example {
+            color: #ffaa33;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        #startBtn {
+            background: #ffaa33;
+            border: none;
+            padding: 14px 44px;
+            font-size: 1.4rem;
+            border-radius: 60px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #b97f44;
+            font-family: inherit;
+            transition: 0.05s linear;
+            color: #31220e;
+        }
+
+        #startBtn:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #b97f44;
+        }
+
+        @media (max-width: 600px) {
+            .game-container {
+                padding: 12px;
+            }
+
+            header h1 {
+                font-size: 1.3rem;
+            }
+
+            .top-panel {
+                font-size: 0.75rem;
+                padding: 4px 10px;
+            }
+
+            .idiom-display {
+                font-size: 1.8rem;
+                letter-spacing: 4px;
+            }
+
+            .idiom-display .blank {
+                min-width: 1.4rem;
+            }
+
+            .options-container {
+                gap: 8px;
+            }
+
+            .option-btn .option-label {
+                font-size: 1rem;
+            }
+
+            .question-area {
+                padding: 16px 12px;
+                min-height: 140px;
+            }
+
+            #startOverlay h1 {
+                font-size: 1.8rem;
+            }
+
+            #startBtn {
+                font-size: 1.1rem;
+                padding: 12px 32px;
+            }
+
+            .rule-box {
+                padding: 12px 16px;
+            }
+
+            .result-card {
+                padding: 25px 25px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .idiom-display {
+                font-size: 1.4rem;
+                letter-spacing: 2px;
+            }
+
+            .options-container {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 6px;
+            }
+
+            .option-btn img {
+                width: 45%;
+                height: 45%;
+            }
+
+            .option-btn .option-label {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== 启动遮罩 ===== -->
+    <div id="startOverlay">
+        <h1>🐉 成语小博士</h1>
+        <div class="subtitle">Idiom Master</div>
+
+        <div class="rule-box">
+            <p>🎯 看成语，选图片，补全 <span class="highlight">空缺</span> 的字</p>
+            <p>📊 共 <span class="highlight">20 题</span>，每题 5 分</p>
+            <p>⭐ 满分 <span class="highlight">100 分</span></p>
+            <p style="margin-top:8px; font-size:0.85rem;">💡 选错直接下一题，不扣分</p>
+        </div>
+
+        <button id="startBtn">🔊 开始挑战</button>
+    </div>
+
+    <!-- ===== 游戏容器 ===== -->
+    <div class="game-container" id="gameContainer" style="display: none;">
+        <header>
+            <h1>🐉 成语小博士</h1>
+            <p>Idiom Master · Fill the Blank</p>
+        </header>
+
+        <div class="top-panel">
+            <span>⭐ 得分: <span id="scoreDisplay">0</span></span>
+            <span>📊 进度: <span id="progressDisplay">0/20</span></span>
+            <span class="best-box" id="bestBox">🏆 最佳: <span id="bestDisplay">—</span></span>
+        </div>
+
+        <div class="question-area">
+            <div class="idiom-display" id="idiomDisplay"></div>
+            <div class="idiom-meaning" id="meaningDisplay">✨ 提示：成语含义</div>
+            <div class="options-container" id="optionsContainer"></div>
+        </div>
+
+        <div id="feedback" class="feedback"></div>
+
+        <div class="bottom-bar">
+            <button id="backHomeBtn" class="back-home-btn"><i class="fas fa-home"></i> 返回首页</button>
+        </div>
+    </div>
+
+    <script src="utils.js"></script>
+    <script src="wordData.js"></script>
+    <script src="wordlistConfig.js"></script>
+    <script src="idiomData.js"></script>
+    <script src="idiom.js"></script>
+
+</body>
+
+</html>
