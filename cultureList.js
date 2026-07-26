@@ -270,9 +270,30 @@
 
     // 处理 content：如果有 content 就用，没有就显示提示
     const contentText = item.content || "📝 暂无详细介绍，请稍后补充。";
-    // 支持换行（如果 content 中有 \n 就转成 <br>）
     const formattedContent = contentText.replace(/\n/g, "<br>");
     modalContentText.innerHTML = formattedContent;
+
+    // ===== 绑定发音按钮 =====
+    const speakBtn = document.getElementById("modalSpeakBtn");
+    if (speakBtn) {
+      // 移除旧事件避免重复绑定
+      const newSpeakBtn = speakBtn.cloneNode(true);
+      speakBtn.parentNode.replaceChild(newSpeakBtn, speakBtn);
+      newSpeakBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        // 朗读内容
+        const text = `${item.hint}，${contentText}`;
+        if (window.SpeechHelper && window.SpeechHelper.speak) {
+          window.SpeechHelper.speak(text, 0.7);
+        } else {
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = "zh-CN";
+          utterance.rate = 0.7;
+          speechSynthesis.cancel();
+          speechSynthesis.speak(utterance);
+        }
+      });
+    }
 
     modalOverlay.classList.add("active");
     document.body.style.overflow = "hidden";
@@ -280,6 +301,11 @@
   }
 
   function closeModal() {
+    // ===== 停止语音播放 =====
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+
     modalOverlay.classList.remove("active");
     document.body.style.overflow = "";
     currentModalItem = null;

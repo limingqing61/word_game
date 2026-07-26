@@ -312,6 +312,35 @@
             margin-bottom: 0;
         }
 
+        /* ===== 发音按钮（弹窗内） ===== */
+        .modal-speak-btn {
+            background: #4fc3f7;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #0288d1;
+            font-family: inherit;
+            transition: 0.05s linear;
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .modal-speak-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 0px 0 #0288d1;
+        }
+
+        .modal-speak-btn i {
+            font-size: 0.9rem;
+        }
+
         .empty-state {
             color: rgba(255, 236, 179, 0.4);
             text-align: center;
@@ -438,6 +467,11 @@
                 font-size: 0.75rem;
                 padding: 3px 12px;
             }
+
+            .modal-speak-btn {
+                font-size: 0.75rem;
+                padding: 4px 12px;
+            }
         }
 
         @media (max-width: 380px) {
@@ -451,6 +485,11 @@
             }
 
             .detail-btn {
+                font-size: 0.7rem;
+                padding: 3px 10px;
+            }
+
+            .modal-speak-btn {
                 font-size: 0.7rem;
                 padding: 3px 10px;
             }
@@ -485,6 +524,9 @@
                 <div class="modal-title" id="modalTitle">
                     <span id="modalName"></span>
                     <span class="modal-country" id="modalCountry"></span>
+                    <button class="modal-speak-btn" id="modalSpeakBtn">
+                        <i class="fas fa-volume-up"></i> 发音
+                    </button>
                 </div>
                 <button class="modal-close" id="modalCloseBtn">✕</button>
             </div>
