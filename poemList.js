@@ -9,6 +9,10 @@
   const totalCountEl = document.getElementById("totalCount");
   const countBadge = document.getElementById("countBadge");
   const floatingBtn = document.getElementById("floatingHomeBtn");
+  const searchInput = document.getElementById("searchPoemInput");
+  const searchBtn = document.getElementById("searchPoemBtn");
+  const clearBtn = document.getElementById("searchClearBtn");
+  const searchRadios = document.querySelectorAll('input[name="searchType"]');
 
   // 弹窗相关
   const modalOverlay = document.getElementById("modalOverlay");
@@ -24,6 +28,8 @@
   let currentPoem = null;
   let allPoems = [];
   let currentFilter = "all"; // 'all' | 'learned' | 'unlearned'
+  let searchKeyword = "";
+  let searchType = "title"; // 'title' | 'author'
 
   // ========== 已学状态 ==========
   function getLearnedSet() {
@@ -138,6 +144,32 @@
     }
   }
 
+  // ========== 获取过滤后的诗列表 ==========
+  function getFilteredPoems() {
+    let poems = allPoems;
+
+    // 1. 搜索过滤
+    if (searchKeyword) {
+      const keyword = searchKeyword.toLowerCase();
+      if (searchType === "title") {
+        poems = poems.filter((p) => p.title.toLowerCase().includes(keyword));
+      } else {
+        poems = poems.filter((p) => p.author.toLowerCase().includes(keyword));
+      }
+    }
+
+    // 2. 状态筛选
+    if (currentFilter === "learned") {
+      const learnedSet = getLearnedSet();
+      poems = poems.filter((p) => learnedSet.has(p.title));
+    } else if (currentFilter === "unlearned") {
+      const learnedSet = getLearnedSet();
+      poems = poems.filter((p) => !learnedSet.has(p.title));
+    }
+
+    return poems;
+  }
+
   // ========== 渲染列表 ==========
   function renderList() {
     // 合并五言和七言
@@ -178,7 +210,7 @@
 
     if (total === 0) {
       listContainer.innerHTML = `
-                <div style="color: rgba(255,236,179,0.4); text-align:center; padding: 50px 20px; font-size:1.1rem;">
+                <div class="empty-msg">
                     📭 暂无古诗数据<br>
                     <span style="display:block; font-size:0.85rem; color: rgba(255,236,179,0.2); margin-top:8px;">
                         请检查 poemData.js 是否正确加载
@@ -188,27 +220,18 @@
       return;
     }
 
-    // 根据筛选条件过滤
-    let filteredPoems = allPoems;
-    if (currentFilter === "learned") {
-      const learnedSet = getLearnedSet();
-      filteredPoems = allPoems.filter((p) => learnedSet.has(p.title));
-    } else if (currentFilter === "unlearned") {
-      const learnedSet = getLearnedSet();
-      filteredPoems = allPoems.filter((p) => !learnedSet.has(p.title));
-    }
+    const filteredPoems = getFilteredPoems();
 
     if (filteredPoems.length === 0) {
-      const msg =
-        currentFilter === "all"
-          ? "暂无古诗"
-          : currentFilter === "learned"
-            ? "还没有已学的诗，加油！"
-            : "🎉 所有诗都已学完！";
+      const msg = searchKeyword
+        ? `没有找到 "${searchKeyword}" 相关的诗`
+        : currentFilter === "learned"
+          ? "还没有已学的诗，加油！"
+          : currentFilter === "unlearned"
+            ? "🎉 所有诗都已学完！"
+            : "暂无古诗";
       listContainer.innerHTML = `
-                <div style="color: rgba(255,236,179,0.4); text-align:center; padding: 40px 20px; font-size:1.1rem;">
-                    ${msg}
-                </div>
+                <div class="empty-msg">${msg}</div>
             `;
       return;
     }
@@ -244,7 +267,6 @@
         e.stopPropagation();
         const title = this.dataset.title;
         toggleLearned(title);
-        // 重新渲染列表（保持当前筛选）
         renderList();
       });
     });
@@ -329,6 +351,33 @@
       renderList();
     });
   });
+
+  // ========== 搜索事件 ==========
+  function performSearch() {
+    searchKeyword = searchInput.value.trim();
+    // 获取当前选中的搜索类型
+    for (const r of searchRadios) {
+      if (r.checked) {
+        searchType = r.value;
+        break;
+      }
+    }
+    renderList();
+  }
+
+  function clearSearch() {
+    searchInput.value = "";
+    searchKeyword = "";
+    renderList();
+  }
+
+  searchBtn.addEventListener("click", performSearch);
+  searchInput.addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+      performSearch();
+    }
+  });
+  clearBtn.addEventListener("click", clearSearch);
 
   // ========== 事件绑定 ==========
   if (floatingBtn) {
