@@ -52,10 +52,6 @@
   const BEST_KEY = "flappy_best";
   const SAVED_SCORE_KEY = "flappy_saved_score"; // 新增：存档分数
 
-  // 三击删除相关
-  let clickCount = 0;
-  let clickTimer = null;
-
   // ========== 尺寸自适应 ==========
   function resizeCanvas() {
     const container = document.querySelector(".game-container");
@@ -150,55 +146,6 @@
   function updateScoreUI() {
     scoreSpan.textContent = score;
     bestSpan.textContent = bestScore;
-  }
-
-  // 三击删除最高记录
-  function bindTripleClick() {
-    bestBox.addEventListener("click", (e) => {
-      e.stopPropagation();
-      clickCount++;
-      if (clickTimer) clearTimeout(clickTimer);
-      clickTimer = setTimeout(() => {
-        clickCount = 0;
-      }, 500);
-      if (clickCount >= 3) {
-        clickCount = 0;
-        if (confirm("确认清除最高记录吗？")) {
-          bestScore = 0;
-          localStorage.setItem(BEST_KEY, "0");
-          updateScoreUI();
-          const msg = document.createElement("div");
-          msg.textContent = "✅ 最高记录已清除";
-          msg.style.cssText =
-            "position:fixed; bottom:100px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.7); color:white; padding:8px 16px; border-radius:30px; z-index:200; font-size:0.9rem;";
-          document.body.appendChild(msg);
-          setTimeout(() => msg.remove(), 1500);
-        }
-      }
-    });
-    bestBox.addEventListener("touchstart", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      clickCount++;
-      if (clickTimer) clearTimeout(clickTimer);
-      clickTimer = setTimeout(() => {
-        clickCount = 0;
-      }, 500);
-      if (clickCount >= 3) {
-        clickCount = 0;
-        if (confirm("确认清除最高记录吗？")) {
-          bestScore = 0;
-          localStorage.setItem(BEST_KEY, "0");
-          updateScoreUI();
-          const msg = document.createElement("div");
-          msg.textContent = "✅ 最高记录已清除";
-          msg.style.cssText =
-            "position:fixed; bottom:100px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.7); color:white; padding:8px 16px; border-radius:30px; z-index:200; font-size:0.9rem;";
-          document.body.appendChild(msg);
-          setTimeout(() => msg.remove(), 1500);
-        }
-      }
-    });
   }
 
   // ========== 游戏逻辑 ==========
@@ -667,7 +614,28 @@
   function init() {
     resizeCanvas();
     loadScore();
-    bindTripleClick();
+
+    const bestBox = document.getElementById("bestBox");
+    if (bestBox) {
+      bindTripleClickDelete(
+        bestBox,
+        function onClear() {
+          bestScore = 0;
+          updateScoreUI();
+          const msg = document.createElement("div");
+          msg.textContent = "✅ 最高记录已清除";
+          msg.style.cssText =
+            "position:fixed; bottom:100px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.7); color:white; padding:8px 16px; border-radius:30px; z-index:200; font-size:0.9rem;";
+          document.body.appendChild(msg);
+          setTimeout(() => msg.remove(), 1500);
+        },
+        "flappy_best",
+        function onConfirm() {
+          const currentRecord = localStorage.getItem("flappy_best");
+          return `确认清除最高记录吗？\n\n当前记录：${currentRecord || "无"}`;
+        },
+      );
+    }
     bindEvents();
 
     loadImages(() => {

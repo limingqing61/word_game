@@ -250,3 +250,47 @@ window.deleteFavorite = deleteFavorite;
 window.renameFavorite = renameFavorite;
 window.isWordInFavorite = isWordInFavorite;
 window.FAVORITES_STORAGE_KEY = FAVORITES_STORAGE_KEY;
+
+// ========== 三击删除最佳记录 ==========
+
+/**
+ * 绑定三击删除功能
+ * @param {string|HTMLElement} target - 要绑定点击事件的元素（选择器或 DOM 元素）
+ * @param {Function} onClear - 删除记录后的回调函数（通常用于更新 UI）
+ * @param {string} storageKey - localStorage 中存储最佳记录的 key
+ * @param {Function} onConfirm - 可选，自定义确认框的提示文字
+ */
+function bindTripleClickDelete(target, onClear, storageKey, onConfirm) {
+  let clickCount = 0;
+  let clickTimer = null;
+
+  const el =
+    typeof target === "string" ? document.querySelector(target) : target;
+  if (!el) return;
+
+  // ===== 防止重复绑定 =====
+  if (el._tripleClickBound) return;
+  el._tripleClickBound = true;
+
+  const defaultMessage = `确认清除最佳记录吗？\n\n当前记录：${localStorage.getItem(storageKey) || "无"}`;
+
+  el.addEventListener("click", function (e) {
+    e.stopPropagation();
+    clickCount++;
+    if (clickTimer) clearTimeout(clickTimer);
+    clickTimer = setTimeout(() => {
+      clickCount = 0;
+    }, 500);
+
+    if (clickCount >= 3) {
+      clickCount = 0;
+      const msg = onConfirm ? onConfirm() : defaultMessage;
+      if (confirm(msg)) {
+        localStorage.removeItem(storageKey);
+        if (onClear) onClear();
+      }
+    }
+  });
+}
+
+window.bindTripleClickDelete = bindTripleClickDelete;

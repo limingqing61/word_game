@@ -15,8 +15,6 @@
   const optionsContainer = document.getElementById("optionsContainer");
   const scoreDisplay = document.getElementById("scoreDisplay");
   const progressDisplay = document.getElementById("progressDisplay");
-  const bestDisplay = document.getElementById("bestDisplay");
-  const bestBox = document.getElementById("bestBox");
   const feedback = document.getElementById("feedback");
   const startOverlay = document.getElementById("startOverlay");
   const startBtn = document.getElementById("startBtn");
@@ -31,62 +29,6 @@
   let gameActive = false;
   let bestRecord = null;
   const BEST_KEY = "idiomMaster_best";
-
-  // ========== 最佳记录 ==========
-  function loadBest() {
-    const stored = localStorage.getItem(BEST_KEY);
-    if (stored) {
-      bestRecord = parseInt(stored);
-      if (!isNaN(bestRecord)) {
-        bestDisplay.textContent = bestRecord;
-        return;
-      }
-    }
-    bestRecord = null;
-    bestDisplay.textContent = "—";
-  }
-
-  function saveBest(score) {
-    if (bestRecord === null || score > bestRecord) {
-      bestRecord = score;
-      localStorage.setItem(BEST_KEY, String(bestRecord));
-      bestDisplay.textContent = bestRecord;
-      return true;
-    }
-    return false;
-  }
-
-  // 三击删除
-  let clickCount = 0;
-  let clickTimer = null;
-
-  function bindTripleClick() {
-    if (!bestBox) return;
-    bestBox.addEventListener("click", (e) => {
-      e.stopPropagation();
-      clickCount++;
-      if (clickTimer) clearTimeout(clickTimer);
-      clickTimer = setTimeout(() => {
-        clickCount = 0;
-      }, 500);
-      if (clickCount >= 3) {
-        clickCount = 0;
-        if (confirm("确认清除最佳记录吗？")) {
-          localStorage.removeItem(BEST_KEY);
-          bestRecord = null;
-          bestDisplay.textContent = "—";
-          feedback.textContent = "✅ 最佳记录已清除";
-          feedback.className = "feedback correct";
-          setTimeout(() => {
-            if (feedback.textContent === "✅ 最佳记录已清除") {
-              feedback.textContent = "";
-              feedback.className = "feedback";
-            }
-          }, 1500);
-        }
-      }
-    });
-  }
 
   // ========== 工具函数 ==========
   function shuffleArray(arr) {
@@ -425,7 +367,6 @@
   // ========== 结束 ==========
   function showResult() {
     gameActive = false;
-    const isNewRecord = saveBest(score);
 
     const overlay = document.createElement("div");
     overlay.className = "result-overlay";
@@ -434,7 +375,6 @@
                 <h2>🏆 闯关完成！</h2>
                 <div class="final-label">最终得分</div>
                 <div class="final-score">${score} / ${MAX_SCORE}</div>
-                ${isNewRecord ? '<div style="color:#ff6b6b; font-size:1.2rem; font-weight:bold;">✨ 新纪录！ ✨</div>' : ""}
                 <div class="result-buttons">
                     <button class="btn-restart" id="resultRestartBtn"><i class="fas fa-redo"></i> 再来一局</button>
                     <button class="btn-home" id="resultHomeBtn"><i class="fas fa-home"></i> 返回首页</button>
@@ -481,8 +421,6 @@
   function initAndStart() {
     startOverlay.style.display = "none";
     gameContainer.style.display = "block";
-    loadBest();
-    bindTripleClick();
     bindGoHome(backHomeBtn);
     resetGame();
   }
