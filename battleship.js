@@ -51,11 +51,34 @@
       bestRecord = parseInt(stored);
       if (!isNaN(bestRecord)) {
         bestDisplay.textContent = bestRecord;
-        return;
       }
+    } else {
+      bestRecord = null;
+      bestDisplay.textContent = "—";
     }
-    bestRecord = null;
-    bestDisplay.textContent = "—";
+
+    // ===== 三击删除最佳记录（只绑定一次） =====
+    if (bestBox) {
+      // 防止重复绑定
+      if (bestBox._tripleClickBound) return;
+      bindTripleClickDelete(
+        bestBox,
+        function onClear() {
+          bestRecord = null;
+          bestDisplay.textContent = "—";
+          message.textContent = "✅ 最佳记录已清除";
+          setTimeout(() => {
+            if (message.textContent === "✅ 最佳记录已清除")
+              message.textContent = "💣 点击格子，炸毁三架飞机！";
+          }, 1500);
+        },
+        "battleship_best",
+        function onConfirm() {
+          const currentRecord = localStorage.getItem("battleship_best");
+          return `确认清除最佳记录吗？\n\n当前记录：${currentRecord || "无"}`;
+        },
+      );
+    }
   }
 
   function saveBest(shots) {
@@ -66,35 +89,6 @@
       return true;
     }
     return false;
-  }
-
-  // 三击删除
-  let clickCount = 0;
-  let clickTimer = null;
-
-  function bindTripleClick() {
-    if (!bestBox) return;
-    bestBox.addEventListener("click", (e) => {
-      e.stopPropagation();
-      clickCount++;
-      if (clickTimer) clearTimeout(clickTimer);
-      clickTimer = setTimeout(() => {
-        clickCount = 0;
-      }, 500);
-      if (clickCount >= 3) {
-        clickCount = 0;
-        if (confirm("确认清除最佳记录吗？")) {
-          localStorage.removeItem(BEST_KEY);
-          bestRecord = null;
-          bestDisplay.textContent = "—";
-          message.textContent = "✅ 最佳记录已清除";
-          setTimeout(() => {
-            if (message.textContent === "✅ 最佳记录已清除")
-              message.textContent = "💣 点击格子，炸毁三架飞机！";
-          }, 1500);
-        }
-      }
-    });
   }
 
   // ========== 音效 ==========
@@ -124,7 +118,6 @@
       const headC =
         Math.floor(Math.random() * (range.maxC - range.minC + 1)) + range.minC;
 
-      // 机头离边缘太近（≤2格），40%概率跳过
       const edgeDist = Math.min(
         headR,
         ROWS - 1 - headR,
@@ -138,10 +131,8 @@
       const cells = getPlaneCells(headR, headC, dir);
       if (!cells || isOverlapping(cells, placed)) continue;
 
-      // 如果已经有飞机了，检查距离
       if (placed.length > 0) {
         const minDist = getMinDistance(cells, placed);
-        // 如果距离太远（> 5格），50%概率跳过
         if (minDist > 5 && Math.random() < 0.5) {
           continue;
         }
@@ -156,7 +147,6 @@
       });
     }
 
-    // 兜底：如果还没放满，用纯随机补足
     while (placed.length < PLANE_COUNT) {
       const dir = Math.floor(Math.random() * 4);
       const range = getHeadRange(dir);
@@ -298,7 +288,7 @@
 
     renderGrid();
 
-    // ===== 滚动到网格底部（多重延迟） =====
+    // 滚动到网格底部
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         setTimeout(() => {
@@ -484,8 +474,6 @@
     floatingBtn.addEventListener("click", goHome);
   }
 
-  bindTripleClick();
-
   // ========== 启动 ==========
   loadBest();
   initBoard();
@@ -502,14 +490,8 @@ if (startBtn) {
     startOverlay.style.display = "none";
     gameContainer.style.display = "block";
 
-    // ===== 等待容器完全显示后再初始化 =====
     setTimeout(() => {
-      // 重新调用 IIFE 内部的函数
-      // 通过触发 loadBest 和 initBoard（它们已经在 IIFE 内定义了）
-      // 但它们在闭包内无法直接访问，所以我们重新执行初始化
-      // 最简单的方式：刷新页面逻辑
-      // 但实际上，我们需要重新初始化 board 和 UI
-      // 更好的方式是用一个全局入口
+      // 重新执行初始化（IIFE 内部函数无法直接访问，用全局函数代替）
       startGame();
     }, 150);
   });
@@ -523,7 +505,7 @@ function startGame() {
   const bestDisplay = document.getElementById("bestDisplay");
   const message = document.getElementById("message");
 
-  // 重新执行初始化（复制 IIFE 内部的初始化逻辑）
+  // 重新执行初始化
   const ROWS = 10;
   const COLS = 10;
   const PLANE_COUNT = 3;
@@ -910,32 +892,6 @@ function startGame() {
 
   function goHome() {
     window.location.href = "index.html";
-  }
-
-  // 绑定三击删除
-  if (bestBox) {
-    let clickCount = 0;
-    let clickTimer = null;
-    bestBox.addEventListener("click", (e) => {
-      e.stopPropagation();
-      clickCount++;
-      if (clickTimer) clearTimeout(clickTimer);
-      clickTimer = setTimeout(() => {
-        clickCount = 0;
-      }, 500);
-      if (clickCount >= 3) {
-        clickCount = 0;
-        if (confirm("确认清除最佳记录吗？")) {
-          localStorage.removeItem("battleship_best");
-          bestDisplay.textContent = "—";
-          message.textContent = "✅ 最佳记录已清除";
-          setTimeout(() => {
-            if (message.textContent === "✅ 最佳记录已清除")
-              message.textContent = "💣 点击格子，炸毁三架飞机！";
-          }, 1500);
-        }
-      }
-    });
   }
 
   // 悬浮返回首页

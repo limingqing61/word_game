@@ -78,49 +78,6 @@
     return false;
   }
 
-  function resetCurrentLevelRecord() {
-    if (bestRecords[currentLevel] !== undefined) {
-      delete bestRecords[currentLevel];
-      localStorage.setItem("puzzle_best_records", JSON.stringify(bestRecords));
-      updateBestDisplay();
-      gameMessageDiv.innerHTML = "✅ 当前关卡的记录已清除";
-      setTimeout(() => {
-        if (gameMessageDiv.innerHTML === "✅ 当前关卡的记录已清除")
-          gameMessageDiv.innerHTML = "";
-      }, 1500);
-      return true;
-    }
-    return false;
-  }
-
-  // 三击重置
-  let clickCount = 0;
-  let clickTimer = null;
-
-  function bindTripleClickReset() {
-    const bestBox = document.querySelector(".best-box");
-    if (!bestBox) return;
-    bestBox.style.cursor = "pointer";
-    bestBox.addEventListener("click", (e) => {
-      e.stopPropagation();
-      clickCount++;
-      if (clickTimer) clearTimeout(clickTimer);
-      clickTimer = setTimeout(() => {
-        clickCount = 0;
-      }, 500);
-      if (clickCount >= 3) {
-        clickCount = 0;
-        if (
-          confirm(
-            `确认清除当前关卡的最快记录吗？\n\n当前记录：${bestDisplaySpan.textContent}`,
-          )
-        ) {
-          resetCurrentLevelRecord();
-        }
-      }
-    });
-  }
-
   function stopTimer() {
     if (timerInterval) {
       clearInterval(timerInterval);
@@ -392,8 +349,40 @@
       bestRecords = {};
     }
     updateBestDisplay();
-
     resetGame(levelIdx);
+
+    // ===== 三击删除最佳记录 =====
+    const bestBox = document.querySelector(".best-box");
+    if (bestBox) {
+      bindTripleClickDelete(
+        bestBox,
+        function onClear() {
+          // 清空内存中的 bestRecords
+          delete bestRecords[currentLevel];
+
+          bestDisplaySpan.textContent = "尚未通过";
+          gameMessageDiv.innerHTML = "✅ 当前关卡的记录已清除";
+          setTimeout(() => {
+            if (gameMessageDiv.innerHTML === "✅ 当前关卡的记录已清除")
+              gameMessageDiv.innerHTML = "";
+          }, 1500);
+        },
+        "puzzle_best_records",
+        function onConfirm() {
+          const currentRecord = localStorage.getItem("puzzle_best_records");
+          let recordText = "无";
+          if (currentRecord) {
+            try {
+              const records = JSON.parse(currentRecord);
+              if (records[currentLevel] !== undefined) {
+                recordText = formatTime(records[currentLevel]);
+              }
+            } catch (e) {}
+          }
+          return `确认清除当前关卡的最快记录吗？\n\n当前记录：${recordText}`;
+        },
+      );
+    }
   }
 
   // ========== 事件绑定 ==========
@@ -425,6 +414,5 @@
     if (ctx.state === "suspended") ctx.resume();
   }
 
-  bindTripleClickReset();
   loadLevel(0);
 })();

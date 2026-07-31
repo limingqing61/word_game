@@ -96,34 +96,6 @@
     }
   }
 
-  // 三击删除最佳记录
-  let clickCount = 0;
-  let clickTimer = null;
-  function bindTripleClick() {
-    if (!bestBox) return;
-    bestBox.addEventListener("click", (e) => {
-      e.stopPropagation();
-      clickCount++;
-      if (clickTimer) clearTimeout(clickTimer);
-      clickTimer = setTimeout(() => {
-        clickCount = 0;
-      }, 500);
-      if (clickCount >= 3) {
-        clickCount = 0;
-        if (confirm("确认清除最佳记录吗？")) {
-          delete bestRecords["total"];
-          localStorage.setItem(BEST_KEY, JSON.stringify(bestRecords));
-          updateBestDisplay();
-          message.textContent = "✅ 最佳记录已清除";
-          setTimeout(() => {
-            if (message.textContent === "✅ 最佳记录已清除")
-              message.textContent = "";
-          }, 1500);
-        }
-      }
-    });
-  }
-
   // ========== 计时器 ==========
   function stopTimer() {
     if (timerInterval) {
@@ -451,7 +423,37 @@
     }, 100);
 
     loadBestRecord();
-    bindTripleClick();
+
+    if (bestBox) {
+      bindTripleClickDelete(
+        bestBox,
+        function onClear() {
+          delete bestRecords["total"];
+          localStorage.setItem(BEST_KEY, JSON.stringify(bestRecords));
+          updateBestDisplay();
+          message.textContent = "✅ 最佳记录已清除";
+          setTimeout(() => {
+            if (message.textContent === "✅ 最佳记录已清除")
+              message.textContent = "";
+          }, 1500);
+        },
+        "duplicateMatch_best",
+        function onConfirm() {
+          const currentRecord = localStorage.getItem("duplicateMatch_best");
+          let recordText = "无";
+          if (currentRecord) {
+            try {
+              const records = JSON.parse(currentRecord);
+              if (records["total"] !== undefined) {
+                recordText = formatTime(records["total"]);
+              }
+            } catch (e) {}
+          }
+          return `确认清除最佳记录吗？\n\n当前记录：${recordText}`;
+        },
+      );
+    }
+
     resetGame();
     bindGoHome(backHomeBtn);
   }
