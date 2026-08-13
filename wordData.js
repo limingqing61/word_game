@@ -5942,7 +5942,7 @@ const wordData = {
     color: "#9C27B0",
     phonetic: "/ɪˈlɪps/",
     guide: "ih-LIPS",
-    type: "shape",
+    type: "other",
   },
   rectangle: {
     image: "images/rectangle.jpeg",
@@ -5950,7 +5950,7 @@ const wordData = {
     color: "#2196F3",
     phonetic: "/ˈrek.tæŋ.ɡəl/",
     guide: "REK-tang-guhl",
-    type: "shape",
+    type: "other",
   },
   seesaw: {
     image: "images/seesaw.jpeg",
@@ -5966,7 +5966,7 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/skwer/",
     guide: "SKWAIR",
-    type: "shape",
+    type: "other",
   },
   triangle: {
     image: "images/triangle.jpeg",
@@ -5974,7 +5974,7 @@ const wordData = {
     color: "#F44336",
     phonetic: "/ˈtraɪ.æŋ.ɡəl/",
     guide: "TRY-ang-guhl",
-    type: "shape",
+    type: "other",
   },
 };
 
