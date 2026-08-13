@@ -273,6 +273,7 @@ const MINIMAL_PAIRS_DATA = [
       "shell",
       "smell",
       "spread",
+      "square",
       "stair",
       "ten",
       "tent",
