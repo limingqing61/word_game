@@ -5936,6 +5936,46 @@ const wordData = {
     guide: "EYE-sland",
     type: "country",
   },
+  ellipse: {
+    image: "images/ellipse.jpeg",
+    chinese: "椭圆",
+    color: "#9C27B0",
+    phonetic: "/ɪˈlɪps/",
+    guide: "ih-LIPS",
+    type: "other",
+  },
+  rectangle: {
+    image: "images/rectangle.jpeg",
+    chinese: "矩形",
+    color: "#2196F3",
+    phonetic: "/ˈrek.tæŋ.ɡəl/",
+    guide: "REK-tang-guhl",
+    type: "other",
+  },
+  seesaw: {
+    image: "images/seesaw.jpeg",
+    chinese: "跷跷板",
+    color: "#FF9800",
+    phonetic: "/ˈsiː.sɔː/",
+    guide: "SEE-saw",
+    type: "toy",
+  },
+  square: {
+    image: "images/square.jpeg",
+    chinese: "正方形",
+    color: "#4CAF50",
+    phonetic: "/skwer/",
+    guide: "SKWAIR",
+    type: "other",
+  },
+  triangle: {
+    image: "images/triangle.jpeg",
+    chinese: "三角形",
+    color: "#F44336",
+    phonetic: "/ˈtraɪ.æŋ.ɡəl/",
+    guide: "TRY-ang-guhl",
+    type: "other",
+  },
 };
 
 window.wordData = wordData;
