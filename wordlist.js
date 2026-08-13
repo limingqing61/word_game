@@ -183,13 +183,11 @@ function renderFavoriteFilter() {
     document.getElementById("favoriteSelect").value = savedFavoriteFilter;
   }
 
+  // 收藏夹筛选变化事件（不再重置分类筛选）
   document.getElementById("favoriteSelect").addEventListener("change", (e) => {
     const value = e.target.value;
     if (value) {
       localStorage.setItem("wordlist_favoriteFilter", value);
-      const typeSelect = document.getElementById("typeSelect");
-      if (typeSelect) typeSelect.value = "all";
-      localStorage.setItem("wordlist_typeFilter", "all");
     } else {
       localStorage.removeItem("wordlist_favoriteFilter");
     }
@@ -251,35 +249,27 @@ function getCurrentTypeFilter() {
   return select ? select.value : "all";
 }
 
-// 获取当前选中的收藏夹筛选
-function getCurrentFavoriteFilterValue() {
-  const select = document.getElementById("favoriteSelect");
-  if (!select) return null;
-  const value = select.value;
-  return value && value !== "" ? value : null;
-}
-
-// 获取过滤后的单词列表
+// 获取过滤后的单词列表（联动筛选：分类 AND 收藏夹）
 function getFilteredWords() {
+  const typeFilter = getCurrentTypeFilter();
   const favoriteFilter = getCurrentFavoriteFilterValue();
 
+  let filtered = wordList; // 默认全部
+
+  // 按分类筛选
+  if (typeFilter && typeFilter !== "all") {
+    filtered = filtered.filter((w) => getWordType(w.word) === typeFilter);
+  }
+
+  // 按收藏夹筛选
   if (favoriteFilter) {
     const favorites = window.getAllFavorites();
     const favoriteWords = favorites[favoriteFilter] || [];
-    return favoriteWords
-      .map((word) => {
-        const found = wordList.find((w) => w.word === word);
-        return found || { word: word, image: "", chinese: "", color: "#333" };
-      })
-      .filter((w) => w.word);
+    // 只保留在收藏夹中的单词
+    filtered = filtered.filter((w) => favoriteWords.includes(w.word));
   }
 
-  const typeFilter = getCurrentTypeFilter();
-  if (typeFilter !== "all") {
-    return wordList.filter((w) => getWordType(w.word) === typeFilter);
-  }
-
-  return wordList;
+  return filtered;
 }
 
 // 渲染分类下拉框
@@ -333,11 +323,14 @@ function renderTypeFilter() {
     document.getElementById("typeSelect").value = savedType;
   }
 
+  // 分类筛选变化事件（不再重置收藏夹筛选）
   document.getElementById("typeSelect").addEventListener("change", (e) => {
-    localStorage.setItem("wordlist_typeFilter", e.target.value);
-    const favSelect = document.getElementById("favoriteSelect");
-    if (favSelect) favSelect.value = "";
-    localStorage.removeItem("wordlist_favoriteFilter");
+    const value = e.target.value;
+    if (value && value !== "all") {
+      localStorage.setItem("wordlist_typeFilter", value);
+    } else {
+      localStorage.removeItem("wordlist_typeFilter");
+    }
     generateWordList();
     if (window.resetPagination) window.resetPagination();
   });
@@ -350,9 +343,6 @@ function generateWordList() {
     console.error("❌ wordList 未加载");
     return;
   }
-
-  const favoriteFilter = getCurrentFavoriteFilterValue();
-  const isFavoriteMode = favoriteFilter !== null;
 
   let filteredWords = getFilteredWords();
 
@@ -426,7 +416,9 @@ function generateWordList() {
     const actionBtn = document.createElement("button");
     actionBtn.className = "word-list-play-btn";
 
-    if (isFavoriteMode) {
+    // 判断当前是否处于“收藏夹筛选”模式
+    const favoriteFilter = getCurrentFavoriteFilterValue();
+    if (favoriteFilter) {
       actionBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
       actionBtn.style.background = "#dc3545";
       actionBtn.addEventListener("click", () => {
@@ -543,32 +535,12 @@ function initSearch() {
     return "en";
   }
 
-  function getCurrentFilteredWords() {
-    const favoriteFilter = getCurrentFavoriteFilterValue();
-    if (favoriteFilter) {
-      const favorites = window.getAllFavorites();
-      const favoriteWords = favorites[favoriteFilter] || [];
-      return favoriteWords
-        .map((word) => {
-          const found = wordList.find((w) => w.word === word);
-          return found || { word: word, image: "", chinese: "", color: "#333" };
-        })
-        .filter((w) => w.word);
-    }
-
-    const typeFilter = getCurrentTypeFilter();
-    if (typeFilter !== "all") {
-      return wordList.filter((w) => getWordType(w.word) === typeFilter);
-    }
-    return wordList;
-  }
-
   function locateWord() {
     const keyword = searchInput.value.trim();
     if (!keyword) return;
     const type = getSearchType();
 
-    const filteredWords = getCurrentFilteredWords();
+    const filteredWords = getFilteredWords(); // 直接使用联动筛选结果
 
     let index = -1;
     if (type === "en") {
