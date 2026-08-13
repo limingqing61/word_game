@@ -5920,6 +5920,22 @@ const wordData = {
     guide: "BLAK-buh-ree",
     type: "fruit",
   },
+  Denmark: {
+    image: "images/Denmark.jpeg",
+    chinese: "丹麦",
+    color: "#C60C30",
+    phonetic: "/ˈdɛn.mɑːrk/",
+    guide: "DEN-mark",
+    type: "country",
+  },
+  Iceland: {
+    image: "images/Iceland.jpeg",
+    chinese: "冰岛",
+    color: "#0048E0",
+    phonetic: "/ˈaɪs.lənd/",
+    guide: "EYE-sland",
+    type: "country",
+  },
 };
 
 window.wordData = wordData;

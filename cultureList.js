@@ -104,6 +104,10 @@
       Qatar: "🇶🇦",
       "New Zealand": "🇳🇿",
       Fiji: "🇫🇯",
+      Netherlands: "🇳🇱",
+      Switzerland: "🇨🇭",
+      Denmark: "🇩🇰",
+      Iceland: "🇮🇸",
     };
     return map[countryKey] || "🌍";
   }
