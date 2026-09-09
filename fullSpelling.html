@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔤</text></svg>">
+    <title>Full Spelling · 全拼模式</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== 全拼特有样式 ===== */
+        .full-spell-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 30px;
+            padding: 24px 20px 28px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border: 4px solid #4fc3f7;
+            text-align: center;
+        }
+
+        .question-card img {
+            width: 140px;
+            height: 140px;
+            object-fit: contain;
+            margin: 0 auto 10px;
+            display: block;
+        }
+
+        .chinese-hint {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 12px;
+        }
+
+        .spell-input-area {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .spell-input-area input {
+            font-size: 2rem;
+            padding: 10px 20px;
+            border: 3px solid #4fc3f7;
+            border-radius: 20px;
+            width: 80%;
+            max-width: 280px;
+            text-align: center;
+            letter-spacing: 3px;
+            outline: none;
+            background: #f5faff;
+            font-weight: bold;
+            color: #333;
+            transition: 0.2s;
+        }
+
+        .spell-input-area input:focus {
+            border-color: #FF9800;
+            box-shadow: 0 0 0 4px rgba(255, 152, 0, 0.2);
+        }
+
+        .spell-input-area input.correct {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+
+        .spell-input-area input.wrong {
+            border-color: #F44336;
+            background: #ffebee;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 18px 0 10px;
+        }
+
+        .action-btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.1s linear;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1 0 auto;
+            justify-content: center;
+            min-width: 80px;
+            font-family: inherit;
+        }
+
+        .action-btn:active {
+            transform: scale(0.95);
+        }
+
+        .action-btn:disabled {
+            opacity: 0.4;
+            transform: none;
+            cursor: not-allowed;
+        }
+
+        .action-btn.speak {
+            background: #42a5f5;
+            color: white;
+        }
+
+        .action-btn.hint {
+            background: #ffa726;
+            color: white;
+        }
+
+        .action-btn.submit {
+            background: #66bb6a;
+            color: white;
+        }
+
+        .action-btn.skip {
+            background: #ef5350;
+            color: white;
+        }
+
+        .hint-display {
+            margin: 10px 0;
+            font-size: 1.8rem;
+            font-weight: bold;
+            letter-spacing: 6px;
+            color: #3366ff;
+            min-height: 2.5rem;
+            background: #f0f4ff;
+            padding: 8px 0;
+            border-radius: 16px;
+            border: 2px dashed #90caf9;
+        }
+
+        .result-display {
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 16px;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .result-display.correct {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+
+        .result-display.wrong {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+
+        .result-display .phonetic {
+            font-weight: normal;
+            color: #1a237e;
+            font-size: 0.9rem;
+        }
+
+        /* ===== 游戏结束错题本 ===== */
+        .wrong-words-section {
+            background: #fff3e0;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 3px solid #FF9800;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .wrong-words-section h3 {
+            color: #E65100;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .wrong-words-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .wrong-word-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: white;
+            border-radius: 15px;
+            padding: 12px 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid #FF9800;
+        }
+
+        .wrong-word-item img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+
+        .wrong-word-info {
+            flex: 1;
+        }
+
+        .wrong-word-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .wrong-word-phonetic {
+            font-size: 0.9rem;
+            color: #3366ff;
+        }
+
+        .wrong-word-chinese {
+            font-size: 0.9rem;
+            color: #4CAF50;
+        }
+
+        .wrong-word-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .wrong-word-btn {
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.1s linear;
+        }
+
+        .wrong-word-btn:active {
+            transform: scale(0.9);
+        }
+
+        .game-complete {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .game-complete .final-score {
+            font-size: 1.3rem;
+            margin: 15px 0;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-group button {
+            border: none;
+            padding: 10px 28px;
+            border-radius: 40px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .btn-group .restart {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-group .home {
+            background: #607d8b;
+            color: white;
+        }
+
+        /* ===== 顶部信息栏 ===== */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            background: #31220e;
+            padding: 6px 14px;
+            border-radius: 40px;
+            margin-bottom: 14px;
+            color: #ffecb3;
+            font-weight: bold;
+            font-size: 0.8rem;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .top-bar span {
+            white-space: nowrap;
+        }
+
+        .top-bar .hint-count {
+            color: #ffd54f;
+        }
+
+        /* ===== 启动遮罩 ===== */
+        #startOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a472a 0%, #0e2a1a 100%);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #startOverlay h1 {
+            font-size: 2.8rem;
+            text-shadow: 4px 4px 0 #b45309;
+            margin-bottom: 4px;
+        }
+
+        #startOverlay .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 24px;
+        }
+
+        #startBtn {
+            background: #ffaa33;
+            border: none;
+            padding: 14px 48px;
+            font-size: 1.6rem;
+            border-radius: 60px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #b97f44;
+            font-family: inherit;
+            transition: 0.05s linear;
+            color: #31220e;
+        }
+
+        #startBtn:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #b97f44;
+        }
+
+        .rule-box {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 30px;
+            padding: 12px 20px;
+            margin-bottom: 24px;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .rule-box p {
+            margin: 4px 0;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .rule-box .highlight {
+            color: #ffd54f;
+            font-weight: bold;
+        }
+
+        .rule-box .small {
+            font-size: 0.75rem;
+            opacity: 0.6;
+        }
+
+        @media (max-width: 550px) {
+            .question-card {
+                padding: 16px 12px 20px;
+            }
+
+            .question-card img {
+                width: 100px;
+                height: 100px;
+            }
+
+            .chinese-hint {
+                font-size: 1.3rem;
+            }
+
+            .spell-input-area input {
+                font-size: 1.6rem;
+                padding: 8px 12px;
+            }
+
+            .action-btn {
+                font-size: 0.8rem;
+                padding: 8px 12px;
+                min-width: 60px;
+            }
+
+            .top-bar {
+                font-size: 0.7rem;
+                padding: 4px 10px;
+            }
+
+            #startOverlay h1 {
+                font-size: 2rem;
+            }
+
+            #startBtn {
+                font-size: 1.2rem;
+                padding: 12px 32px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===== 启动遮罩 ===== -->
+    <div id="startOverlay">
+        <h1>🔤 全拼模式</h1>
+        <div class="subtitle">Full Spelling · Type the whole word</div>
+        <div class="rule-box">
+            <p>📝 看到图片和中文，<span class="highlight">拼出完整的英文单词</span></p>
+            <p>🔊 发音提示 & 辅音提示 各限 <span class="highlight">2次</span>（全局）</p>
+            <p>📏 短词(≤6字母) <span class="highlight">6分</span>，长词(>6) <span class="highlight">8分</span></p>
+            <p class="small">⭐ 满分 100 分 · 共 15 题</p>
+        </div>
+        <button id="startBtn">🚀 开始挑战</button>
+    </div>
+
+    <!-- ===== 游戏主容器 ===== -->
+    <div class="container" id="gameContainer" style="display: none;">
+        <header>
+            <h1><i class="fas fa-pencil-alt"></i> Full Spelling <i class="fas fa-pencil-alt"></i></h1>
+            <p class="subtitle">Type the word · Think & Spell</p>
+        </header>
+
+        <div class="top-bar">
+            <span>⭐ 得分: <span id="scoreDisplay">0</span></span>
+            <span>📊 <span id="progressDisplay">1/15</span></span>
+            <span class="hint-count">🔊 发音: <span id="speakHintLeft">2</span>次</span>
+            <span class="hint-count">🔤 辅音提示: <span id="letterHintLeft">2</span>次</span>
+        </div>
+
+        <div class="full-spell-container" id="questionContainer">
+            <!-- 由 JS 动态渲染 -->
+        </div>
+
+        <div style="text-align:center; margin: 20px 0 10px;">
+            <button id="backHomeBtn" class="back-btn"><i class="fas fa-home"></i> 返回首页</button>
+        </div>
+    </div>
+
+    <script src="utils.js"></script>
+    <script src="wordData.js"></script>
+    <script src="wordlistConfig.js"></script>
+    <script src="wordlist.js"></script>
+    <script src="fullSpelling.js"></script>
+</body>
+
+</html>
