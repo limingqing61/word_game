@@ -131,7 +131,12 @@
         <div class="chinese-hint">${q.chinese}</div>
 
         <div class="spell-input-area">
-          <input type="text" id="wordInput" placeholder="输入单词..." autofocus>
+          <input type="text" id="wordInput" placeholder="输入单词..." autofocus 
+       inputmode="latin" 
+       autocorrect="off" 
+       autocapitalize="off" 
+       spellcheck="false"
+       lang="en">
         </div>
 
         <div class="hint-display" id="hintDisplay">💡 点击「辅音提示」显示</div>
