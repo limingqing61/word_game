@@ -294,3 +294,184 @@ function bindTripleClickDelete(target, onClear, storageKey, onConfirm) {
 }
 
 window.bindTripleClickDelete = bindTripleClickDelete;
+
+// ========== 收藏夹 UI 公共工具 ==========
+
+/**
+ * 显示短暂提示
+ */
+function showToast(message) {
+  const toast = document.createElement("div");
+  toast.className = "toast-message";
+  toast.textContent = message;
+  toast.style.cssText =
+    "position:fixed; bottom:100px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.7); color:white; padding:8px 20px; border-radius:30px; z-index:10001; font-size:0.9rem;";
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 1500);
+}
+
+/**
+ * HTML 转义
+ */
+function escapeHtml(str) {
+  if (!str) return "";
+  return String(str).replace(/[&<>]/g, function (m) {
+    if (m === "&") return "&amp;";
+    if (m === "<") return "&lt;";
+    if (m === ">") return "&gt;";
+    return m;
+  });
+}
+
+/**
+ * 获取单词的分类（从 wordData 中读取）
+ */
+function getWordType(word) {
+  return window.wordData?.[word]?.type || "other";
+}
+
+/**
+ * 显示「管理收藏夹」弹窗（全局公共 UI 工具）
+ * - 已收藏：显示「✕ 取消收藏」按钮，可即时取消
+ * - 未收藏：显示「➕ 添加」，点击即添加
+ * 操作后刷新列表但不关闭弹窗，方便连续操作
+ * @param {string} word - 单词
+ */
+function showAddToFavoritesDialog(word) {
+  const existingDialog = document.querySelector(".favorites-dialog-overlay");
+  if (existingDialog) existingDialog.remove();
+
+  const overlay = document.createElement("div");
+  overlay.className = "favorites-dialog-overlay";
+  overlay.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+  `;
+
+  const dialog = document.createElement("div");
+  dialog.style.cssText = `
+    background: white;
+    border-radius: 24px;
+    padding: 24px;
+    width: 90%;
+    max-width: 320px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  `;
+  dialog.innerHTML = `
+    <h3 style="margin: 0 0 12px 0; font-size: 1.2rem;">📚 管理收藏夹</h3>
+    <p style="color: #666; margin-bottom: 16px; font-size: 0.9rem;">单词: <strong>${escapeHtml(word)}</strong></p>
+    <div style="margin-bottom: 16px;">
+      <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+        <input type="text" id="newFavoriteName" placeholder="新收藏夹名称" style="flex:1; padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px;">
+        <button id="createFavoriteBtn" style="background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer;">➕ 新建</button>
+      </div>
+      <div id="favoriteList" style="display: flex; flex-direction: column; gap: 8px;"></div>
+    </div>
+    <div style="display: flex; gap: 12px; justify-content: flex-end;">
+      <button id="closeFavoritesDialog" style="background: #ccc; border: none; padding: 8px 20px; border-radius: 8px; cursor: pointer;">关闭</button>
+    </div>
+  `;
+
+  overlay.appendChild(dialog);
+  document.body.appendChild(overlay);
+
+  const favoriteListEl = document.getElementById("favoriteList");
+
+  function renderFavoriteItems() {
+    const favs = getAllFavorites();
+    const names = Object.keys(favs);
+
+    if (names.length === 0) {
+      favoriteListEl.innerHTML = `<div style="color:#999;text-align:center;font-size:0.85rem;padding:8px 0;">暂无收藏夹，请先新建</div>`;
+      return;
+    }
+
+    favoriteListEl.innerHTML = names
+      .map((name) => {
+        const isAdded = favs[name].includes(word);
+        if (isAdded) {
+          // 已收藏：显示「取消收藏」
+          return `
+            <div class="favorite-item favorite-added-item" data-name="${escapeHtml(name)}" style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #f0f8f0; border: 1px solid #c8e6c9; border-radius: 8px;">
+              <span style="color: #2e7d32; font-weight: 500;">📁 ${escapeHtml(name)}</span>
+              <button class="favorite-remove-btn" data-name="${escapeHtml(name)}" style="background: #ffebee; color: #c62828; border: 1px solid #ef9a9a; padding: 4px 12px; border-radius: 20px; cursor: pointer; font-size: 0.78rem; font-weight: bold;">✕ 取消收藏</button>
+            </div>
+          `;
+        } else {
+          // 未收藏：显示「添加」
+          return `
+            <div class="favorite-item favorite-add-item" data-name="${escapeHtml(name)}" style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #f5f5f5; border-radius: 8px; cursor: pointer;">
+              <span>📁 ${escapeHtml(name)}</span>
+              <span style="font-size: 0.8rem; color: #999;">➕ 添加</span>
+            </div>
+          `;
+        }
+      })
+      .join("");
+
+    // 绑定「添加」事件
+    favoriteListEl.querySelectorAll(".favorite-add-item").forEach((item) => {
+      item.onclick = (e) => {
+        e.stopPropagation();
+        const name = item.dataset.name;
+        addToFavorite(word, name);
+        showToast(`✓ 已添加到「${name}」`);
+        renderFavoriteItems();
+      };
+    });
+
+    // 绑定「取消收藏」事件
+    favoriteListEl.querySelectorAll(".favorite-remove-btn").forEach((btn) => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        const name = btn.dataset.name;
+        removeFromFavorite(word, name);
+        showToast(`✕ 已从「${name}」取消收藏`);
+        renderFavoriteItems();
+      };
+    });
+  }
+
+  renderFavoriteItems();
+
+  // 关闭对话框
+  document.getElementById("closeFavoritesDialog").onclick = () =>
+    overlay.remove();
+  overlay.onclick = (e) => {
+    if (e.target === overlay) overlay.remove();
+  };
+
+  // 新建收藏夹
+  document.getElementById("createFavoriteBtn").onclick = () => {
+    const newName = document.getElementById("newFavoriteName").value.trim();
+    if (!newName) {
+      alert("请输入收藏夹名称");
+      return;
+    }
+    const favs = getAllFavorites();
+    if (favs[newName]) {
+      alert("收藏夹已存在");
+      return;
+    }
+    favs[newName] = [];
+    saveAllFavorites(favs);
+    document.getElementById("newFavoriteName").value = "";
+    renderFavoriteItems();
+  };
+}
+
+// ========== 挂载到 window ==========
+window.showToast = showToast;
+window.escapeHtml = escapeHtml;
+window.getWordType = getWordType;
+window.showAddToFavoritesDialog = showAddToFavoritesDialog;
