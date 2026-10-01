@@ -6112,6 +6112,30 @@ const wordData = {
     guide: "SOWTH",
     type: "other",
   },
+  loach: {
+    image: "images/loach.jpeg",
+    chinese: "泥鳅",
+    color: "#8D6E63",
+    phonetic: "/loʊtʃ/",
+    guide: "LOHCH",
+    type: "animal",
+  },
+  snowman: {
+    image: "images/snowman.jpeg",
+    chinese: "雪人",
+    color: "#90CAF9",
+    phonetic: "/ˈsnoʊ.mæn/",
+    guide: "SNOH-man",
+    type: "other",
+  },
+  taro: {
+    image: "images/taro.jpeg",
+    chinese: "芋头",
+    color: "#B39DDB",
+    phonetic: "/ˈtɑː.roʊ/",
+    guide: "TAH-roh",
+    type: "vegetable",
+  },
 };
 
 window.wordData = wordData;
