@@ -410,6 +410,7 @@ const MINIMAL_PAIRS_DATA = [
       "gold",
       "hold",
       "know",
+      "loach",
       "nose",
       "phone",
       "rose",
