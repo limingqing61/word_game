@@ -1,12 +1,9 @@
 (function () {
   // ========== 音阶配置 ==========
-  // 核心音阶数据：每个音符的显示名、频率、颜色
   const NOTE_DATA = {
-    // 低音区 (只保留常用的 -5, -6, -7)
     "-5": { label: "Sol", display: "·5", frequency: 196.0, zone: "low" },
     "-6": { label: "La", display: "·6", frequency: 220.0, zone: "low" },
     "-7": { label: "Si", display: "·7", frequency: 246.94, zone: "low" },
-    // 中音区 (1 ~ 7)
     1: { label: "Do", display: "1", frequency: 261.63, zone: "mid" },
     2: { label: "Re", display: "2", frequency: 293.66, zone: "mid" },
     3: { label: "Mi", display: "3", frequency: 329.63, zone: "mid" },
@@ -14,19 +11,10 @@
     5: { label: "Sol", display: "5", frequency: 392.0, zone: "mid" },
     6: { label: "La", display: "6", frequency: 440.0, zone: "mid" },
     7: { label: "Si", display: "7", frequency: 493.88, zone: "mid" },
-    // 高音区 (只保留常用的 8, 9)
     8: { label: "Do'", display: "1·", frequency: 523.25, zone: "high" },
     9: { label: "Re'", display: "2·", frequency: 587.33, zone: "high" },
   };
 
-  // 音区颜色
-  const ZONE_COLORS = {
-    low: "key-low",
-    mid: "", // 中音用原来的颜色
-    high: "key-high",
-  };
-
-  // 中音区颜色（1-7）
   const MID_COLORS = {
     1: "key-1",
     2: "key-2",
@@ -49,45 +37,40 @@
     const data = NOTE_DATA[noteId];
     return data ? data.display : "?";
   }
-
   function getNoteLabel(noteId) {
     const data = NOTE_DATA[noteId];
     return data ? data.label : "?";
   }
-
   function getNoteFrequency(noteId) {
     const data = NOTE_DATA[noteId];
     return data ? data.frequency : 440;
-  }
-
-  function getNoteZone(noteId) {
-    const data = NOTE_DATA[noteId];
-    return data ? data.zone : "mid";
   }
 
   // ========== DOM 元素 ==========
   const keysContainer = document.getElementById("keysContainer");
   const freeModeBtn = document.getElementById("freeModeBtn");
   const learnModeBtn = document.getElementById("learnModeBtn");
+  const playModeBtn = document.getElementById("playModeBtn");
+  const songSelector = document.getElementById("songSelector");
   const songSelect = document.getElementById("songSelect");
   const songTitleDisplay = document.getElementById("songTitleDisplay");
   const lyricLine = document.getElementById("lyricLine");
   const notesLine = document.getElementById("notesLine");
   const progressInfo = document.getElementById("progressInfo");
+  const progressBarContainer = document.getElementById("progressBarContainer");
+  const progressBarFill = document.getElementById("progressBarFill");
   const messageArea = document.getElementById("messageArea");
   const backBtn = document.getElementById("backBtn");
-  const rangeRadios = document.querySelectorAll('input[name="rangeMode"]');
 
   // ========== 游戏状态 ==========
-  let mode = "free"; // 'free' | 'learn'
-  let rangeMode = "simple"; // 'simple' | 'full'
+  let mode = "free"; // 'free' | 'learn' | 'play'
   let currentSong = null;
   let currentLineIndex = 0;
   let currentNoteIndex = 0;
   let isPlayingDemo = false;
   let demoTimeout = null;
+  let autoPlayTimer = null;
 
-  // 固定12键布局（低音5·6·7· + 中音1-7 + 高音1·2·）
   const FIXED_12_KEYS = [-5, -6, -7, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   // ========== 音效 ==========
@@ -131,17 +114,9 @@
   }
 
   // ========== 琴键渲染 ==========
-  function getRequiredNotes() {
-    // 固定12键布局，不再区分模式和扫描歌曲
-    return FIXED_12_KEYS;
-  }
-
   function renderKeys() {
-    const notes = getRequiredNotes();
     keysContainer.innerHTML = "";
-
-    // 直接渲染所有键，不分组，不显示音区标签
-    notes.forEach((n) => {
+    FIXED_12_KEYS.forEach((n) => {
       keysContainer.appendChild(createKeyElement(n));
     });
   }
@@ -155,9 +130,9 @@
     key.className = `key ${color}`;
     key.dataset.noteId = noteId;
     key.innerHTML = `
-            <span class="key-note">${display}</span>
-            <span class="key-label">${label}</span>
-        `;
+      <span class="key-note">${display}</span>
+      <span class="key-label">${label}</span>
+    `;
     key.addEventListener("click", () => onKeyClick(noteId));
     key.addEventListener("touchstart", (e) => {
       e.preventDefault();
@@ -174,15 +149,17 @@
     playNote(freq);
 
     const keyEl = keysContainer.querySelector(`.key[data-note-id="${noteId}"]`);
-    if (keyEl) {
-      keyEl.classList.remove("flash-green", "flash-red");
-      void keyEl.offsetWidth;
-      if (mode === "free") {
-        keyEl.classList.add("flash-green");
-        setTimeout(() => keyEl.classList.remove("flash-green"), 300);
-      } else {
-        handleLearnModeClick(noteId, keyEl);
-      }
+    if (!keyEl) return;
+
+    keyEl.classList.remove("flash-green", "flash-red");
+    void keyEl.offsetWidth;
+
+    if (mode === "learn") {
+      handleLearnModeClick(noteId, keyEl);
+    } else {
+      // 自由弹奏或其它情况：仅视觉反馈
+      keyEl.classList.add("flash-green");
+      setTimeout(() => keyEl.classList.remove("flash-green"), 300);
     }
   }
 
@@ -270,25 +247,68 @@
     progressInfo.textContent = `📊 第 ${currentLineIndex + 1} / ${total} 句`;
   }
 
+  // ========== 停止播放（清定时器 + 标记） ==========
+  function stopPlayback() {
+    if (demoTimeout) {
+      clearTimeout(demoTimeout);
+      demoTimeout = null;
+    }
+    if (autoPlayTimer) {
+      clearTimeout(autoPlayTimer);
+      autoPlayTimer = null;
+    }
+    isPlayingDemo = false;
+  }
+
   // ========== 完整旋律播放 ==========
   function playFullMelody() {
-    if (!currentSong || isPlayingDemo) return;
+    if (!currentSong) return;
+
+    // 如果正在播放，先停掉（允许中断重放）
+    stopPlayback();
+
     const lines = currentSong.lines;
     if (lines.length === 0) return;
 
+    // 重置学习进度，从第一句第一个音开始
+    currentLineIndex = 0;
+    currentNoteIndex = 0;
+
     isPlayingDemo = true;
-    messageArea.textContent = "🔊 播放完整旋律...";
+    messageArea.textContent = "🔊 播放中...";
     messageArea.className = "message-area";
+    progressBarFill.style.width = "0%";
 
     let lineIndex = 0;
     let noteIndex = 0;
     const noteDuration = 250;
     const pauseBetweenLines = 500;
 
+    // 计算总音符数，用于进度条
+    const totalNotes = lines.reduce((sum, line) => sum + line.notes.length, 0);
+    let playedNotes = 0;
+
+    function updateSheetDisplayForDemo(lineIdx) {
+      if (!currentSong || lineIdx >= currentSong.lines.length) return;
+      const line = currentSong.lines[lineIdx];
+      lyricLine.textContent = line.lyric;
+      let html = "";
+      line.notes.forEach((num, idx) => {
+        const display = getNoteDisplay(num);
+        let cls = "note-slot";
+        if (idx === 0) cls += " active";
+        html += `<span class="${cls}">${display}</span>`;
+      });
+      notesLine.innerHTML = html;
+      const total = currentSong.lines.length;
+      progressInfo.textContent = `📊 第 ${lineIdx + 1} / ${total} 句`;
+    }
+
     function playNextNote() {
       if (lineIndex >= lines.length) {
         isPlayingDemo = false;
-        messageArea.textContent = "🎵 播放结束！点击琴键继续练习";
+        progressBarFill.style.width = "100%";
+        messageArea.textContent = "🎵 播放结束！";
         messageArea.className = "message-area success";
         document
           .querySelectorAll(".note-slot")
@@ -318,23 +338,10 @@
       });
 
       noteIndex++;
-      demoTimeout = setTimeout(playNextNote, noteDuration);
-    }
+      playedNotes++;
+      progressBarFill.style.width = `${(playedNotes / totalNotes) * 100}%`;
 
-    function updateSheetDisplayForDemo(lineIdx) {
-      if (!currentSong || lineIdx >= currentSong.lines.length) return;
-      const line = currentSong.lines[lineIdx];
-      lyricLine.textContent = line.lyric;
-      let html = "";
-      line.notes.forEach((num, idx) => {
-        const display = getNoteDisplay(num);
-        let cls = "note-slot";
-        if (idx === 0) cls += " active";
-        html += `<span class="${cls}">${display}</span>`;
-      });
-      notesLine.innerHTML = html;
-      const total = currentSong.lines.length;
-      progressInfo.textContent = `📊 第 ${lineIdx + 1} / ${total} 句`;
+      demoTimeout = setTimeout(playNextNote, noteDuration);
     }
 
     updateSheetDisplayForDemo(0);
@@ -354,106 +361,124 @@
     }, 1000);
   }
 
-  // ========== 加载歌曲 ==========
-  function loadSong(songId) {
-    if (isPlayingDemo) {
-      if (demoTimeout) clearTimeout(demoTimeout);
-      isPlayingDemo = false;
+  // ========== 模式切换 ==========
+  function setMode(newMode) {
+    // 切换前先停止所有播放
+    stopPlayback();
+
+    mode = newMode;
+
+    // 按钮激活态
+    freeModeBtn.classList.toggle("active", newMode === "free");
+    learnModeBtn.classList.toggle("active", newMode === "learn");
+    playModeBtn.classList.toggle("active", newMode === "play");
+
+    // 显示控制
+    if (newMode === "free") {
+      songSelector.style.display = "none";
+      keysContainer.style.display = "flex";
+      progressBarContainer.style.display = "none";
+
+      currentSong = null;
+      currentLineIndex = 0;
+      currentNoteIndex = 0;
+      songTitleDisplay.textContent = "🎶 自由弹奏";
+      lyricLine.textContent = "";
+      notesLine.innerHTML = "";
+      progressInfo.textContent = "";
+      progressBarFill.style.width = "0%";
+      messageArea.textContent = "🎵 自由弹奏模式，点击琴键随意发挥！";
+      messageArea.className = "message-area";
+      return;
     }
+
+    // learn 或 play
+    songSelector.style.display = "flex";
+    keysContainer.style.display = newMode === "play" ? "none" : "flex";
+    progressBarContainer.style.display = newMode === "play" ? "block" : "none";
+
+    // 确保有选中的歌曲
+    let songId = songSelect.value;
+    const songs = window.MUSIC_DATA ? window.MUSIC_DATA.songs : [];
+    if (!songId || !songs.find((s) => s.id === songId)) {
+      if (songs.length > 0) {
+        songId = songs[0].id;
+        songSelect.value = songId;
+      } else {
+        messageArea.textContent = "⚠️ 暂无歌曲，请检查数据";
+        messageArea.className = "message-area error";
+        return;
+      }
+    }
+
+    loadSong(songId);
+  }
+
+  // ========== 加载歌曲 ==========
+  function loadSong(songId, autoPlay = false) {
+    stopPlayback();
 
     const songs = window.MUSIC_DATA ? window.MUSIC_DATA.songs : [];
     const song = songs.find((s) => s.id === songId);
     if (!song) {
       currentSong = null;
-      songTitleDisplay.textContent = "🎶 自由弹奏";
-      lyricLine.textContent = "";
-      notesLine.innerHTML = "";
-      progressInfo.textContent = "";
-      messageArea.textContent = "💡 点击琴键自由弹奏";
-      messageArea.className = "message-area";
-      renderKeys();
       return;
     }
 
     currentSong = song;
     currentLineIndex = 0;
     currentNoteIndex = 0;
+    progressBarFill.style.width = "0%";
+
     songTitleDisplay.textContent = `🎤 ${song.title} (${song.titleEn})`;
-    messageArea.textContent = `🎵 开始弹奏：${song.lines[0].lyric}`;
-    messageArea.className = "message-area";
     updateSheetDisplay();
-    renderKeys();
+
+    if (mode === "learn") {
+      messageArea.textContent = `🎵 开始弹奏：${song.lines[0].lyric}`;
+      messageArea.className = "message-area";
+    } else if (mode === "play") {
+      if (autoPlay) {
+        autoPlayTimer = setTimeout(() => {
+          autoPlayTimer = null;
+          playFullMelody();
+        }, 300);
+      } else {
+        messageArea.textContent = "👆 请从下拉框选择歌曲开始播放";
+        messageArea.className = "message-area";
+      }
+    }
   }
 
-  // ========== 初始化歌曲列表 ==========
+  // ========== 初始化歌曲列表（只含歌曲，无"自由弹奏"） ==========
   function initSongSelect() {
     const songs = window.MUSIC_DATA ? window.MUSIC_DATA.songs : [];
-    songSelect.innerHTML = '<option value="__free">🎵 自由弹奏</option>';
+    songSelect.innerHTML = "";
     songs.forEach((song) => {
       const opt = document.createElement("option");
       opt.value = song.id;
       opt.textContent = `${song.title} (${song.titleEn})`;
       songSelect.appendChild(opt);
     });
-    songSelect.value = "__free";
-    songSelect.addEventListener("change", () => {
-      const val = songSelect.value;
-      if (val === "__free") {
-        mode = "free";
-        freeModeBtn.classList.add("active");
-        learnModeBtn.classList.remove("active");
-        loadSong(null);
-      } else {
-        mode = "learn";
-        learnModeBtn.classList.add("active");
-        freeModeBtn.classList.remove("active");
-        loadSong(val);
+
+    songSelect.onchange = () => {
+      const songId = songSelect.value;
+      if (!songId) return;
+      if (mode === "learn") {
+        loadSong(songId);
+      } else if (mode === "play") {
+        loadSong(songId, true); // 播放模式：立即播放
       }
-    });
+    };
   }
 
   // ========== 事件绑定 ==========
   function bindEvents() {
-    freeModeBtn.addEventListener("click", () => {
-      if (isPlayingDemo) {
-        if (demoTimeout) clearTimeout(demoTimeout);
-        isPlayingDemo = false;
-      }
-      mode = "free";
-      freeModeBtn.classList.add("active");
-      learnModeBtn.classList.remove("active");
-      songSelect.value = "__free";
-      loadSong(null);
-      messageArea.textContent = "🎵 自由弹奏模式，点击琴键随意发挥！";
-      messageArea.className = "message-area";
-    });
-
-    learnModeBtn.addEventListener("click", () => {
-      if (isPlayingDemo) {
-        if (demoTimeout) clearTimeout(demoTimeout);
-        isPlayingDemo = false;
-      }
-      mode = "learn";
-      learnModeBtn.classList.add("active");
-      freeModeBtn.classList.remove("active");
-      const val = songSelect.value;
-      if (val && val !== "__free") {
-        loadSong(val);
-      } else {
-        const songs = window.MUSIC_DATA ? window.MUSIC_DATA.songs : [];
-        if (songs.length > 0) {
-          songSelect.value = songs[0].id;
-          loadSong(songs[0].id);
-        } else {
-          messageArea.textContent = "⚠️ 暂无歌曲，请检查数据";
-          messageArea.className = "message-area error";
-        }
-      }
-    });
+    freeModeBtn.addEventListener("click", () => setMode("free"));
+    learnModeBtn.addEventListener("click", () => setMode("learn"));
+    playModeBtn.addEventListener("click", () => setMode("play"));
 
     bindGoHome(backBtn);
 
-    // 启动遮罩
     const startOverlay = document.getElementById("startOverlay");
     const startBtn = document.getElementById("startBtn");
     const gameContainer = document.getElementById("gameContainer");
@@ -463,10 +488,8 @@
       if (gameContainer) gameContainer.style.display = "block";
       wakeUpAudio();
       initSongSelect();
-      loadSong(null);
-      messageArea.textContent = "🎵 点击琴键开始演奏！";
-      messageArea.className = "message-area";
       renderKeys();
+      setMode("free");
     }
 
     if (startBtn) {
@@ -498,11 +521,11 @@
       const container = document.querySelector(".game-container");
       if (container) {
         container.innerHTML = `
-                    <div style="text-align:center;padding:40px;color:#ffecb3;">
-                        <h2>⚠️ 数据加载失败</h2>
-                        <p>请检查 musicData.js 是否存在</p>
-                    </div>
-                `;
+          <div style="text-align:center;padding:40px;color:#ffecb3;">
+            <h2>⚠️ 数据加载失败</h2>
+            <p>请检查 musicData.js 是否存在</p>
+          </div>
+        `;
       }
       return false;
     }
@@ -512,6 +535,5 @@
   // ========== 启动 ==========
   if (checkData()) {
     bindEvents();
-    // 初始渲染琴键（会在启动后由 initAndStart 触发）
   }
 })();
