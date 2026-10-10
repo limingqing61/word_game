@@ -282,7 +282,7 @@ const wordData = {
   },
   pepper: {
     image: "images/pepper.jpeg",
-    chinese: "甜椒",
+    chinese: "花椒",
     color: "#F44336",
     phonetic: "/ˈpep.ər/",
     guide: "PEP-ur",
@@ -1998,22 +1998,6 @@ const wordData = {
     color: "#4CAF50",
     phonetic: "/ˈoʊ.krə/",
     guide: "OH-kruh",
-    type: "vegetable",
-  },
-  shallot: {
-    image: "images/shallot.jpeg",
-    chinese: "青葱",
-    color: "#FF9800",
-    phonetic: "/ʃəˈlɑːt/",
-    guide: "shuh-LAHT",
-    type: "vegetable",
-  },
-  endive: {
-    image: "images/endive.jpeg",
-    chinese: "菊苣",
-    color: "#4CAF50",
-    phonetic: "/ˈen.daɪv/",
-    guide: "EN-dyv",
     type: "vegetable",
   },
   bed: {
@@ -4242,7 +4226,7 @@ const wordData = {
   },
   yam: {
     image: "images/yam.jpeg",
-    chinese: "山药",
+    chinese: "红薯",
     color: "#D2B48C",
     phonetic: "/jæm/",
     guide: "yam",
@@ -6134,6 +6118,22 @@ const wordData = {
     color: "#B39DDB",
     phonetic: "/ˈtɑː.roʊ/",
     guide: "TAH-roh",
+    type: "vegetable",
+  },
+  scallion: {
+    image: "images/scallion.jpeg",
+    chinese: "葱",
+    color: "#8BC34A",
+    phonetic: "/ˈskæl.jən/",
+    guide: "SKAL-yuhn",
+    type: "vegetable",
+  },
+  beet: {
+    image: "images/beet.jpeg",
+    chinese: "甜菜",
+    color: "#9C27B0",
+    phonetic: "/biːt/",
+    guide: "BEET",
     type: "vegetable",
   },
 };
