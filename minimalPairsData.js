@@ -295,6 +295,7 @@ const MINIMAL_PAIRS_DATA = [
     words: [
       "beach",
       "bee",
+      "beet",
       "cheek",
       "clean",
       "east",
