@@ -336,14 +336,6 @@ const wordData = {
     guide: "RAD-ish",
     type: "vegetable",
   },
-  leek: {
-    image: "images/leek.jpeg",
-    chinese: "大葱",
-    color: "#4CAF50",
-    phonetic: "/liːk/",
-    guide: "LEEK",
-    type: "vegetable",
-  },
   asparagus: {
     image: "images/asparagus.jpeg",
     chinese: "芦笋",
@@ -6122,7 +6114,7 @@ const wordData = {
   },
   scallion: {
     image: "images/scallion.jpeg",
-    chinese: "葱",
+    chinese: "小葱",
     color: "#8BC34A",
     phonetic: "/ˈskæl.jən/",
     guide: "SKAL-yuhn",
