@@ -8,7 +8,7 @@
     hard: { digits: 4, label: "困难", key: "hard" },
   };
 
-  const BEST_KEY_PREFIX = "numberGuess_best_";
+  const BEST_KEY = "numberGuess_best_records";
 
   // ========== DOM ==========
   const guessCountEl = document.getElementById("guessCount");
@@ -37,14 +37,15 @@
 
   // ========== 最佳记录 ==========
   function loadBestRecords() {
-    for (const [key, config] of Object.entries(DIFFICULTY_CONFIG)) {
-      const stored = localStorage.getItem(BEST_KEY_PREFIX + config.key);
-      if (stored) {
-        const val = parseInt(stored);
-        if (!isNaN(val)) {
-          bestRecords[config.key] = val;
-        }
+    const stored = localStorage.getItem(BEST_KEY);
+    if (stored) {
+      try {
+        bestRecords = JSON.parse(stored) || {};
+      } catch (e) {
+        bestRecords = {};
       }
+    } else {
+      bestRecords = {};
     }
     updateBestDisplay();
   }
@@ -52,7 +53,7 @@
   function saveBestRecord(difficultyKey, guesses) {
     if (!bestRecords[difficultyKey] || guesses < bestRecords[difficultyKey]) {
       bestRecords[difficultyKey] = guesses;
-      localStorage.setItem(BEST_KEY_PREFIX + difficultyKey, String(guesses));
+      localStorage.setItem(BEST_KEY, JSON.stringify(bestRecords));
       updateBestDisplay();
       return true;
     }
@@ -71,33 +72,24 @@
 
   // ========== 三击删除 ==========
   function bindTripleClick() {
-    if (!bestBox || bestBox._tripleClickBound) return;
-    bestBox._tripleClickBound = true;
+    if (!bestBox) return;
 
-    let clickCount = 0;
-    let clickTimer = null;
-    bestBox.addEventListener("click", function (e) {
-      e.stopPropagation();
-      clickCount++;
-      if (clickTimer) clearTimeout(clickTimer);
-      clickTimer = setTimeout(() => {
-        clickCount = 0;
-      }, 500);
-      if (clickCount >= 3) {
-        clickCount = 0;
+    bindTripleClickDelete(
+      bestBox,
+      function onClear() {
+        const config = DIFFICULTY_CONFIG[currentDifficulty];
+        delete bestRecords[config.key];
+        // 把剩余难度的记录写回
+        localStorage.setItem(BEST_KEY, JSON.stringify(bestRecords));
+        updateBestDisplay();
+      },
+      BEST_KEY,
+      function onConfirm() {
         const config = DIFFICULTY_CONFIG[currentDifficulty];
         const currentBest = bestRecords[config.key];
-        if (
-          confirm(
-            `确认清除「${config.label}」级别的最佳记录吗？\n\n当前记录：${currentBest !== undefined ? currentBest : "无"}`,
-          )
-        ) {
-          delete bestRecords[config.key];
-          localStorage.removeItem(BEST_KEY_PREFIX + config.key);
-          updateBestDisplay();
-        }
-      }
-    });
+        return `确认清除「${config.label}」级别的最佳记录吗？\n\n当前记录：${currentBest !== undefined ? currentBest : "无"}`;
+      },
+    );
   }
 
   // ========== 数字图片路径 ==========
