@@ -139,7 +139,7 @@
   }
 
   function getImagePath(animalId) {
-    return `images/${animalId}.jpeg`;
+    return getWordImage(animalId) || `images/${animalId}.jpeg`;
   }
 
   function createAnimalImage(animalId, className = "") {

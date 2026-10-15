@@ -322,7 +322,7 @@
       const card = document.createElement("div");
       card.className = "option-card";
       const img = document.createElement("img");
-      img.src = opt.image;
+      img.src = getWordImage(opt.word);
       img.alt = opt.word;
       const chineseSpan = document.createElement("div");
       chineseSpan.textContent = opt.chinese || "";

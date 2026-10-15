@@ -114,7 +114,9 @@
       8: "eight",
       9: "nine",
     };
-    return `images/${words[num]}.jpeg`;
+    const word = words[num];
+    if (!word) return "";
+    return getWordImage(word) || `images/${word}.jpeg`;
   }
 
   // ========== 游戏逻辑 ==========
@@ -363,6 +365,15 @@
     loadBestRecords();
     bindTripleClick();
     resetGame();
+
+    // ===== 提示：三击清除最佳记录 =====
+    if (shouldShowInfoDialog("numberGuess_record_tip")) {
+      showInfoDialog({
+        title: "💡 小提示",
+        message: "三击页面顶部的「🏆 最佳」区域，可以清除当前难度的最佳记录。",
+        storageKey: "numberGuess_record_tip",
+      });
+    }
   }
 
   // ========== 事件绑定 ==========

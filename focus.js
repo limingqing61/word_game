@@ -163,7 +163,7 @@
     const selected = shuffled.slice(0, count);
     return selected.map((name) => ({
       word: name,
-      path: `images/${name}.jpeg`,
+      path: getWordImage(name) || `images/${name}.jpeg`,
       img: null,
     }));
   }

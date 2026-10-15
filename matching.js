@@ -94,7 +94,7 @@ function startRound() {
 
   gameState.pairs = selectedWords.map((w) => ({
     word: w.word,
-    image: w.image,
+    image: getWordImage(w.word),
     chinese: w.chinese,
     matched: false,
   }));
@@ -298,7 +298,7 @@ function showGameComplete() {
                       .map(
                         (w) => `
                         <div class="wrong-word-item">
-                            <img src="${w.image}" style="width:80px;height:80px;object-fit:contain">
+                            <img src="${getWordImage(w.word)}" style="width:80px;height:80px;object-fit:contain">
                             <div class="wrong-word-info">
                                 <div class="wrong-word-text">${w.word}</div>
                                 <div class="wrong-word-phonetic">${window.getPhoneticSymbol(w.word)}</div>

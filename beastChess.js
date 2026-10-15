@@ -160,7 +160,7 @@
     }
 
     const img = document.createElement("img");
-    img.src = `images/${animal.id}.jpeg`;
+    img.src = getWordImage(animal.id) || `images/${animal.id}.jpeg`;
     img.alt = animal.name;
     img.style.width = "75%";
     img.style.height = "75%";
@@ -313,7 +313,7 @@
         card.draggable = true;
         card.setAttribute("data-animal-id", animal.id);
         const img = document.createElement("img");
-        img.src = `images/${animal.id}.jpeg`;
+        img.src = getWordImage(animal.id) || `images/${animal.id}.jpeg`;
         img.alt = animal.name;
         const nameSpan = document.createElement("div");
         nameSpan.className = "animal-name";

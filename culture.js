@@ -138,7 +138,8 @@
         btn.dataset.country = country;
 
         const img = document.createElement("img");
-        img.src = `images/${country}.jpeg`;
+        const imgSrc = getWordImage(country) || `images/${country}.jpeg`;
+        img.src = imgSrc;
         img.alt = country;
         img.onerror = () => {
           img.style.display = "none";

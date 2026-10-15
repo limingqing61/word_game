@@ -126,7 +126,7 @@
     cell.backEl.style.display = "none";
 
     const img = document.createElement("img");
-    img.src = `images/${animal}.jpeg`;
+    img.src = getWordImage(animal) || `images/${animal}.jpeg`;
     img.alt = animal;
     img.onerror = () => {
       img.style.display = "none";

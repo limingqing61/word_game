@@ -78,12 +78,11 @@
     for (let i = 0; i < rows * rodCols; i++) {
       const idx = i % images.length;
       const wordKey = images[idx];
-      const wordData = window.wordData[wordKey];
       const card = document.createElement("div");
       card.className = "rod-card";
       card.dataset.word = wordKey;
       const img = document.createElement("img");
-      img.src = wordData.image;
+      img.src = getWordImage(wordKey);
       img.alt = wordKey;
       card.appendChild(img);
       card.addEventListener(
@@ -203,9 +202,8 @@
     }
     const lane = laneElements[laneIdx];
     if (!lane) return;
-    const wordData = window.wordData[wordKey];
     const fishEl = document.createElement("img");
-    fishEl.src = wordData.image;
+    fishEl.src = getWordImage(wordKey);
     fishEl.className = "fish";
     fishEl.style.position = "absolute";
     fishEl.style.left = "0px";

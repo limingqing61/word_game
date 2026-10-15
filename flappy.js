@@ -96,9 +96,9 @@
     pipeImg.onerror = checkComplete;
     groundImg.onerror = checkComplete;
 
-    birdImg.src = "images/bird.jpeg";
-    pipeImg.src = "images/tree.jpeg";
-    groundImg.src = "images/grass.jpeg";
+    birdImg.src = getWordImage("bird") || "images/bird.jpeg";
+    pipeImg.src = getWordImage("tree") || "images/tree.jpeg";
+    groundImg.src = getWordImage("grass") || "images/grass.jpeg";
 
     setTimeout(() => {
       if (loaded < totalImages) {
@@ -636,6 +636,16 @@
         },
       );
     }
+
+    // ===== 提示：三击清除最佳记录 =====
+    if (shouldShowInfoDialog("flappy_record_tip")) {
+      showInfoDialog({
+        title: "💡 小提示",
+        message: "三击页面顶部的「🏆 最佳」区域，可以清除最高记录。",
+        storageKey: "flappy_record_tip",
+      });
+    }
+
     bindEvents();
 
     loadImages(() => {
