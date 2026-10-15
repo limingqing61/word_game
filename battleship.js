@@ -894,11 +894,15 @@ function startGame() {
     window.location.href = "index.html";
   }
 
-  // 悬浮返回首页
-  if (floatingBtn) {
-    floatingBtn.addEventListener("click", goHome);
-  }
-
   // 启动游戏
   initBoard();
+
+  // ===== 提示：三击清除最佳记录 =====
+  if (shouldShowInfoDialog("battleship_record_tip")) {
+    showInfoDialog({
+      title: "💡 小提示",
+      message: "三击页面顶部的「🏆 最佳」区域，可以清除最佳记录。",
+      storageKey: "battleship_record_tip",
+    });
+  }
 }

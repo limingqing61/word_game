@@ -223,23 +223,23 @@
 
   function createImageElement(key) {
     const img = document.createElement("img");
-    const wordData = window.wordData[key];
-    if (wordData && wordData.image) {
-      img.src = wordData.image;
+    const imgSrc = getWordImage(key);
+    if (imgSrc) {
+      img.src = imgSrc;
       img.alt = key;
       img.onerror = () => {
         img.style.display = "none";
         const placeholder = document.createElement("span");
         placeholder.className = "placeholder";
         placeholder.textContent = key.substring(0, 3);
-        img.parentNode.appendChild(placeholder);
+        if (img.parentNode) img.parentNode.appendChild(placeholder);
       };
     } else {
       img.style.display = "none";
       const placeholder = document.createElement("span");
       placeholder.className = "placeholder";
       placeholder.textContent = key.substring(0, 3);
-      img.parentNode.appendChild(placeholder);
+      if (img.parentNode) img.parentNode.appendChild(placeholder);
     }
     return img;
   }
@@ -456,6 +456,15 @@
 
     resetGame();
     bindGoHome(backHomeBtn);
+
+    // ===== 提示：三击清除最佳记录 =====
+    if (shouldShowInfoDialog("duplicateMatch_record_tip")) {
+      showInfoDialog({
+        title: "💡 小提示",
+        message: "三击页面顶部的「🏆 最佳记录」区域，可以清除最佳成绩。",
+        storageKey: "duplicateMatch_record_tip",
+      });
+    }
   }
 
   // ========== 事件绑定 ==========

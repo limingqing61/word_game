@@ -106,6 +106,10 @@
     };
     const word = numberWords[num];
     if (!word) return null;
+    // 优先取自定义覆盖（会走 wordData 的默认图或 localStorage 覆盖）
+    const custom = getWordImage(word);
+    if (custom) return custom;
+    // 兜底：wordData 里没这个词时，按老规则硬拼路径
     return `images/${word}.jpeg`;
   }
 

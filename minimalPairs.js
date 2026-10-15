@@ -51,7 +51,7 @@ function renderMinimalPairs() {
       if (detail) {
         validWords.push({
           word: word,
-          image: detail.image || "",
+          image: getWordImage(word),
           chinese: detail.chinese || window.wordData?.[word]?.chinese || "",
         });
       }

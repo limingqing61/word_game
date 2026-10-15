@@ -70,7 +70,7 @@ function renderFocusWordsOnOverlay() {
     let image = "";
     if (window.wordData && window.wordData[word]) {
       chinese = window.wordData[word].chinese || "";
-      image = window.wordData[word].image || "";
+      image = getWordImage(word);
     }
 
     html += `
@@ -240,7 +240,7 @@ function showQuestion() {
   questionDiv.className = "spelling-question";
 
   const img = document.createElement("img");
-  img.src = correctWord.image;
+  img.src = getWordImage(correctWord.word);
   img.alt = correctWord.word;
   img.onerror = () => {
     img.style.display = "none";
@@ -460,7 +460,7 @@ function showGameComplete() {
               }
               return `
                 <div class="wrong-word-item">
-                  <img src="${w.image}" style="width:80px;height:80px;object-fit:contain">
+                  <img src="${getWordImage(w.word)}" style="width:80px;height:80px;object-fit:contain">
                   <div class="wrong-word-info">
                     <div class="wrong-word-text">${w.word}</div>
                     <div class="wrong-word-phonetic">${window.getPhoneticSymbol(w.word)}</div>

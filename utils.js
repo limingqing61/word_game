@@ -475,3 +475,267 @@ window.showToast = showToast;
 window.escapeHtml = escapeHtml;
 window.getWordType = getWordType;
 window.showAddToFavoritesDialog = showAddToFavoritesDialog;
+
+// ========== 单词图片自定义覆盖工具 ==========
+
+const WORD_IMAGE_OVERRIDES_KEY = "wordImageOverrides";
+
+/**
+ * 读取所有图片覆盖记录
+ * @returns {Object} { word: dataUrl, ... }
+ */
+function getWordImageOverrides() {
+  try {
+    const raw = localStorage.getItem(WORD_IMAGE_OVERRIDES_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    console.warn("读取图片覆盖记录失败", e);
+    return {};
+  }
+}
+
+/**
+ * 获取某个单词的最终图片地址
+ * 优先取 localStorage 覆盖，否则回退到 wordData.image
+ * @param {string} word - 单词
+ * @returns {string} 图片地址（可能是 data URL 或 images/xxx.jpeg）
+ */
+function getWordImage(word) {
+  if (!word) return "";
+  const overrides = getWordImageOverrides();
+  if (overrides[word]) return overrides[word];
+  return window.wordData?.[word]?.image || "";
+}
+
+/**
+ * 判断某个单词是否有自定义覆盖图
+ * @param {string} word
+ * @returns {boolean}
+ */
+function hasWordImageOverride(word) {
+  if (!word) return false;
+  const overrides = getWordImageOverrides();
+  return !!overrides[word];
+}
+
+/**
+ * 保存单词的覆盖图片
+ * @param {string} word - 单词
+ * @param {string} dataUrl - 图片的 Data URL
+ * @returns {boolean} 是否保存成功
+ */
+function setWordImageOverride(word, dataUrl) {
+  if (!word || !dataUrl) return false;
+  try {
+    const overrides = getWordImageOverrides();
+    overrides[word] = dataUrl;
+    localStorage.setItem(WORD_IMAGE_OVERRIDES_KEY, JSON.stringify(overrides));
+    return true;
+  } catch (e) {
+    console.error("保存图片覆盖失败（可能是存储空间不足）", e);
+    if (typeof showToast === "function") {
+      showToast("⚠️ 存储空间不足，请先清理一些自定义图片");
+    } else {
+      alert("⚠️ 存储空间不足，请先清理一些自定义图片");
+    }
+    return false;
+  }
+}
+
+/**
+ * 删除某个单词的覆盖图片（恢复系统默认）
+ * @param {string} word - 单词
+ * @returns {boolean} 是否删除成功
+ */
+function removeWordImageOverride(word) {
+  if (!word) return false;
+  try {
+    const overrides = getWordImageOverrides();
+    if (!overrides[word]) return false;
+    delete overrides[word];
+    localStorage.setItem(WORD_IMAGE_OVERRIDES_KEY, JSON.stringify(overrides));
+    return true;
+  } catch (e) {
+    console.error("删除图片覆盖失败", e);
+    return false;
+  }
+}
+
+/**
+ * 清空所有图片覆盖记录（危险操作，慎用）
+ */
+function clearAllWordImageOverrides() {
+  try {
+    localStorage.removeItem(WORD_IMAGE_OVERRIDES_KEY);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+/**
+ * 压缩图片文件为 Data URL
+ * @param {File} file - 用户选择的文件
+ * @param {number} maxSize - 最大边长，默认 400
+ * @param {number} quality - JPEG 质量，默认 0.8
+ * @returns {Promise<string|null>} Data URL 或 null（失败）
+ */
+function compressImage(file, maxSize = 400, quality = 0.8) {
+  return new Promise((resolve) => {
+    if (!file || !file.type || !file.type.startsWith("image/")) {
+      console.warn("不是有效的图片文件");
+      resolve(null);
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const canvas = document.createElement("canvas");
+          let { width, height } = img;
+
+          // 等比缩放到 maxSize 以内
+          if (width > height) {
+            if (width > maxSize) {
+              height = Math.round((height * maxSize) / width);
+              width = maxSize;
+            }
+          } else {
+            if (height > maxSize) {
+              width = Math.round((width * maxSize) / height);
+              height = maxSize;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+
+          const dataUrl = canvas.toDataURL("image/jpeg", quality);
+          resolve(dataUrl);
+        } catch (err) {
+          console.error("图片压缩失败", err);
+          resolve(null);
+        }
+      };
+      img.onerror = () => {
+        console.error("图片解码失败（可能是 HEIC 等不支持格式）");
+        resolve(null);
+      };
+      img.src = e.target.result;
+    };
+    reader.onerror = () => {
+      console.error("文件读取失败");
+      resolve(null);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+// 挂载到 window
+window.getWordImage = getWordImage;
+window.setWordImageOverride = setWordImageOverride;
+window.removeWordImageOverride = removeWordImageOverride;
+window.hasWordImageOverride = hasWordImageOverride;
+window.clearAllWordImageOverrides = clearAllWordImageOverrides;
+window.compressImage = compressImage;
+window.WORD_IMAGE_OVERRIDES_KEY = WORD_IMAGE_OVERRIDES_KEY;
+
+// ========== 通用提示框工具 ==========
+
+/**
+ * 检查某个提示是否应该显示（未被"不再提醒"过）
+ * @param {string} storageKey - 该提示的唯一标识 key
+ * @returns {boolean}
+ */
+function shouldShowInfoDialog(storageKey) {
+  if (!storageKey) return true;
+  try {
+    return localStorage.getItem("info_dialog_dismissed_" + storageKey) !== "1";
+  } catch (e) {
+    return true;
+  }
+}
+
+/**
+ * 显示通用提示框
+ * @param {Object} options
+ * @param {string} options.title - 标题
+ * @param {string} options.message - 正文（支持 HTML）
+ * @param {string} options.storageKey - "不再提醒"时使用的存储 key
+ * @param {Function} [options.onClose] - 关闭时的回调
+ */
+function showInfoDialog({ title, message, storageKey, onClose }) {
+  const existing = document.querySelector(".info-dialog-overlay");
+  if (existing) existing.remove();
+
+  const overlay = document.createElement("div");
+  overlay.className = "info-dialog-overlay";
+  overlay.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10002;
+    padding: 20px;
+    box-sizing: border-box;
+  `;
+
+  const dialog = document.createElement("div");
+  dialog.style.cssText = `
+    background: linear-gradient(135deg, #fff9ef, #ffe0b3);
+    border-radius: 30px;
+    padding: 28px 26px;
+    width: 100%;
+    max-width: 380px;
+    border: 4px solid #ffaa33;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    text-align: center;
+    box-sizing: border-box;
+  `;
+  dialog.innerHTML = `
+    <h3 style="margin: 0 0 14px 0; font-size: 1.3rem; color: #31220e;">${title || "💡 小提示"}</h3>
+    <div style="color: #5a4a2e; font-size: 0.95rem; line-height: 1.6; margin-bottom: 22px;">
+      ${message || ""}
+    </div>
+    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+      <button id="infoDialogOk" style="background: #4caf50; color: white; border: none; padding: 10px 24px; border-radius: 40px; font-weight: bold; font-size: 0.95rem; cursor: pointer; font-family: inherit; box-shadow: 0 4px 0 #2e7d32;">知道了</button>
+      <button id="infoDialogNoMore" style="background: #607d8b; color: white; border: none; padding: 10px 24px; border-radius: 40px; font-weight: bold; font-size: 0.95rem; cursor: pointer; font-family: inherit; box-shadow: 0 4px 0 #455a64;">不再提醒</button>
+    </div>
+  `;
+
+  overlay.appendChild(dialog);
+  document.body.appendChild(overlay);
+
+  function close() {
+    overlay.remove();
+    if (typeof onClose === "function") onClose();
+  }
+
+  document.getElementById("infoDialogOk").onclick = close;
+
+  document.getElementById("infoDialogNoMore").onclick = () => {
+    if (storageKey) {
+      try {
+        localStorage.setItem("info_dialog_dismissed_" + storageKey, "1");
+      } catch (e) {
+        console.warn("保存不再提醒标记失败", e);
+      }
+    }
+    close();
+  };
+
+  // 点击遮罩不关闭（提示类弹窗，避免误触）
+}
+
+// 挂载到 window
+window.shouldShowInfoDialog = shouldShowInfoDialog;
+window.showInfoDialog = showInfoDialog;

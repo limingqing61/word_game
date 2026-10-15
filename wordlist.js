@@ -254,27 +254,14 @@ function generateWordList() {
     const row = document.createElement("div");
     row.className = "word-list-row";
 
+    // ===== 图片：优先取自定义覆盖 =====
     const img = document.createElement("img");
-    img.src = w.image;
+    img.src = getWordImage(w.word);
     img.alt = w.word;
     img.onerror = () => (img.style.display = "none");
-    img.addEventListener("click", (e) => {
-      e.stopPropagation();
-      document.body.style.overflow = "hidden";
-      const backdrop = document.createElement("div");
-      backdrop.style.cssText =
-        "position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); display:flex; align-items:center; justify-content:center; z-index:9999; cursor:pointer;";
-      const zoomImg = document.createElement("img");
-      zoomImg.src = img.src;
-      zoomImg.style.cssText =
-        "max-width: min(90vw, 500px); max-height: min(90vh, 500px); width: auto; height: auto; object-fit: contain; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);";
-      backdrop.appendChild(zoomImg);
-      backdrop.addEventListener("click", () => {
-        backdrop.remove();
-        document.body.style.overflow = "";
-      });
-      document.body.appendChild(backdrop);
-    });
+
+    // 三击替换 / 单击预览
+    bindImageInteractions(img, w.word);
 
     const info = document.createElement("div");
     info.className = "word-list-info";
@@ -490,6 +477,159 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("scroll", saveScroll());
   initSearch();
 
+  // ===== 提示：三击图片可替换 =====
+  if (shouldShowInfoDialog("wordlist_image_tip")) {
+    showInfoDialog({
+      title: "💡 小提示",
+      message:
+        "三击单词图片，可以替换成你自己的照片哦！<br>再三次击已替换的图片，可以恢复默认。",
+      storageKey: "wordlist_image_tip",
+    });
+  }
+
   const backBtn = document.getElementById("backToMenuBtn");
   if (backBtn) bindGoHome(backBtn);
 });
+
+// ========== 图片三击替换 / 单击预览 ==========
+
+/**
+ * 绑定图片交互：
+ * - 单击 → 放大预览
+ * - 双击 → 忽略（避免误触）
+ * - 三击 → 替换自定义图片 / 恢复系统图片
+ * @param {HTMLImageElement} img - 图片元素
+ * @param {string} word - 对应的单词
+ */
+function bindImageInteractions(img, word) {
+  // 禁用触屏默认手势（双击/三击缩放）
+  img.style.touchAction = "manipulation";
+  img.style.webkitTouchCallout = "none";
+  img.style.webkitUserSelect = "none";
+  img.style.userSelect = "none";
+
+  let clickCount = 0;
+  let clickTimer = null;
+
+  function processClick() {
+    clickCount++;
+    if (clickTimer) clearTimeout(clickTimer);
+    clickTimer = setTimeout(() => {
+      if (clickCount === 1) {
+        showImagePreview(img.src);
+      } else if (clickCount >= 3) {
+        handleTripleClickImage(word, img);
+      }
+      clickCount = 0;
+    }, 300);
+  }
+
+  // 触摸端：用 touchend 拦截默认缩放
+  img.addEventListener(
+    "touchend",
+    function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      processClick();
+    },
+    { passive: false },
+  );
+
+  // 鼠标端：正常 click（PC 上依然工作）
+  img.addEventListener("click", function (e) {
+    e.stopPropagation();
+    processClick();
+  });
+}
+
+/**
+ * 显示图片放大预览
+ * @param {string} src - 图片地址
+ */
+function showImagePreview(src) {
+  document.body.style.overflow = "hidden";
+  const backdrop = document.createElement("div");
+  backdrop.style.cssText =
+    "position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); display:flex; align-items:center; justify-content:center; z-index:9999; cursor:pointer;";
+  const zoomImg = document.createElement("img");
+  zoomImg.src = src;
+  zoomImg.style.cssText =
+    "max-width: min(90vw, 500px); max-height: min(90vh, 500px); width: auto; height: auto; object-fit: contain; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);";
+  backdrop.appendChild(zoomImg);
+  backdrop.addEventListener("click", () => {
+    backdrop.remove();
+    document.body.style.overflow = "";
+  });
+  document.body.appendChild(backdrop);
+}
+
+/**
+ * 处理图片三击事件
+ * - 已有自定义 → 询问是否恢复系统图片
+ * - 无自定义 → 弹出文件选择器替换
+ */
+function handleTripleClickImage(word, img) {
+  if (hasWordImageOverride(word)) {
+    // 已有自定义图片 → 询问是否恢复
+    if (confirm(`恢复「${word}」的系统默认图片？\n\n自定义图片将被删除。`)) {
+      removeWordImageOverride(word);
+      showToast(`✅ 已恢复「${word}」的系统图片`);
+      generateWordList();
+    }
+  } else {
+    // 无自定义 → 弹出文件选择器
+    selectImageForWord(word);
+  }
+}
+
+/**
+ * 弹出文件选择器，让用户选择一张图片替换
+ * @param {string} word - 单词
+ */
+function selectImageForWord(word) {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*";
+  // 移动端优先唤起相册
+  // input.setAttribute("capture", ""); // 可选：hint 相机，用户仍可从相册选
+  input.style.display = "none";
+  document.body.appendChild(input);
+
+  input.onchange = async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) {
+      input.remove();
+      return;
+    }
+
+    showToast("⏳ 正在处理图片...");
+
+    const dataUrl = await compressImage(file);
+    if (!dataUrl) {
+      alert("⚠️ 图片处理失败，请换一张试试（建议使用 JPG/PNG 格式）");
+      input.remove();
+      return;
+    }
+
+    if (setWordImageOverride(word, dataUrl)) {
+      showToast(`✅ 已替换「${word}」的图片`);
+      generateWordList();
+    }
+
+    input.remove();
+  };
+
+  // 用户取消选择时的兜底
+  window.addEventListener(
+    "focus",
+    function onFocus() {
+      setTimeout(() => {
+        if (input.parentNode) input.remove();
+      }, 300);
+      window.removeEventListener("focus", onFocus);
+    },
+    { once: true },
+  );
+
+  input.click();
+}

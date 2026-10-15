@@ -171,7 +171,7 @@
     if (!wordObj) return;
 
     cardEl.innerHTML = `
-            <img src="${wordObj.image}" alt="${card.wordKey}" style="width:60px;height:60px;object-fit:contain; margin-bottom:4px;" onerror="this.style.display='none'">
+            <img src="${getWordImage(card.wordKey)}" alt="${card.wordKey}" style="width:60px;height:60px;object-fit:contain; margin-bottom:4px;" onerror="this.style.display='none'">
             <div class="card-word">${card.wordKey}</div>
             <div class="card-phonetic">${wordObj.phonetic || ""}</div>
             <div class="card-chinese">${wordObj.chinese || ""}</div>
@@ -305,6 +305,11 @@
         function onClear() {
           // 清空内存中的 bestRecords
           delete bestRecords[currentLevel];
+          // ✅ 把剩余关卡的记录写回 localStorage
+          localStorage.setItem(
+            "crash_best_records",
+            JSON.stringify(bestRecords),
+          );
 
           bestDisplaySpan.textContent = "尚未通过";
           gameMessageDiv.innerHTML = "✅ 当前关卡的记录已清除";
@@ -352,4 +357,13 @@
   }
 
   loadLevel(0);
+
+  // ===== 提示：三击清除最佳记录 =====
+  if (shouldShowInfoDialog("crash_record_tip")) {
+    showInfoDialog({
+      title: "💡 小提示",
+      message: "三击页面顶部的「🏆 最快记录」区域，可以清除当前关卡的记录。",
+      storageKey: "crash_record_tip",
+    });
+  }
 })();

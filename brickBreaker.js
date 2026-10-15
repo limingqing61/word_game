@@ -201,14 +201,13 @@
           const x = gap + c * (BRICK_W + gap);
           const y = topMargin + r * (BRICK_H + gap);
           const key = selected[idx++];
-          const wordData = window.wordData[key] || {};
           bricks.push({
             x: x,
             y: y,
             w: BRICK_W,
             h: BRICK_H,
             wordKey: key,
-            image: wordData.image || "",
+            image: getWordImage(key),
             alive: true,
           });
         }

@@ -100,7 +100,7 @@ function renderFocusWordsOnOverlay() {
     let image = "";
     if (window.wordData && window.wordData[word]) {
       chinese = window.wordData[word].chinese || "";
-      image = window.wordData[word].image || "";
+      image = getWordImage(word);
     }
 
     html += `
@@ -338,7 +338,7 @@ function generateChoices(correctIndex) {
     choice.dataset.isCorrect = idx === correctIndex;
 
     const img = document.createElement("img");
-    img.src = word.image;
+    img.src = getWordImage(word.word);
     img.alt = word.word;
 
     const wordLabel = document.createElement("div");
@@ -501,7 +501,7 @@ function showGameComplete() {
               }
               return `
                 <div class="wrong-word-item">
-                  <img src="${w.image}" style="width:80px;height:80px;object-fit:contain">
+                  <img src="${getWordImage(w.word)}" style="width:80px;height:80px;object-fit:contain">
                   <div class="wrong-word-info">
                     <div class="wrong-word-text">${w.word}</div>
                     <div class="wrong-word-phonetic">${getPhoneticSymbol(w.word)}</div>

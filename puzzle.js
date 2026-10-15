@@ -239,7 +239,7 @@
           // ===== 使用 images 下的图片显示数字 =====
           const img = document.createElement("img");
           const word = getNumberWord(val);
-          img.src = `images/${word}.jpeg`;
+          img.src = getWordImage(word) || `images/${word}.jpeg`;
           img.alt = val;
           cell.appendChild(img);
           img.onerror = () => {
@@ -285,7 +285,7 @@
           // 展示区用图片
           const img = document.createElement("img");
           const word = getNumberWord(num);
-          img.src = `images/${word}.jpeg`;
+          img.src = getWordImage(word) || `images/${word}.jpeg`;
           img.alt = num;
           img.style.width = "70%";
           img.style.height = "70%";
@@ -359,6 +359,11 @@
         function onClear() {
           // 清空内存中的 bestRecords
           delete bestRecords[currentLevel];
+          // ✅ 把剩余关卡的记录写回 localStorage
+          localStorage.setItem(
+            "puzzle_best_records",
+            JSON.stringify(bestRecords),
+          );
 
           bestDisplaySpan.textContent = "尚未通过";
           gameMessageDiv.innerHTML = "✅ 当前关卡的记录已清除";
@@ -415,4 +420,13 @@
   }
 
   loadLevel(0);
+
+  // ===== 提示：三击清除最佳记录 =====
+  if (shouldShowInfoDialog("puzzle_record_tip")) {
+    showInfoDialog({
+      title: "💡 小提示",
+      message: "三击页面顶部的「🏆 最佳」区域，可以清除当前关卡的最快记录。",
+      storageKey: "puzzle_record_tip",
+    });
+  }
 })();

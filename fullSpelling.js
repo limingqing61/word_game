@@ -35,20 +35,6 @@
     return /[aeiou]/i.test(word);
   }
 
-  // ========== 工具：获取单词信息（安全） ==========
-  function getWordInfo(word) {
-    const data = window.wordData && window.wordData[word];
-    if (data) {
-      return {
-        word: word,
-        chinese: data.chinese || word,
-        image: data.image || "",
-        phonetic: data.phonetic || "",
-      };
-    }
-    return { word, chinese: word, image: "", phonetic: "" };
-  }
-
   // ========== 生成题目（15题：10短+5长，打乱） ==========
   function generateQuestions() {
     if (!window.wordList || !window.wordList.length) {
@@ -99,7 +85,7 @@
       return {
         word: item.word,
         chinese: item.chinese || "",
-        image: item.image || "",
+        image: getWordImage(item.word),
         phonetic: item.phonetic || "",
         points: points,
         length: len,

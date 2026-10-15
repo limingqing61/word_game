@@ -46,13 +46,6 @@
     return wordKey;
   }
 
-  function getWordImage(wordKey) {
-    if (window.wordData && window.wordData[wordKey]) {
-      return window.wordData[wordKey].image || "";
-    }
-    return "";
-  }
-
   function isValidIdiom(idiomKey, data) {
     const words = data.words;
     for (const [pos, wordKey] of Object.entries(words)) {
