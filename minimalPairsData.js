@@ -49,7 +49,7 @@ const MINIMAL_PAIRS_DATA = [
   {
     id: "bird_group",
     name: "bird group",
-    sound: "/ɜː/",
+    sound: "/ɜ/",
     example: "bird",
     words: [
       "bird",
@@ -67,7 +67,7 @@ const MINIMAL_PAIRS_DATA = [
   {
     id: "dog_group",
     name: "dog group",
-    sound: "/ɔː/",
+    sound: "/ɔ/",
     example: "dog",
     words: [
       "ball",
@@ -96,7 +96,7 @@ const MINIMAL_PAIRS_DATA = [
   {
     id: "pot_group",
     name: "pot group",
-    sound: "/ɑː/",
+    sound: "/ɑ/",
     example: "pot",
     words: [
       "arm",
@@ -240,7 +240,7 @@ const MINIMAL_PAIRS_DATA = [
   {
     id: "pet_group",
     name: "pet group",
-    sound: "/e/",
+    sound: "/ɛ/",
     example: "pet",
     words: [
       "bear",
@@ -290,7 +290,7 @@ const MINIMAL_PAIRS_DATA = [
   {
     id: "bee_group",
     name: "bee group",
-    sound: "/iː/",
+    sound: "/i/",
     example: "bee",
     words: [
       "beach",
@@ -333,7 +333,7 @@ const MINIMAL_PAIRS_DATA = [
   {
     id: "blue_group",
     name: "blue group",
-    sound: "/uː/",
+    sound: "/u/",
     example: "blue",
     words: [
       "blue",
