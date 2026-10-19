@@ -144,6 +144,10 @@
             max-width: 160px;
         }
 
+        .song-selector.hidden {
+            display: none !important;
+        }
+
         .play-btn {
             background: #4CAF50;
             color: white;
@@ -617,7 +621,7 @@
                 <button id="learnModeBtn" class="mode-btn">📖 跟谱练习</button>
                 <button id="playModeBtn" class="mode-btn">▶️ 播放乐谱</button>
             </div>
-            <div class="song-selector" id="songSelector" style="display:none;">
+            <div class="song-selector hidden" id="songSelector">
                 <label style="font-size:0.85rem;">🎤</label>
                 <select id="songSelect"></select>
             </div>
