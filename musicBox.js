@@ -1,9 +1,18 @@
 (function () {
   // ========== 音阶配置 ==========
+  // 21 个音：低音 1-7（负数为编码）、中音 1-7、高音 1-7（+7 为编码）
+  // 跟谱练习只开放 12 键：[-5,-6,-7, 1~7, 8,9]
+  // 播放乐谱可播放全部 21 个音
   const NOTE_DATA = {
+    // ===== 低音区 1-7 =====
+    "-1": { label: "Do", display: "·1", frequency: 130.81, zone: "low" },
+    "-2": { label: "Re", display: "·2", frequency: 146.83, zone: "low" },
+    "-3": { label: "Mi", display: "·3", frequency: 164.81, zone: "low" },
+    "-4": { label: "Fa", display: "·4", frequency: 174.61, zone: "low" },
     "-5": { label: "Sol", display: "·5", frequency: 196.0, zone: "low" },
     "-6": { label: "La", display: "·6", frequency: 220.0, zone: "low" },
     "-7": { label: "Si", display: "·7", frequency: 246.94, zone: "low" },
+    // ===== 中音区 1-7 =====
     1: { label: "Do", display: "1", frequency: 261.63, zone: "mid" },
     2: { label: "Re", display: "2", frequency: 293.66, zone: "mid" },
     3: { label: "Mi", display: "3", frequency: 329.63, zone: "mid" },
@@ -11,10 +20,17 @@
     5: { label: "Sol", display: "5", frequency: 392.0, zone: "mid" },
     6: { label: "La", display: "6", frequency: 440.0, zone: "mid" },
     7: { label: "Si", display: "7", frequency: 493.88, zone: "mid" },
+    // ===== 高音区 1-7 =====
     8: { label: "Do'", display: "1·", frequency: 523.25, zone: "high" },
     9: { label: "Re'", display: "2·", frequency: 587.33, zone: "high" },
+    10: { label: "Mi'", display: "3·", frequency: 659.25, zone: "high" },
+    11: { label: "Fa'", display: "4·", frequency: 698.46, zone: "high" },
+    12: { label: "Sol'", display: "5·", frequency: 783.99, zone: "high" },
+    13: { label: "La'", display: "6·", frequency: 880.0, zone: "high" },
+    14: { label: "Si'", display: "7·", frequency: 987.77, zone: "high" },
   };
 
+  // 中音区颜色（1-7）
   const MID_COLORS = {
     1: "key-1",
     2: "key-2",
@@ -37,10 +53,12 @@
     const data = NOTE_DATA[noteId];
     return data ? data.display : "?";
   }
+
   function getNoteLabel(noteId) {
     const data = NOTE_DATA[noteId];
     return data ? data.label : "?";
   }
+
   function getNoteFrequency(noteId) {
     const data = NOTE_DATA[noteId];
     return data ? data.frequency : 440;
@@ -71,6 +89,7 @@
   let demoTimeout = null;
   let autoPlayTimer = null;
 
+  // 固定 12 键布局（跟谱练习用）：低音 5-7 + 中音 1-7 + 高音 1-2
   const FIXED_12_KEYS = [-5, -6, -7, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   // ========== 音效 ==========
@@ -113,7 +132,7 @@
     if (freq) playNote(freq, duration);
   }
 
-  // ========== 琴键渲染 ==========
+  // ========== 琴键渲染（仅跟谱练习用） ==========
   function renderKeys() {
     keysContainer.innerHTML = "";
     FIXED_12_KEYS.forEach((n) => {
@@ -270,7 +289,7 @@
     const lines = currentSong.lines;
     if (lines.length === 0) return;
 
-    // 重置学习进度，从第一句第一个音开始
+    // 重置进度，从第一句第一个音开始
     currentLineIndex = 0;
     currentNoteIndex = 0;
 
@@ -348,7 +367,7 @@
     playNextNote();
   }
 
-  // ========== 完成 ==========
+  // ========== 跟谱完成 ==========
   function showComplete() {
     lyricLine.textContent = "🎉 太棒啦！你弹完了整首歌！🎉";
     notesLine.innerHTML = "";
@@ -359,6 +378,38 @@
     setTimeout(() => {
       playFullMelody();
     }, 1000);
+  }
+
+  // ========== 下拉列表填充（按模式过滤） ==========
+  // onlyPlayable=true → 只显示 playable !== false 的歌（跟谱练习）
+  // onlyPlayable=false → 显示全部（播放乐谱）
+  function populateSongSelect(onlyPlayable) {
+    const songs = window.MUSIC_DATA ? window.MUSIC_DATA.songs : [];
+    const currentValue = songSelect.value;
+    const filtered = onlyPlayable
+      ? songs.filter((s) => s.playable !== false)
+      : songs;
+
+    songSelect.innerHTML = "";
+    filtered.forEach((song) => {
+      const opt = document.createElement("option");
+      opt.value = song.id;
+      opt.textContent = `${song.title} (${song.titleEn})`;
+      songSelect.appendChild(opt);
+    });
+
+    if (filtered.length === 0) {
+      const opt = document.createElement("option");
+      opt.value = "";
+      opt.textContent = "（无可用歌曲）";
+      songSelect.appendChild(opt);
+      return;
+    }
+
+    // 尽量保持之前选中的歌曲
+    if (currentValue && filtered.some((s) => s.id === currentValue)) {
+      songSelect.value = currentValue;
+    }
   }
 
   // ========== 模式切换 ==========
@@ -375,7 +426,7 @@
 
     // 显示控制
     if (newMode === "free") {
-      songSelector.style.display = "none";
+      songSelector.classList.add("hidden");
       keysContainer.style.display = "flex";
       progressBarContainer.style.display = "none";
 
@@ -393,19 +444,24 @@
     }
 
     // learn 或 play
-    songSelector.style.display = "flex";
+    songSelector.classList.remove("hidden");
     keysContainer.style.display = newMode === "play" ? "none" : "flex";
     progressBarContainer.style.display = newMode === "play" ? "block" : "none";
+
+    // 根据模式填充下拉列表：跟谱练习只显示 playable，播放乐谱显示全部
+    populateSongSelect(newMode === "learn");
 
     // 确保有选中的歌曲
     let songId = songSelect.value;
     const songs = window.MUSIC_DATA ? window.MUSIC_DATA.songs : [];
-    if (!songId || !songs.find((s) => s.id === songId)) {
-      if (songs.length > 0) {
-        songId = songs[0].id;
+    const validSongs =
+      newMode === "learn" ? songs.filter((s) => s.playable !== false) : songs;
+    if (!songId || !validSongs.find((s) => s.id === songId)) {
+      if (validSongs.length > 0) {
+        songId = validSongs[0].id;
         songSelect.value = songId;
       } else {
-        messageArea.textContent = "⚠️ 暂无歌曲，请检查数据";
+        messageArea.textContent = "⚠️ 暂无可用歌曲";
         messageArea.className = "message-area error";
         return;
       }
@@ -449,24 +505,15 @@
     }
   }
 
-  // ========== 初始化歌曲列表（只含歌曲，无"自由弹奏"） ==========
+  // ========== 初始化歌曲列表（只绑定 onchange，内容由 setMode 填充） ==========
   function initSongSelect() {
-    const songs = window.MUSIC_DATA ? window.MUSIC_DATA.songs : [];
-    songSelect.innerHTML = "";
-    songs.forEach((song) => {
-      const opt = document.createElement("option");
-      opt.value = song.id;
-      opt.textContent = `${song.title} (${song.titleEn})`;
-      songSelect.appendChild(opt);
-    });
-
     songSelect.onchange = () => {
       const songId = songSelect.value;
       if (!songId) return;
       if (mode === "learn") {
         loadSong(songId);
       } else if (mode === "play") {
-        loadSong(songId, true); // 播放模式：立即播放
+        loadSong(songId, true);
       }
     };
   }
@@ -531,6 +578,22 @@
     }
     return true;
   }
+
+  // ========== 辅助工具：检查某首歌是否在 12 键范围内 ==========
+  // 挂到 window，方便控制台批量验证
+  function checkSongPlayable(song) {
+    const FIXED_KEYS = [-5, -6, -7, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    const allNotes = [];
+    for (const line of song.lines) {
+      allNotes.push(...line.notes);
+    }
+    const outOfRange = allNotes.filter((n) => !FIXED_KEYS.includes(n));
+    return {
+      playable: outOfRange.length === 0,
+      outOfRange: [...new Set(outOfRange)],
+    };
+  }
+  window.checkSongPlayable = checkSongPlayable;
 
   // ========== 启动 ==========
   if (checkData()) {

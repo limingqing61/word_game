@@ -8,6 +8,7 @@ const MUSIC_DATA = {
       id: "shangxuege",
       title: "上学歌",
       titleEn: "Going to School",
+      playAble: true,
       lines: [
         { lyric: "太阳当空照", notes: [1, 2, 3, 1, 5] },
         { lyric: "花儿对我笑", notes: [6, 6, 8, 6, 5] },
@@ -35,6 +36,7 @@ const MUSIC_DATA = {
       id: "woyoueryuan",
       title: "我上幼儿园",
       titleEn: "Going to Kindergarten",
+      playAble: true,
       lines: [
         { lyric: "爸爸妈妈去上班", notes: [5, 5, 3, 3, 5, 6, 5] },
         { lyric: "我上幼儿园", notes: [3, 5, 6, 6, 5] },
@@ -50,6 +52,7 @@ const MUSIC_DATA = {
       id: "xiaomaolv",
       title: "我有一只小毛驴",
       titleEn: "I Have a Little Donkey",
+      playAble: true,
       lines: [
         {
           lyric: "我有一只小毛驴我",
@@ -89,6 +92,7 @@ const MUSIC_DATA = {
       id: "shuajiang",
       title: "粉刷匠",
       titleEn: "Painter",
+      playAble: true,
       lines: [
         {
           lyric: "我是一个粉刷匠",
@@ -128,6 +132,7 @@ const MUSIC_DATA = {
       id: "wohaomama",
       title: "我的好妈妈",
       titleEn: "My Good Mother",
+      playAble: true,
       lines: [
         { lyric: "我的好妈妈", notes: [3, 3, 5, 2, 2, 1] },
         { lyric: "下班回到家", notes: [3, 3, 5, 6, 6, 5] },
@@ -163,6 +168,7 @@ const MUSIC_DATA = {
       id: "diushoujuan",
       title: "丢手绢",
       titleEn: "Drop the Handkerchief",
+      playAble: true,
       lines: [
         {
           lyric: "丢丢丢手绢",
@@ -191,6 +197,7 @@ const MUSIC_DATA = {
       id: "shuya",
       title: "数鸭子",
       titleEn: "Counting Ducks",
+      playAble: true,
       lines: [
         {
           lyric: "门前大桥下",
@@ -226,6 +233,7 @@ const MUSIC_DATA = {
       id: "yangwawa",
       title: "洋娃娃和小熊跳舞",
       titleEn: "Doll and Bear Dance",
+      playAble: true,
       lines: [
         {
           lyric: "洋娃娃和小熊跳舞",
@@ -265,6 +273,7 @@ const MUSIC_DATA = {
       id: "liangzhilaohu",
       title: "两只老虎",
       titleEn: "Two Tigers",
+      playAble: true,
       lines: [
         { lyric: "两只老虎", notes: [1, 2, 3, 1] },
         { lyric: "两只老虎", notes: [1, 2, 3, 1] },
@@ -286,6 +295,7 @@ const MUSIC_DATA = {
       id: "shengri",
       title: "生日快乐",
       titleEn: "Happy Birthday",
+      playAble: true,
       lines: [
         { lyric: "祝你生日快乐", notes: [1, 1, 2, 1, 4, 3] },
         { lyric: "祝你生日快乐", notes: [1, 1, 2, 1, 5, 4] },
@@ -297,6 +307,7 @@ const MUSIC_DATA = {
       id: "xiaomeiman",
       title: "小美满",
       titleEn: "Little Happy",
+      playAble: true,
       lines: [
         { lyric: "没什么大愿望", notes: [5, 5, 5, 3, 8, 5, 5] },
         { lyric: "没有什么事要赶", notes: [1, 6, 6, 6, 6, 5, 3] },
@@ -339,6 +350,7 @@ const MUSIC_DATA = {
       id: "dongfanghong",
       title: "东方红",
       titleEn: "The East Is Red",
+      playAble: true,
       lines: [
         { lyric: "东方红，太阳升", notes: [5, 5, 6, 2, 1, 1, -6, 2] },
         { lyric: "中国出了个毛泽东", notes: [5, 5, 8, 6, 5, 1, 1, -6, 2] },
@@ -353,6 +365,7 @@ const MUSIC_DATA = {
       id: "yiyongjun",
       title: "义勇军进行曲",
       titleEn: "March of the Volunteers",
+      playAble: true,
       lines: [
         {
           lyric: "起来！不愿做奴隶的人们",
@@ -389,6 +402,7 @@ const MUSIC_DATA = {
       id: "deyidexiao",
       title: "得意的笑",
       titleEn: "Vigorous Laugh",
+      playAble: true,
       lines: [
         // 主歌1
         {
@@ -445,6 +459,7 @@ const MUSIC_DATA = {
       id: "yongqidabaofa",
       title: "勇气大爆发",
       titleEn: "Courage Burst",
+      playAble: true,
       lines: [
         // 主歌1
         {
@@ -520,6 +535,7 @@ const MUSIC_DATA = {
       id: "woyouyigehaomama",
       title: "我有一个好妈妈",
       titleEn: "I Have a Good Mom",
+      playAble: true,
       lines: [
         {
           lyric: "我有一个好妈妈好妈妈",
@@ -563,6 +579,7 @@ const MUSIC_DATA = {
       id: "chongerfei",
       title: "虫儿飞",
       titleEn: "Fireflies Fly",
+      playAble: true,
       lines: [
         { lyric: "黑黑的天空低垂", notes: [3, 3, 3, 4, 5, 3, 2, 2] },
         { lyric: "亮亮的繁星相随", notes: [1, 1, 1, 2, 3, 3, -7, -7] },
@@ -583,6 +600,7 @@ const MUSIC_DATA = {
       id: "maitangyuan",
       title: "卖汤圆",
       titleEn: "Selling Tangyuan",
+      playAble: true,
       lines: [
         { lyric: "卖汤圆 卖汤圆", notes: [3, 6, 3, 6, 7, 3] },
         {
@@ -605,6 +623,7 @@ const MUSIC_DATA = {
       id: "yifenqian",
       title: "一分钱",
       titleEn: "One Cent",
+      playAble: true,
       lines: [
         {
           lyric: "我在马路边 捡到一分钱",
@@ -628,6 +647,7 @@ const MUSIC_DATA = {
       id: "maibaoge",
       title: "卖报歌",
       titleEn: "The Newsboy",
+      playAble: true,
       lines: [
         {
           lyric: "啦啦啦 啦啦啦 我是卖报的小行家",
@@ -674,6 +694,7 @@ const MUSIC_DATA = {
       id: "baluobo",
       title: "拔萝卜",
       titleEn: "Pull the Turnip",
+      playAble: true,
       lines: [
         {
           lyric: "拔萝卜 拔萝卜 嘿哟嘿哟拔萝卜 嘿哟嘿哟拔不动",
@@ -705,6 +726,7 @@ const MUSIC_DATA = {
       id: "shishangzhiyoumamahao",
       title: "世上只有妈妈好",
       titleEn: "Only Mom is the Best",
+      playAble: true,
       lines: [
         {
           lyric: "世上只有妈妈好",
@@ -736,6 +758,7 @@ const MUSIC_DATA = {
       id: "nixiaoqilaizhenhaokan",
       title: "你笑起来真好看",
       titleEn: "Your Smile Is Beautiful",
+      playAble: true,
       lines: [
         {
           lyric: "想去远方的山川 想去海边看海鸥",
@@ -775,6 +798,7 @@ const MUSIC_DATA = {
       id: "hetangyuese",
       title: "荷塘月色",
       titleEn: "Moonlit Lotus Pond",
+      playAble: true,
       lines: [
         {
           lyric: "剪一段时光缓缓流淌",
@@ -827,6 +851,7 @@ const MUSIC_DATA = {
       id: "tingwoxiexieni",
       title: "听我说谢谢你",
       titleEn: "Thank You",
+      playAble: true,
       lines: [
         {
           lyric: "送给你小心心 送你花一朵",
@@ -866,6 +891,7 @@ const MUSIC_DATA = {
       id: "jiayouya",
       title: "加油鸭",
       titleEn: "Go Go Duck",
+      playAble: true,
       lines: [
         {
           lyric: "加油鸭 加油鸭 向前冲鸭",
@@ -973,6 +999,7 @@ const MUSIC_DATA = {
       id: "fenhongsedetiyi",
       title: "粉红色的记忆",
       titleEn: "Pink Memory",
+      playAble: true,
       lines: [
         {
           lyric: "夏天夏天悄悄过去留下小秘密",
@@ -1028,6 +1055,7 @@ const MUSIC_DATA = {
       id: "bailongma",
       title: "白龙马",
       titleEn: "White Dragon Horse",
+      playAble: true,
       lines: [
         { lyric: "白龙马 蹄朝西", notes: [3, 3, -6, 1, -6, -5, -6] },
         {
@@ -1075,6 +1103,7 @@ const MUSIC_DATA = {
       id: "honghongdetaiyang",
       title: "红红的太阳",
       titleEn: "Red Sun",
+      playAble: true,
       lines: [
         {
           lyric: "红红的太阳升东方 鸟语伴花香",
@@ -1156,6 +1185,370 @@ const MUSIC_DATA = {
           lyric: "红红的梦想 把未来照亮",
           notes: [6, 8, 5, 8, 8, 4, 3, 2, 1, 1, 1],
         },
+      ],
+    },
+    {
+      id: "guniangbiekuqi",
+      title: "姑娘别哭泣",
+      titleEn: "Don't Cry Girl",
+      playable: false,
+      lines: [
+        {
+          lyric: "突来的消息 那个人是你",
+          notes: [1, -6, 1, -6, 1, 1, -3, -5, -3, -5, -6, -5],
+        },
+        {
+          lyric: "这么多年 你杳无音讯",
+          notes: [-5, -5, -6, -6, -6, -5, -6, -5, -3, -3],
+        },
+        {
+          lyric: "时间的橡皮 擦掉了记忆",
+          notes: [1, -6, 1, -6, 1, 1, -3, -5, -3, -5, -6, -5],
+        },
+        {
+          lyric: "但我迟迟 却没有忘记你",
+          notes: [-5, -5, -6, -6, -6, -5, -6, -6, -5, -6, -6, -6],
+        },
+        {
+          lyric: "秒针的声音 嘀嗒转不停",
+          notes: [1, -6, 1, -6, 1, 1, -3, -5, -3, -5, -6, -5],
+        },
+        {
+          lyric: "我的心里 住着一个你",
+          notes: [-5, -5, -6, -6, -5, -6, -5, -6, -3, -3],
+        },
+        {
+          lyric: "流过的泪滴 全都因为你",
+          notes: [1, -6, 1, -6, 1, 1, -5, -5, -3, -5, -6, -5],
+        },
+        {
+          lyric: "原来迟迟都 不曾放下你",
+          notes: [-5, -5, -6, -6, -6, -5, -6, -6, -5, -6, -6, -6],
+        },
+        {
+          lyric: "或许我们 就不该有段因果",
+          notes: [1, -7, -6, -6, -6, 1, -7, -6, -5, -3, -5, -5, -7, -6],
+        },
+        {
+          lyric: "或许我不该 一味求施舍",
+          notes: [3, 3, -6, -6, -6, 1, -7, -6, -5, -6, -3, -3],
+        },
+        {
+          lyric: "如果有天 我离开了你的生活",
+          notes: [1, -7, -6, -6, -6, 1, -7, -6, -5, -3, -5, -5, -7, -6],
+        },
+        {
+          lyric: "如果有天 你还爱着我",
+          notes: [3, 3, -6, 3, 3, 3, -5, -6, -5, -6, -6],
+        },
+        {
+          lyric: "姑娘为何你要放声哭泣",
+          notes: [3, 2, 3, 3, 3, 3, 3, 3, -6, -5, -5, -5],
+        },
+        {
+          lyric: "我在路那旁小河等你",
+          notes: [-3, -5, -6, -6, -6, -5, -6, -6, -5, -3, -3],
+        },
+        {
+          lyric: "你心里到底藏了什么秘密",
+          notes: [3, 2, 3, 3, 3, 3, 3, -6, -6, -6, -5, -5, -5, -6],
+        },
+        {
+          lyric: "我想紧紧的抱住你",
+          notes: [3, -5, -6, -6, -6, -5, -6, -7, -6, -6, -6],
+        },
+        {
+          lyric: "你说遇到的人全都像你",
+          notes: [3, 2, 3, 3, 3, 3, 3, 3, -6, -5, -5, -5],
+        },
+        {
+          lyric: "找不到失去你的意义",
+          notes: [-3, -5, -6, -6, -6, -5, -6, -6, -5, -3, -3],
+        },
+        {
+          lyric: "你说你克制着不再想起",
+          notes: [3, 2, 3, 3, 3, 3, 3, 3, -6, -5, -5, -5],
+        },
+        {
+          lyric: "可是我就在你心里",
+          notes: [-3, -5, -6, -6, -6, -5, -6, -7, -6, -6, -6],
+        },
+        {
+          lyric: "秒针的声音 嘀嗒转不停",
+          notes: [1, -6, 1, -6, 1, 1, -3, -5, -3, -5, -6, -5],
+        },
+        {
+          lyric: "我的心里 住着一个你",
+          notes: [-5, -5, -6, -6, -5, -6, -5, -6, -3, -3],
+        },
+        {
+          lyric: "流过的泪滴 全都因为你",
+          notes: [1, -6, 1, -6, 1, 1, -3, -5, -3, -5, -6, -5],
+        },
+        {
+          lyric: "原来迟迟都 不曾放下你",
+          notes: [-6, -5, -6, -6, -6, -5, -6, -6, -5, -6, -6, -6],
+        },
+        {
+          lyric: "或许我们 就不该有段因果",
+          notes: [1, -7, -6, -6, -6, 1, -7, -6, -5, -3, -5, -5, -7, -6],
+        },
+        {
+          lyric: "或许我不该 一味求施舍",
+          notes: [3, 3, -6, -6, -6, 1, -7, -6, -5, -6, -3, -3],
+        },
+        {
+          lyric: "如果有天 我离开了你的生活",
+          notes: [1, -7, -6, -6, -6, 1, -7, -6, -5, -3, -5, -5, -7, -6],
+        },
+        {
+          lyric: "如果有天 你还爱着我",
+          notes: [3, 3, -6, 3, 3, 3, -5, -6, -5, -6, -6],
+        },
+        {
+          lyric: "姑娘为何你要放声哭泣",
+          notes: [3, 2, 3, 3, 3, 3, 3, 3, -6, -5, -5, -5],
+        },
+        {
+          lyric: "我在路那旁小河等你",
+          notes: [-3, -5, -6, -6, -6, -5, -6, -5, -3, -3],
+        },
+        {
+          lyric: "你心里到底藏了什么秘密",
+          notes: [3, 2, 3, 3, 3, 3, 3, -6, -6, -6, -5, -5, -5],
+        },
+        {
+          lyric: "我想紧紧的抱住你",
+          notes: [3, -5, -6, -6, -6, -5, -6, -7, -6, -6, -6],
+        },
+        {
+          lyric: "你说遇到的人全都像你",
+          notes: [3, 2, 3, 3, 3, 3, 3, 3, -6, -5, -5, -5],
+        },
+        {
+          lyric: "找不到失去你的意义",
+          notes: [-3, -5, -6, -6, -6, -5, -6, -6, -5, -3, -3],
+        },
+        {
+          lyric: "你说你克制着不再想起",
+          notes: [3, 2, 3, 3, 3, 3, 3, 3, -5, -6, -5, -5, -5],
+        },
+        {
+          lyric: "可是我就在你心里",
+          notes: [-3, -5, -6, -6, -6, -5, -7, -6, -6, -6, -6],
+        },
+      ],
+    },
+    {
+      id: "bugua",
+      title: "卜卦",
+      titleEn: "Divination",
+      playable: false,
+      lines: [
+        {
+          lyric: "风吹沙 蝶恋花 千古佳话",
+          notes: [1, 2, 3, 1, 2, 3, 5, 6, 5, 3],
+        },
+        {
+          lyric: "似水中月 情迷着镜中花",
+          notes: [3, 5, 6, 2, 2, 2, 2, 3, 5, 2, 3, 3, 3],
+        },
+        {
+          lyric: "竹篱笆 木琵琶 拱桥月下",
+          notes: [1, 2, 3, 1, 2, 3, 5, 6, 5, 3, 3],
+        },
+        {
+          lyric: "谁在弹唱 思念远方牵挂",
+          notes: [3, 5, 8, 7, 7, 8, 7, 6, 5, 6, 6, 6],
+        },
+        {
+          lyric: "那年仲夏 你背上行囊离开家",
+          notes: [3, 6, 7, 8, 8, 8, 8, 7, 6, 8, 5, 5, 4, 3],
+        },
+        {
+          lyric: "古道旁 我欲语泪先下",
+          notes: [5, 6, 6, 7, 7, 7, 7, 8, 7, 6, 6, 8, 8],
+        },
+        {
+          lyric: "庙里求签 我哭诉青梅等竹马",
+          notes: [3, 6, 7, 8, 8, 8, 8, 7, 8, 9, 10, 8, 8, 5, 5, 5],
+        },
+        {
+          lyric: "求菩萨保佑我俩",
+          notes: [7, 7, 7, 7, 8, 7, 6, 7, 7],
+        },
+        {
+          lyric: "不停的猜 猜 猜 又卜了一卦",
+          notes: [6, 8, 9, 10, 10, 10, 9, 10, 13, 12, 10, 10],
+        },
+        {
+          lyric: "吉凶祸福 还是担惊受怕",
+          notes: [10, 12, 13, 9, 9, 9, 10, 12, 9, 9, 10, 10],
+        },
+        {
+          lyric: "对你的爱 爱 爱 望断了天涯",
+          notes: [6, 8, 9, 10, 10, 10, 9, 10, 13, 12, 10, 10],
+        },
+        {
+          lyric: "造化弄人 缘分阴错阳差",
+          notes: [10, 12, 13, 9, 10, 12, 10, 12, 13, 13, 13, 13],
+        },
+
+        {
+          lyric: "风吹沙 蝶恋花 千古佳话",
+          notes: [1, 2, 3, 1, 2, 3, 5, 6, 5, 3],
+        },
+        {
+          lyric: "似水中月 情迷着镜中花",
+          notes: [3, 5, 6, 2, 2, 2, 2, 3, 5, 2, 2, 3, 3, 3],
+        },
+        {
+          lyric: "竹篱笆 木琵琶 拱桥月下",
+          notes: [1, 2, 3, 1, 2, 3, 5, 6, 5, 3, 3],
+        },
+        {
+          lyric: "谁在弹唱 思念远方牵挂",
+          notes: [3, 5, 8, 7, 7, 8, 7, 6, 5, 6, 6, 6],
+        },
+        {
+          lyric: "那年仲夏 你背上行囊离开家",
+          notes: [3, 6, 7, 8, 8, 8, 8, 7, 6, 8, 5, 5, 4, 3],
+        },
+        {
+          lyric: "古道旁 我欲语泪先下",
+          notes: [5, 6, 6, 7, 7, 7, 7, 8, 7, 6, 6, 8, 8],
+        },
+        {
+          lyric: "田里庄稼 收获了一茬又一茬",
+          notes: [3, 6, 7, 8, 8, 8, 8, 7, 8, 9, 10, 8, 8, 5, 5, 5],
+        },
+        {
+          lyric: "而我们何时发芽",
+          notes: [7, 7, 7, 7, 8, 7, 6, 7, 7],
+        },
+        {
+          lyric: "不停的猜 猜 猜 又卜了一卦",
+          notes: [6, 8, 9, 10, 10, 10, 9, 10, 13, 12, 10, 10],
+        },
+        {
+          lyric: "吉凶祸福 还是担惊受怕",
+          notes: [10, 12, 13, 9, 9, 9, 10, 12, 9, 9, 10, 10],
+        },
+        {
+          lyric: "对你的爱 爱 爱 望断了天涯",
+          notes: [6, 8, 9, 10, 10, 10, 9, 10, 13, 12, 10, 10],
+        },
+        {
+          lyric: "造化弄人 缘分阴错阳差",
+          notes: [10, 12, 13, 9, 10, 12, 10, 12, 13, 13, 13, 13],
+        },
+
+        {
+          lyric: "猜猜猜 又卜了一卦",
+          notes: [10, 10, 10, 9, 10, 13, 12, 10, 10],
+        },
+        {
+          lyric: "是上上签 可还是放不下",
+          notes: [10, 12, 13, 9, 9, 9, 10, 12, 9, 9, 10, 10],
+        },
+        {
+          lyric: "对你的爱 爱 挨过几个冬夏",
+          notes: [6, 8, 9, 10, 10, 10, 9, 10, 13, 12, 10],
+        },
+        {
+          lyric: "日夜思念 祈求别再变卦",
+          notes: [10, 12, 8, 14, 14, 8, 14, 13, 12, 13, 13, 13, 13],
+        },
+      ],
+    },
+    {
+      id: "wohewo_dezuguo",
+      title: "我和我的祖国",
+      titleEn: "My Motherland and I",
+      playable: false,
+      lines: [
+        {
+          lyric: "我和我的祖国 一刻也不能分割",
+          notes: [5, 6, 5, 4, 3, 2, 1, -5, 1, 3, 8, 7, 6, 3, 5, 5],
+        },
+        {
+          lyric: "无论我走到哪里 都流出一首赞歌",
+          notes: [6, 7, 6, 5, 4, 3, 2, -6, -7, -6, -5, 5, 1, 2, 3, 3],
+        },
+        {
+          lyric: "我歌唱每一座高山 我歌唱每一条河",
+          notes: [5, 6, 5, 4, 3, 2, 1, -5, 1, 3, 8, 7, 9, 8, 6, 6],
+        },
+        {
+          lyric: "袅袅炊烟小小村落 路上一道辙",
+          notes: [8, 7, 6, 5, 6, 5, 4, 3, -7, -6, -5, 2, 1, 1],
+        },
+        { lyric: "我最亲爱的祖国", notes: [8, 9, 10, 9, 8, 6, 7, 6, 3, 5, 5] },
+        {
+          lyric: "我永远紧依着你的心窝",
+          notes: [8, 9, 10, 9, 8, 6, 7, 5, 3, 6, 6],
+        },
+        { lyric: "你用你那母亲的脉搏", notes: [5, 4, 3, 2, -7, -6, -6, -5, 3] },
+        { lyric: "和我诉说", notes: [4, 2, 1, 1, 1] },
+        {
+          lyric: "我的祖国和我 像海和浪花一朵",
+          notes: [5, 6, 5, 4, 3, 2, 1, -5, 1, 3, 8, 7, 6, 3, 5, 5],
+        },
+        {
+          lyric: "浪是那海的赤子 海是那浪的依托",
+          notes: [6, 7, 6, 5, 4, 3, 2, -6, -7, -6, -5, 5, 1, 2, 3, 3],
+        },
+        {
+          lyric: "每当大海在微笑 我就是笑的漩涡",
+          notes: [5, 6, 5, 4, 3, 2, 1, -5, 1, 3, 8, 7, 9, 8, 6, 6],
+        },
+        {
+          lyric: "我分担着海的忧愁 分享海的欢乐",
+          notes: [8, 7, 6, 5, 6, 5, 4, 3, -7, -6, -5, 2, 1, 1],
+        },
+        { lyric: "我最亲爱的祖国", notes: [8, 9, 10, 9, 8, 6, 7, 6, 3, 5, 5] },
+        {
+          lyric: "你是大海永不干涸",
+          notes: [8, 9, 10, 9, 8, 6, 7, 5, 3, 6, 6],
+        },
+        { lyric: "永远给我碧浪清波", notes: [5, 4, 3, 2, -7, -6, -6, -5, 3] },
+        { lyric: "心中的歌", notes: [4, 2, 1, 1, 1] },
+      ],
+    },
+    {
+      id: "dawangjiaowolaixunshan",
+      title: "大王叫我来巡山",
+      titleEn: "The King Sent Me to Patrol",
+      playable: false,
+      lines: [
+        { lyric: "太阳对我眨眼睛", notes: [5, 5, 5, 5, 6, 3, 5, 5] },
+        { lyric: "鸟儿唱歌给我听", notes: [6, 5, 3, 2, 3, -6, 1, 1] },
+        {
+          lyric: "我是一个努力干活儿",
+          notes: [6, 6, 8, 6, 5, 5, 6, 6, 8, 6, 5, 5],
+        },
+        { lyric: "还不粘人的小妖精", notes: [5, 6, 5, 5, 5, 1, 3, 2, 2] },
+        { lyric: "别问我从哪里来", notes: [5, 5, 5, 5, 6, 3, 5, 5] },
+        { lyric: "也别问我到哪儿去", notes: [5, 6, 6, 6, 5, 6, 3, 2, 3, 1] },
+        {
+          lyric: "我要摘下最美的花儿",
+          notes: [6, 6, 8, 6, 5, 5, 6, 6, 6, 8, 6, 6],
+        },
+        { lyric: "献给我的小公举", notes: [5, 5, 5, 5, -6, 2, -6, 1] },
+        { lyric: "大王叫我来巡山", notes: [8, 8, 8, 6, 12, 10, 10, 10] },
+        { lyric: "我把人间转一转", notes: [6, 3, 6, 6, 8, 6, 6, 5] },
+        {
+          lyric: "打起我的鼓 敲起我的锣",
+          notes: [6, 6, 5, 6, 3, 5, 6, 6, 5, 6, 12, 10],
+        },
+        { lyric: "生活充满节奏感", notes: [9, 9, 9, 8, 12, 12, 10, 9, 9] },
+        { lyric: "大王叫我来巡山", notes: [8, 8, 8, 6, 12, 10, 10, 10, 9, 8] },
+        { lyric: "抓个和尚做晚餐", notes: [6, 5, 6, 5, 8, 2, 3, 5, 5] },
+        {
+          lyric: "这山涧的水 无比的甜",
+          notes: [5, 6, 6, 5, 6, 3, 5, 5, 6, 5, 5, 6, 12, 10],
+        },
+        { lyric: "不羡鸳鸯不羡仙", notes: [9, 9, 9, 8, 10, 10, 9, 8, 8] },
       ],
     },
   ],
