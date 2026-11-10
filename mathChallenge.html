@@ -53,6 +53,45 @@
             margin: 2px 0 0;
         }
 
+        /* ===== Sheet 切换标签 ===== */
+        .mode-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .mode-tab {
+            background: #fef3c7;
+            color: #5a4a2e;
+            border: 2px solid #ffaa33;
+            padding: 6px 22px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            font-family: inherit;
+            box-shadow: 0 3px 0 #b97f44;
+            transition: 0.05s linear;
+        }
+
+        .mode-tab:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 #b97f44;
+        }
+
+        .mode-tab.active {
+            background: #4CAF50;
+            color: white;
+            border-color: #2e7d32;
+            box-shadow: 0 3px 0 #2e7d32;
+        }
+
+        .sheet.hidden {
+            display: none !important;
+        }
+
         .top-panel {
             display: flex;
             justify-content: space-between;
@@ -243,6 +282,135 @@
             font-size: 2.5rem;
         }
 
+        /* ===== 剩多少：二叉树 ===== */
+        .tree-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            min-height: 320px;
+            gap: 20px;
+        }
+
+        .tree-node {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            color: #333;
+            border: 4px solid #ffaa33;
+            background: #fef3c7;
+            box-shadow: 0 6px 0 #b97f44;
+        }
+
+        .tree-node.root {
+            background: #ffd966;
+            border-color: #b97f44;
+        }
+
+        .tree-node.left {
+            background: #4fc3f7;
+            color: #fff;
+            border-color: #0288d1;
+            box-shadow: 0 6px 0 #0288d1;
+        }
+
+        .tree-node.answer {
+            background: #fff;
+            color: #ff6b6b;
+            border: 4px dashed #ff6b6b;
+            box-shadow: none;
+        }
+
+        .tree-node.answer.filled {
+            background: #66bb6a;
+            color: #fff;
+            border: 4px solid #2e7d32;
+            box-shadow: 0 6px 0 #2e7d32;
+        }
+
+        .tree-children {
+            display: flex;
+            gap: 70px;
+            position: relative;
+        }
+
+        /* 连线 */
+        .tree-lines {
+            position: relative;
+            width: 250px;
+            height: 36px;
+        }
+
+        .tree-lines::before,
+        .tree-lines::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 3px;
+            height: 40px;
+            background: #ffaa33;
+            transform-origin: top center;
+        }
+
+        .tree-lines::before {
+            left: 50%;
+            transform: rotate(-35deg);
+        }
+
+        .tree-lines::after {
+            left: 50%;
+            transform: rotate(35deg);
+        }
+
+        .tree-prompt {
+            font-size: 1.1rem;
+            color: #ffecb3;
+            font-weight: bold;
+            text-align: center;
+            min-height: 2rem;
+            margin-top: 10px;
+        }
+
+        /* 数字键盘 */
+        .num-pad {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 480px;
+            margin-top: 20px;
+        }
+
+        .num-key {
+            aspect-ratio: 1 / 1;
+            border-radius: 18px;
+            border: none;
+            background: #fef3c7;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #b97f44;
+            font-family: inherit;
+            transition: 0.05s linear;
+        }
+
+        .num-key:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #b97f44;
+        }
+
+        .num-key:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         /* 启动遮罩 */
         #startOverlay {
             position: fixed;
@@ -277,7 +445,7 @@
             font-family: inherit;
         }
 
-        /* ===== 新增：返回首页按钮样式 ===== */
+        /* ===== 返回首页按钮样式 ===== */
         .back-home-btn {
             background: #607d8b;
             color: white;
@@ -321,6 +489,31 @@
             .top-panel {
                 font-size: 0.8rem;
             }
+
+            .tree-node {
+                width: 85px;
+                height: 85px;
+                font-size: 2.2rem;
+                border-width: 3px;
+            }
+
+            .tree-children {
+                gap: 45px;
+            }
+
+            .tree-lines {
+                width: 180px;
+            }
+
+            .num-pad {
+                gap: 6px;
+                max-width: 360px;
+            }
+
+            .num-key {
+                font-size: 1.4rem;
+                border-radius: 12px;
+            }
         }
     </style>
 </head>
@@ -338,32 +531,64 @@
             <p>🧠 限时计算 · 看图选数</p>
         </header>
 
-        <div class="top-panel">
-            <span>🏆 得分: <span id="scoreValue">0</span></span>
-            <span>📊 第 <span id="roundValue">1</span>/<span id="totalRounds">20</span> 关</span>
-            <span class="timer-display" id="timerDisplay">⏱️ <span id="timerValue">0</span>s</span>
+        <!-- ===== Sheet 切换标签 ===== -->
+        <div class="mode-tabs">
+            <button id="tabMath" class="mode-tab active">➕ 加减法</button>
+            <button id="tabSplit" class="mode-tab">🍎 剩多少</button>
         </div>
 
-        <div class="game-area" id="gameArea">
-            <div class="question-text" id="questionText">?</div>
-            <div class="options-grid" id="optionsContainer"></div>
-            <div class="feedback" id="feedback"></div>
+        <!-- ===== 加减法 sheet ===== -->
+        <div id="mathSheet" class="sheet">
+            <div class="top-panel">
+                <span>🏆 得分: <span id="scoreValue">0</span></span>
+                <span>📊 第 <span id="roundValue">1</span>/<span id="totalRounds">20</span> 关</span>
+                <span class="timer-display" id="timerDisplay">⏱️ <span id="timerValue">0</span>s</span>
+            </div>
+
+            <div class="game-area" id="gameArea">
+                <div class="question-text" id="questionText">?</div>
+                <div class="options-grid" id="optionsContainer"></div>
+                <div class="feedback" id="feedback"></div>
+            </div>
+
+            <div class="result-area" id="resultArea">
+                <h2>🎉 闯关完成！ 🎉</h2>
+                <div class="final-score">⭐ <span id="finalScore">0</span> / 100</div>
+                <div class="result-buttons">
+                    <button id="restartBtn"><i class="fas fa-redo"></i> 再来一局</button>
+                    <button id="backHomeBtn" class="home-btn"><i class="fas fa-home"></i> 返回主页</button>
+                </div>
+            </div>
         </div>
 
-        <!-- ===== 游戏进行中的返回首页按钮 ===== -->
+        <!-- ===== 剩多少 sheet ===== -->
+        <div id="splitSheet" class="sheet hidden">
+            <div class="top-panel">
+                <span>🏆 得分: <span id="splitScoreValue">0</span></span>
+                <span>📊 第 <span id="splitRoundValue">1</span>/10 题</span>
+                <span class="timer-display" id="splitTimerDisplay">⏱️ <span id="splitTimerValue">0</span>s</span>
+            </div>
+
+            <div class="game-area">
+                <div class="tree-area">
+                    <div class="tree-node root" id="splitRoot">?</div>
+                    <div class="tree-lines"></div>
+                    <div class="tree-children">
+                        <div class="tree-node left" id="splitLeft">?</div>
+                        <div class="tree-node answer" id="splitAnswer">?</div>
+                    </div>
+                </div>
+                <div class="tree-prompt" id="splitPrompt"></div>
+                <div class="options-grid" id="splitOptions"></div>
+                <div class="feedback" id="splitFeedback"></div>
+            </div>
+        </div>
+
+        <!-- ===== 公共返回首页按钮（两个 sheet 共用） ===== -->
         <div class="bottom-bar">
             <button id="backBtn" class="back-home-btn">
                 <i class="fas fa-home"></i> 返回首页
             </button>
-        </div>
-
-        <div class="result-area" id="resultArea">
-            <h2>🎉 闯关完成！ 🎉</h2>
-            <div class="final-score">⭐ <span id="finalScore">0</span> / 100</div>
-            <div class="result-buttons">
-                <button id="restartBtn"><i class="fas fa-redo"></i> 再来一局</button>
-                <button id="backHomeBtn" class="home-btn"><i class="fas fa-home"></i> 返回主页</button>
-            </div>
         </div>
     </div>
 
